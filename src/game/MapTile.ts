@@ -1,14 +1,18 @@
 class MapTile {
-  private type: string;
-  private variant: string;
+  private _type: number;
+  private _variant: string;
 
-  constructor(type: string, variant: string) {
-    this.type = type;
-    this.variant = variant;
+  constructor(type: number, variant: string) {
+    this._type = type;
+    this._variant = variant;
   }
 
-  public getFileName(): string {
-    return `${this.type}_${this.variant}`;
+  public get type(): number {
+    return this._type;
+  }
+
+  public get fileName(): string {
+    return `${this._type}_${this._variant}`;
   }
 }
 

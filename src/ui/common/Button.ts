@@ -1,9 +1,8 @@
 import Phaser from "phaser";
 import ButtonStates from "../../enums/ButtonStates";
+import BaseButton from "./BaseButton";
 
-class CommonButton extends Phaser.GameObjects.Sprite {
-  onClick: () => void;
-
+class Button extends BaseButton {
   constructor(
     scene: Phaser.Scene,
     x: number,
@@ -11,25 +10,25 @@ class CommonButton extends Phaser.GameObjects.Sprite {
     texture: string,
     onClick: () => void
   ) {
-    super(scene, x, y, texture);
+    super(scene, x, y, texture, onClick);
 
-    this.onClick = onClick;
-
-    scene.add.existing(this);
-    this.setInteractive();
     this.on("pointerdown", this.handleDown, this);
+    this.on("pointerout", this.handleOut, this);
     this.on("pointerup", this.handleUp, this);
-    this.setFrame(ButtonStates.down);
   }
 
   handleDown(): void {
+    this.setFrame(ButtonStates.up);
+  }
+
+  handleOut(): void {
     this.setFrame(ButtonStates.down);
   }
 
   handleUp(): void {
-    this.setFrame(ButtonStates.up);
+    this.setFrame(ButtonStates.down);
     this.onClick();
   }
 }
 
-export default CommonButton;
+export default Button;

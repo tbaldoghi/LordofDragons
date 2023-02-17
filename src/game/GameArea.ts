@@ -1,6 +1,5 @@
 import MapSize from "../interfaces/MapSize";
 import Wolf from "./creature/Wolf";
-import MapGenerator from "./MapGenerator";
 
 class GameArea {
   private _scene: Phaser.Scene;
@@ -16,13 +15,11 @@ class GameArea {
   }
 
   public init(mapSize: MapSize): void {
-    const mapGenerator = new MapGenerator(mapSize);
     const forest = this._scene.add.image(0, 0, "forest");
     const wolf = new Wolf(this._scene, this._width / 2, 570);
     const wolf2 = new Wolf(this._scene, this._width / 2, 400);
     const wolf3 = new Wolf(this._scene, this._width / 2, 475);
 
-    mapGenerator.init();
     this._scene.add.existing(wolf2);
     this._scene.add.existing(wolf3);
     this._scene.add.existing(wolf);

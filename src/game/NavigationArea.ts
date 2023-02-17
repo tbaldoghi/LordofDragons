@@ -1,4 +1,7 @@
-import CommonButton from "../ui/common/CommonButton";
+import Button from "../ui/common/Button";
+import SwitchButton from "../ui/common/SwitchButton";
+import MiniMap from "./map/MiniMap";
+import MapTile from "./MapTile";
 
 class NavigationArea {
   private _scene: Phaser.Scene;
@@ -7,7 +10,9 @@ class NavigationArea {
     this._scene = scene;
   }
 
-  public init() {
+  public init(map: MapTile[][]) {
+    const miniMap = new MiniMap(this._scene, map);
+    miniMap.renderMap();
     const size = 78;
     const offsetX = 575;
     const offsetY = 175;
@@ -21,13 +26,13 @@ class NavigationArea {
         const x = this._scene.scale.gameSize.width - offsetX + j * size;
         const y = this._scene.scale.gameSize.height - offsetY + i * size;
 
-        this._scene.add.image(x, y, name);
+        new Button(this._scene, x, y, name, () => {});
       });
     });
 
     const x = this._scene.scale.gameSize.width - offsetX + size * 6;
     const y = this._scene.scale.gameSize.height - offsetY;
-    const fullScreenButton = new CommonButton(
+    const fullScreenButton = new SwitchButton(
       this._scene,
       x,
       y + size,

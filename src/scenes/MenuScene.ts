@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import GameScene from "./GameScene";
-import CommonButton from "../ui/common/CommonButton";
+import Button from "../ui/common/Button";
 
 class MenuScene extends Phaser.Scene {
   constructor() {
@@ -15,14 +15,14 @@ class MenuScene extends Phaser.Scene {
     const uiBackground = this.add.image(0, 0, "uiBackground");
     const width = this.scale.gameSize.width / 2;
     const height = this.scale.gameSize.height / 4;
-    const newGameButton = new CommonButton(
+    const newGameButton = new Button(
       this,
       200,
       300,
       "fullScreen",
       this.handleNewGameClick
     );
-    const fullScreenButton = new CommonButton(
+    const fullScreenButton = new Button(
       this,
       200,
       500,

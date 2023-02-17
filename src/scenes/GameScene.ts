@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import creatures from "../data/creatures";
 import GameArea from "../game/GameArea";
+import MapGenerator from "../game/MapGenerator";
+import MapTile from "../game/MapTile";
 import MessageArea from "../game/MessageArea";
 import NavigationArea from "../game/NavigationArea";
 import PortraitArea from "../game/PortraitArea";
@@ -31,29 +33,32 @@ class GameScene extends Phaser.Scene {
 
     this.load.image("uiBackground", `${path}/ui/background.png`);
     this.load.image("uiBorder", `${path}/ui/border.png`);
-    this.load.image("arrowUp", `${path}/ui/arrow_up.png`);
-    this.load.image("arrowRight", `${path}/ui/arrow_right.png`);
-    this.load.image("arrowDown", `${path}/ui/arrow_down.png`);
-    this.load.image("arrowLeft", `${path}/ui/arrow_left.png`);
-    this.load.image("arrowTurnRight", `${path}/ui/arrow_turn_right.png`);
-    this.load.image("arrowTurnLeft", `${path}/ui/arrow_turn_left.png`);
     this.load.image("emptyPortrait", `${path}/ui/empty_portrait.png`);
     this.load.spritesheet("fullScreen", `${path}/ui/full_screen.png`, {
       frameWidth: 78,
       frameHeight: 78,
       startFrame: 0,
-      endFrame: 1,
+      endFrame: 3,
+    });
+    this.load.spritesheet("mapTiles", `${path}/ui/map_tiles.png`, {
+      frameWidth: 16,
+      frameHeight: 16,
+      startFrame: 0,
+      endFrame: 4,
     });
     this.load.image("forest", `${path}/background/forest/forest_1.png`);
     this.load.image("portrait", `${path}/portraits/portrait_1.png`);
 
     this.loadCreatures(path);
+    this.loadArrowButtons(path);
   }
 
   create(): void {
+    const mapGenerator = new MapGenerator(mapSize);
     const uiBackground = this.add.image(0, 0, "uiBackground");
     const uiBorder = this.add.image(0, 0, "uiBorder");
 
+    mapGenerator.init();
     uiBackground.setOrigin(0);
     uiBorder.setOrigin(0);
     this._gameArea.init(mapSize);
@@ -64,13 +69,35 @@ class GameScene extends Phaser.Scene {
     this._messageArea.addMessage("... Try to sneak through.");
     this._messageArea.showMessages();
 
-    this._navigationArea.init();
+    const map = mapGenerator.map;
+
+    this._navigationArea.init(map);
     this._portraitArea.init();
   }
 
   private loadCreatures(path: string): void {
     creatures.forEach((creature) => {
       this.load.image(creature, `${path}/creatures/${creature}.png`);
+    });
+  }
+
+  private loadArrowButtons(path: string): void {
+    const buttons = [
+      { name: "arrowUp", fileName: "arrow_up" },
+      { name: "arrowRight", fileName: "arrow_right" },
+      { name: "arrowDown", fileName: "arrow_down" },
+      { name: "arrowLeft", fileName: "arrow_left" },
+      { name: "arrowTurnRight", fileName: "arrow_turn_right" },
+      { name: "arrowTurnLeft", fileName: "arrow_turn_left" },
+    ];
+
+    buttons.forEach((button) => {
+      this.load.spritesheet(button.name, `${path}/ui/${button.fileName}.png`, {
+        frameWidth: 78,
+        frameHeight: 78,
+        startFrame: 0,
+        endFrame: 1,
+      });
     });
   }
 

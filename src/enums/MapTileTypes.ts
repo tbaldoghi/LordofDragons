@@ -1,8 +1,8 @@
 enum MapTileTypes {
-  forest = "forest",
-  desert = "desert",
-  mountain = "mountain",
-  plain = "plain",
+  forest = 0,
+  hill = 1,
+  mountain = 2,
+  plain = 3,
 }
 
 export default MapTileTypes;
