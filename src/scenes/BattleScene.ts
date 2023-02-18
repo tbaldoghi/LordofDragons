@@ -1,0 +1,90 @@
+import Phaser from "phaser";
+import Wolf from "../game/creature/Wolf";
+import PortraitArea from "../game/PortraitArea";
+import Button from "../ui/common/Button";
+import SwitchButton from "../ui/common/SwitchButton";
+
+class BattleScene extends Phaser.Scene {
+  private _portraitArea: PortraitArea;
+
+  constructor() {
+    super("BattleScene");
+
+    this._portraitArea = new PortraitArea(this);
+  }
+
+  preload(): void {
+    const path = "assets/images";
+    this.load.image(
+      "forestBattle",
+      `${path}/background/forest/forest_battle.png`
+    );
+    this.load.spritesheet("attack", `${path}/ui/attack_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
+    this.load.spritesheet("cast", `${path}/ui/cast_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
+  }
+
+  create() {
+    this.cameras.main.fadeIn(500, 0, 0, 0);
+
+    const uiBackground = this.add.image(0, 0, "uiBackground");
+    const uiBorder = this.add.image(0, 0, "uiBorder");
+    const forest = this.add.image(0, 0, "forestBattle");
+
+    for (let i = 0; i < 4; i++) {
+      const wolf = new Wolf(this, 1280 / 4 + 50 + i * 200, 570);
+    }
+
+    const size = 78;
+    const offsetX = 575;
+    const offsetY = 250;
+    const x = this.scale.gameSize.width - offsetX + size * 6;
+    const y = this.scale.gameSize.height - offsetY;
+    const fullScreenButton = new SwitchButton(
+      this,
+      x,
+      y + size + 75,
+      "fullScreen",
+      this.handleFullScreenClick
+    );
+
+    uiBackground.setOrigin(0);
+    uiBorder.setOrigin(0);
+    forest.setOrigin(0);
+    this._portraitArea.init();
+
+    for (let i = 0; i < 4; i++) {
+      const attackButton = new Button(
+        this,
+        x - 475 + i * 155,
+        y,
+        "attack",
+        () => {},
+        i !== 0
+      );
+      const castButton = new Button(
+        this,
+        x + 64 - 475 + i * 155,
+        y,
+        "cast",
+        () => {},
+        i !== 0
+      );
+    }
+  }
+
+  handleFullScreenClick = (): void => {
+    this.scale.toggleFullscreen();
+  };
+}
+
+export default BattleScene;

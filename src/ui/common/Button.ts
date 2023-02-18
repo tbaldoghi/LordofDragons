@@ -8,13 +8,16 @@ class Button extends BaseButton {
     x: number,
     y: number,
     texture: string,
-    onClick: () => void
+    onClick: () => void,
+    isDisabled?: boolean
   ) {
-    super(scene, x, y, texture, onClick);
+    super(scene, x, y, texture, onClick, isDisabled);
 
-    this.on("pointerdown", this.handleDown, this);
-    this.on("pointerout", this.handleOut, this);
-    this.on("pointerup", this.handleUp, this);
+    if (!isDisabled) {
+      this.on("pointerdown", this.handleDown, this);
+      this.on("pointerout", this.handleOut, this);
+      this.on("pointerup", this.handleUp, this);
+    }
   }
 
   handleDown(): void {

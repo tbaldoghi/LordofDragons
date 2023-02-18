@@ -37,11 +37,11 @@ class NavigationArea {
       x,
       y + size,
       "fullScreen",
-      this.onClick
+      this.handleFullScreenClick
     );
   }
 
-  onClick = (): void => {
+  handleFullScreenClick = (): void => {
     this._scene.scale.toggleFullscreen();
   };
 }
