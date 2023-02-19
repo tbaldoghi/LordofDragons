@@ -3,6 +3,7 @@ import Wolf from "../game/creature/Wolf";
 import PortraitArea from "../game/PortraitArea";
 import Button from "../ui/common/Button";
 import SwitchButton from "../ui/common/SwitchButton";
+import FloatMenuScene from "./FloatMenuScene";
 
 class BattleScene extends Phaser.Scene {
   private _portraitArea: PortraitArea;
@@ -62,6 +63,8 @@ class BattleScene extends Phaser.Scene {
     forest.setOrigin(0);
     this._portraitArea.init();
 
+    let count = 0;
+
     for (let i = 0; i < 4; i++) {
       const attackButton = new Button(
         this,
@@ -71,6 +74,12 @@ class BattleScene extends Phaser.Scene {
         () => {},
         i !== 0
       );
+
+      attackButton.on("pointerup", () => {
+        this.handleCreateFloatMenu(count, x - 475 + i * 155, y);
+        count++;
+      });
+
       const castButton = new Button(
         this,
         x + 64 - 475 + i * 155,
@@ -84,6 +93,18 @@ class BattleScene extends Phaser.Scene {
 
   handleFullScreenClick = (): void => {
     this.scale.toggleFullscreen();
+  };
+
+  handleCreateFloatMenu = (key: number, x: number, y: number): void => {
+    const floatMenu = this.add.zone(x - 150, y - 100, 300, 200);
+
+    floatMenu.setInteractive();
+    floatMenu.setOrigin(0);
+
+    const floatMenuScene = new FloatMenuScene(key, floatMenu);
+
+    this.scene.add(`FloatMenuScene${key}`, floatMenuScene);
+    floatMenuScene.scene.start();
   };
 }
 

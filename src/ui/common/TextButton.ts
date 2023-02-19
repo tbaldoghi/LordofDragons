@@ -6,10 +6,12 @@ class TextButton extends Phaser.GameObjects.Text {
     x: number,
     y: number,
     text: string,
-    onClick: () => void
+    onClick: () => void,
+    size?: number
   ) {
+    const fontSize = size ? size : 48;
     const style: Phaser.Types.GameObjects.Text.TextStyle = {
-      font: "48px Oswald",
+      font: `${fontSize}px Oswald`,
       color: "#4b3d44",
     };
 
@@ -20,10 +22,20 @@ class TextButton extends Phaser.GameObjects.Text {
     scene.add.existing(this);
     this.setInteractive();
     this.on("pointerup", this.handleUp, this);
+    this.on("pointerover", this.handleOver, this);
+    this.on("pointerout", this.handleOut, this);
   }
 
   handleUp(): void {
     this._onClick();
+  }
+
+  handleOver(): void {
+    this.setColor("#79444a");
+  }
+
+  handleOut(): void {
+    this.setColor("#4b3d44");
   }
 }
 

@@ -1,4 +1,5 @@
 import BattleScene from "../scenes/BattleScene";
+import TextButton from "../ui/common/TextButton";
 
 class MessageArea {
   private _scene: Phaser.Scene;
@@ -15,16 +16,31 @@ class MessageArea {
   }
 
   public showMessages(): void {
-    this._messages.forEach((message: string, index: number): void => {
-      const x = 20;
-      const y = this._scene.scale.gameSize.height - this._heigth + index * 38;
-      const text = this._scene.add.text(x, y, message, {
-        font: "28px Oswald",
-        color: "#4b3d44",
-      });
+    const height = this._scene.scale.gameSize.height;
+    const messageBackground = this._scene.add.image(
+      0,
+      height - this._heigth - 12,
+      "messageBackground"
+    );
 
-      text.setInteractive();
-      text.on("pointerup", this.handleTextClick);
+    messageBackground.setOrigin(0);
+    this._messages.forEach((message: string, index: number): void => {
+      const x = 50;
+      const y = this._scene.scale.gameSize.height - this._heigth + index * 32;
+
+      if (index === 0) {
+        const text = this._scene.add.text(x, y, message, {
+          font: "24px Oswald",
+          color: "#4b3d44",
+        });
+      } else {
+        const button = new TextButton(this._scene, x, y, message, () => {}, 24);
+
+        if (index === 1) {
+          button.setInteractive();
+          button.on("pointerup", this.handleTextClick);
+        }
+      }
     });
   }
 

@@ -33,6 +33,7 @@ class GameScene extends Phaser.Scene {
 
     this.load.image("uiBackground", `${path}/ui/background.png`);
     this.load.image("uiBorder", `${path}/ui/border.png`);
+    this.load.image("messageBackground", `${path}/ui/message_background.png`);
     this.load.image("emptyPortrait", `${path}/ui/empty_portrait.png`);
     this.load.spritesheet("fullScreen", `${path}/ui/full_screen.png`, {
       frameWidth: 78,
