@@ -25,8 +25,9 @@ class MessageArea {
 
     messageBackground.setOrigin(0);
     this._messages.forEach((message: string, index: number): void => {
-      const x = 50;
-      const y = this._scene.scale.gameSize.height - this._heigth + index * 32;
+      const x = 45;
+      const y =
+        this._scene.scale.gameSize.height - this._heigth + index * 32 + 15;
 
       if (index === 0) {
         const text = this._scene.add.text(x, y, message, {

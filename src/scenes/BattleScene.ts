@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Wolf from "../game/creature/Wolf";
+import MessageArea from "../game/MessageArea";
 import PortraitArea from "../game/PortraitArea";
 import Button from "../ui/common/Button";
 import SwitchButton from "../ui/common/SwitchButton";
@@ -7,11 +8,13 @@ import FloatMenuScene from "./FloatMenuScene";
 
 class BattleScene extends Phaser.Scene {
   private _portraitArea: PortraitArea;
+  private _messageArea: MessageArea;
 
   constructor() {
     super("BattleScene");
 
     this._portraitArea = new PortraitArea(this);
+    this._messageArea = new MessageArea(this);
   }
 
   preload(): void {
@@ -32,6 +35,18 @@ class BattleScene extends Phaser.Scene {
       startFrame: 0,
       endFrame: 1,
     });
+    this.load.spritesheet("potion", `${path}/ui/potion_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
+    this.load.spritesheet("flag", `${path}/ui/flag_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
   }
 
   create() {
@@ -39,6 +54,7 @@ class BattleScene extends Phaser.Scene {
 
     const uiBackground = this.add.image(0, 0, "uiBackground");
     const uiBorder = this.add.image(0, 0, "uiBorder");
+    const uiRightBack = this.add.image(1288, 0, "uiRightBack");
     const forest = this.add.image(0, 0, "forestBattle");
 
     for (let i = 0; i < 4; i++) {
@@ -60,35 +76,72 @@ class BattleScene extends Phaser.Scene {
 
     uiBackground.setOrigin(0);
     uiBorder.setOrigin(0);
+    uiRightBack.setOrigin(0);
     forest.setOrigin(0);
-    this._portraitArea.init();
+    this._messageArea.showMessages();
 
-    let count = 0;
+    const portraitSpace = 300;
+    const portraitOffsetX = 400;
+    const portraitOffsetY = 100;
+    const portraits = [
+      ["portrait", "emptyPortrait"],
+      ["emptyPortrait", "emptyPortrait"],
+    ];
 
-    for (let i = 0; i < 4; i++) {
-      const attackButton = new Button(
-        this,
-        x - 475 + i * 155,
-        y,
-        "attack",
-        () => {},
-        i !== 0
-      );
+    portraits.forEach((row: string[], i: number): void => {
+      const portraitY = portraitOffsetY + i * portraitSpace;
 
-      attackButton.on("pointerup", () => {
-        this.handleCreateFloatMenu(count, x - 475 + i * 155, y);
-        count++;
+      row.forEach((portrait: string, j: number) => {
+        const portraitX =
+          this.scale.gameSize.width - portraitOffsetX + j * portraitSpace;
+
+        this.add.image(portraitX, portraitY, portrait);
+
+        const attackButton = new Button(
+          this,
+          portraitX - 100,
+          portraitY - 32,
+          "attack",
+          () => {},
+          i !== 0 || j !== 0
+        );
+        const potionButton = new Button(
+          this,
+          portraitX - 164,
+          portraitY - 32,
+          "potion",
+          () => {},
+          i !== 0 || j !== 0
+        );
+        let count = 0;
+
+        attackButton.on("pointerup", () => {
+          this.handleCreateFloatMenu(
+            count,
+            portraitX + i * 155 - 128,
+            portraitY + 32
+          );
+          count++;
+        });
+
+        const castButton = new Button(
+          this,
+          portraitX - 100,
+          portraitY + 32,
+          "cast",
+          () => {},
+          i !== 0 || j !== 0
+        );
+        const actionButton = new Button(
+          this,
+          portraitX - 164,
+          portraitY + 32,
+          "flag",
+          () => {},
+          i !== 0 || j !== 0
+        );
       });
-
-      const castButton = new Button(
-        this,
-        x + 64 - 475 + i * 155,
-        y,
-        "cast",
-        () => {},
-        i !== 0
-      );
-    }
+    });
   }
 
   handleFullScreenClick = (): void => {
