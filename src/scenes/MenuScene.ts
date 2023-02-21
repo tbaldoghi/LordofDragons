@@ -20,14 +20,14 @@ class MenuScene extends Phaser.Scene {
       this,
       250,
       300,
-      "New Game",
+      "START A NEW HERO",
       this.handleNewGameClick
     );
     const fullScreenButton = new TextButton(
       this,
       250,
       400,
-      "Full Screen",
+      "FULL SCREEN",
       this.handleFullScreenClick
     );
 

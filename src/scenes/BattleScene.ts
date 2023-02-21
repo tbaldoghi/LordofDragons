@@ -58,7 +58,7 @@ class BattleScene extends Phaser.Scene {
     const forest = this.add.image(0, 0, "forestBattle");
 
     for (let i = 0; i < 4; i++) {
-      const wolf = new Wolf(this, 1280 / 4 + 50 + i * 200, 570);
+      const wolf = new Wolf(this, 1280 / 4 + 50 + i * 200, 570, true);
     }
 
     const size = 78;

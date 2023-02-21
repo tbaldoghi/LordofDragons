@@ -1,6 +1,6 @@
 import Directions from "../enums/Directions";
 
-class Player {
+class Hero {
   private _positionX: number;
   private _positionY: number;
   private _direction: string;
@@ -24,4 +24,4 @@ class Player {
   }
 }
 
-export default Player;
+export default Hero;
