@@ -1,3 +1,5 @@
+import Button from "../ui/common/Button";
+
 class PortraitArea {
   private _scene: Phaser.Scene;
 
@@ -21,6 +23,22 @@ class PortraitArea {
       const x = this._scene.scale.gameSize.width - offsetX + index * size;
 
       this._scene.add.image(x, y, portrait);
+      const inventoryButton = new Button(
+        this._scene,
+        x - 32,
+        y + 100,
+        "inventory",
+        () => {},
+        index !== 0
+      );
+      const bookButton = new Button(
+        this._scene,
+        x + 32,
+        y + 100,
+        "book",
+        () => {},
+        index !== 0
+      );
     });
   }
 }

@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import creatures from "../data/creatures";
 import GameArea from "../game/GameArea";
-import MapGenerator from "../game/MapGenerator";
+import MapGenerator from "../game/map/MapGenerator";
 import MessageArea from "../game/MessageArea";
 import NavigationArea from "../game/NavigationArea";
 import PortraitArea from "../game/PortraitArea";
@@ -48,6 +48,30 @@ class GameScene extends Phaser.Scene {
       startFrame: 0,
       endFrame: 4,
     });
+    this.load.spritesheet("inventory", `${path}/ui/inventory_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
+    this.load.spritesheet("cast", `${path}/ui/cast_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
+    this.load.spritesheet("flag", `${path}/ui/flag_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
+    this.load.spritesheet("book", `${path}/ui/book_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
     this.load.image("forest", `${path}/background/forest/forest_1.png`);
     this.load.image("portrait", `${path}/portraits/portrait_1.png`);
 
@@ -61,7 +85,6 @@ class GameScene extends Phaser.Scene {
     const uiBorder = this.add.image(0, 0, "uiBorder");
     const uiRightBack = this.add.image(1288, 0, "uiRightBack");
 
-    mapGenerator.init();
     uiBackground.setOrigin(0);
     uiBorder.setOrigin(0);
     uiRightBack.setOrigin(0);
@@ -73,7 +96,7 @@ class GameScene extends Phaser.Scene {
     this._messageArea.addMessage("... Try to sneak through.");
     this._messageArea.showMessages();
 
-    const map = mapGenerator.map;
+    const { map } = mapGenerator;
 
     this._navigationArea.init(map);
     this._portraitArea.init();

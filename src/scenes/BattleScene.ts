@@ -29,19 +29,7 @@ class BattleScene extends Phaser.Scene {
       startFrame: 0,
       endFrame: 1,
     });
-    this.load.spritesheet("cast", `${path}/ui/cast_button.png`, {
-      frameWidth: 64,
-      frameHeight: 64,
-      startFrame: 0,
-      endFrame: 1,
-    });
     this.load.spritesheet("potion", `${path}/ui/potion_button.png`, {
-      frameWidth: 64,
-      frameHeight: 64,
-      startFrame: 0,
-      endFrame: 1,
-    });
-    this.load.spritesheet("flag", `${path}/ui/flag_button.png`, {
       frameWidth: 64,
       frameHeight: 64,
       startFrame: 0,

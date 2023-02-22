@@ -17,11 +17,11 @@ class GameArea {
   public init(mapSize: MapSize): void {
     const forest = this._scene.add.image(0, 0, "forest");
 
-    const wolf2 = new Wolf(this._scene, this._width / 2, 400);
-    const wolf3 = new Wolf(this._scene, this._width / 2, 475);
+    const wolf2 = new Wolf(this._scene, this._width / 2 - 10, 390);
+    const wolf3 = new Wolf(this._scene, this._width / 2 + 10, 410);
     const wolf = new Wolf(this._scene, this._width / 2, 570);
-    wolf2.setScale(0.25);
-    wolf3.setScale(0.5);
+    wolf2.setScale(0.1);
+    wolf3.setScale(0.25);
     forest.setOrigin(0);
   }
 
