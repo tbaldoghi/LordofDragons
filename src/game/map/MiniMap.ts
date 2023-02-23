@@ -11,8 +11,8 @@ class MiniMap {
   }
 
   public renderMap = (): void => {
-    const miniMapSize = 20;
-    const size = 16;
+    const miniMapSize = 5;
+    const size = 32 * 2;
     const offsetX = 450;
     const offsetY = 50;
 
@@ -24,6 +24,21 @@ class MiniMap {
         new MiniMapTile(this._scene, x, y, this._mapTiles[i][j].type);
       }
     }
+
+    const minimapArrow = this._scene.add.image(
+      this._scene.scale.gameSize.width - offsetX + 2 * size,
+      offsetY + 2 * size,
+      "minimapArrow"
+    );
+
+    const minimapMark = this._scene.add.image(
+      this._scene.scale.gameSize.width - offsetX + 1 * size,
+      offsetY + 1 * size,
+      "minimapMark"
+    );
+
+    minimapArrow.setScale(2);
+    minimapMark.setScale(2);
   };
 }
 

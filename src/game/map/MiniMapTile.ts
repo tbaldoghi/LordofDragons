@@ -4,6 +4,7 @@ class MiniMapTile extends Phaser.GameObjects.Sprite {
 
     scene.add.existing(this);
     this.setFrame(type);
+    this.setScale(2);
   }
 }
 

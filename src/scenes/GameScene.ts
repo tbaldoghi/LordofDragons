@@ -36,6 +36,8 @@ class GameScene extends Phaser.Scene {
     this.load.image("uiSelect", `${path}/ui/select.png`);
     this.load.image("messageBackground", `${path}/ui/message_background.png`);
     this.load.image("emptyPortrait", `${path}/ui/empty_portrait.png`);
+    this.load.image("minimapArrow", `${path}/ui/minimap_arrow.png`);
+    this.load.image("minimapMark", `${path}/ui/minimap_mark.png`);
     this.load.spritesheet("fullScreen", `${path}/ui/full_screen.png`, {
       frameWidth: 78,
       frameHeight: 78,
@@ -43,8 +45,8 @@ class GameScene extends Phaser.Scene {
       endFrame: 3,
     });
     this.load.spritesheet("mapTiles", `${path}/ui/map_tiles.png`, {
-      frameWidth: 16,
-      frameHeight: 16,
+      frameWidth: 32,
+      frameHeight: 32,
       startFrame: 0,
       endFrame: 4,
     });
