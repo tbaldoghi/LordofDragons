@@ -14,7 +14,7 @@ class MiniMap {
     const miniMapSize = 5;
     const size = 32 * 2;
     const offsetX = 450;
-    const offsetY = 50;
+    const offsetY = 100;
 
     for (let i = 0; i < miniMapSize; i++) {
       for (let j = 0; j < miniMapSize; j++) {
@@ -36,9 +36,22 @@ class MiniMap {
       offsetY + 1 * size,
       "minimapMark"
     );
+    const minimapMark2 = this._scene.add.image(
+      this._scene.scale.gameSize.width - offsetX + 3 * size,
+      offsetY + 4 * size,
+      "minimapMark"
+    );
+
+    // const minimapGold = this._scene.add.image(
+    //   this._scene.scale.gameSize.width - offsetX + 2 * size,
+    //   offsetY + 3 * size,
+    //   "minimapGold"
+    // );
 
     minimapArrow.setScale(2);
     minimapMark.setScale(2);
+    minimapMark2.setScale(2);
+    // minimapGold.setScale(2);
   };
 }
 

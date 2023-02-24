@@ -32,12 +32,14 @@ class GameScene extends Phaser.Scene {
 
     this.load.image("uiBackground", `${path}/ui/background.png`);
     this.load.image("uiBorder", `${path}/ui/border.png`);
+    this.load.image("uiMapBorder", `${path}/ui/map_border.png`);
     this.load.image("uiRightBack", `${path}/ui/right_back.png`);
     this.load.image("uiSelect", `${path}/ui/select.png`);
     this.load.image("messageBackground", `${path}/ui/message_background.png`);
     this.load.image("emptyPortrait", `${path}/ui/empty_portrait.png`);
     this.load.image("minimapArrow", `${path}/ui/minimap_arrow.png`);
     this.load.image("minimapMark", `${path}/ui/minimap_mark.png`);
+    this.load.image("minimapGold", `${path}/ui/minimap_gold.png`);
     this.load.spritesheet("fullScreen", `${path}/ui/full_screen.png`, {
       frameWidth: 78,
       frameHeight: 78,
@@ -86,10 +88,12 @@ class GameScene extends Phaser.Scene {
     const uiBackground = this.add.image(0, 0, "uiBackground");
     const uiBorder = this.add.image(0, 0, "uiBorder");
     const uiRightBack = this.add.image(1288, 0, "uiRightBack");
+    const uiMapBorder = this.add.image(1430, 60, "uiMapBorder");
 
     uiBackground.setOrigin(0);
     uiBorder.setOrigin(0);
     uiRightBack.setOrigin(0);
+    uiMapBorder.setOrigin(0);
     this._gameArea.init(mapSize);
 
     this._messageArea.addMessage("A pack of wolves.");
