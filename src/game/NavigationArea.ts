@@ -1,5 +1,6 @@
 import Button from "../ui/common/Button";
 import SwitchButton from "../ui/common/SwitchButton";
+import eventHandler from "./EventHandler";
 import MiniMap from "./map/MiniMap";
 import MapTile from "./MapTile";
 
@@ -68,6 +69,7 @@ class NavigationArea {
 
   private handleTurnLeftClick = (): void => {
     console.log("TODO: emit turn left");
+    eventHandler.emit("turnLeft");
   };
 
   private addUpButton = (x: number, y: number): void => {
@@ -76,6 +78,7 @@ class NavigationArea {
 
   private handleUpClick = (): void => {
     console.log("TODO: emit up");
+    eventHandler.emit("up");
   };
 
   private addTurnRightButton = (x: number, y: number): void => {
@@ -90,6 +93,7 @@ class NavigationArea {
 
   private handleTurnRightClick = (): void => {
     console.log("TODO: emit turn right");
+    eventHandler.emit("turnRight");
   };
 
   private addLeftButton = (x: number, y: number): void => {
@@ -104,6 +108,7 @@ class NavigationArea {
 
   private handleLeftClick = (): void => {
     console.log("TODO: emit left");
+    eventHandler.emit("left");
   };
 
   private addDownButton = (x: number, y: number): void => {
@@ -118,6 +123,7 @@ class NavigationArea {
 
   private handleDownClick = (): void => {
     console.log("TODO: emit down");
+    eventHandler.emit("down");
   };
 
   private addRigthButton = (x: number, y: number): void => {
@@ -132,6 +138,7 @@ class NavigationArea {
 
   private handleRightClick = (): void => {
     console.log("TODO: emit right");
+    eventHandler.emit("rigth");
   };
 
   private handleFullScreenClick = (): void => {

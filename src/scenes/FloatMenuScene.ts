@@ -27,6 +27,7 @@ class FloatMenuScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("rgba(209, 177, 135, 0.9)");
 
     const border = this.add.rectangle(0, 0, 210, this.items.length * 36);
+
     border.setOrigin(0);
     border.setStrokeStyle(4, 0x574852);
 

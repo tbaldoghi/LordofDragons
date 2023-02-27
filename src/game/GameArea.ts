@@ -1,24 +1,46 @@
 import MapSize from "../interfaces/MapSize";
 import Wolf from "./creature/Wolf";
+import eventHandler from "./EventHandler";
 
 class GameArea {
-  private _scene: Phaser.Scene;
+  private scene: Phaser.Scene;
   private _mousePositionX: number;
   private _mousePositionY: number;
-  private readonly _width = 1280;
-  private readonly _heigth = 800;
+  private readonly width = 1280;
+  private readonly heigth = 800;
+  direction = 0;
 
   constructor(scene: Phaser.Scene) {
-    this._scene = scene;
+    this.scene = scene;
     this._mousePositionX = 0;
     this._mousePositionY = 0;
   }
 
   public init(mapSize: MapSize): void {
-    const forest = this._scene.add.image(0, 0, "forest");
+    const forest = this.scene.add.sprite(0, 0, "forest");
+    const wolf = new Wolf(this.scene, this.width / 2, 590);
 
-    const wolf = new Wolf(this._scene, this._width / 2, 590);
     forest.setOrigin(0);
+    forest.setScale(4);
+    forest.setFrame(0);
+
+    eventHandler.on(
+      "turnRight",
+      () => {
+        this.direction < 3 ? this.direction++ : (this.direction = 0);
+        forest.setFrame(this.direction);
+      },
+      this.scene
+    );
+
+    eventHandler.on(
+      "turnLeft",
+      () => {
+        this.direction > 0 ? this.direction-- : (this.direction = 3);
+        forest.setFrame(this.direction);
+      },
+      this.scene
+    );
   }
 
   public setMousePosition(x: number, y: number): void {

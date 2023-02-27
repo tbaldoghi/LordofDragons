@@ -1,9 +1,11 @@
+import eventHandler from "../EventHandler";
 import MapTile from "../MapTile";
 import MiniMapTile from "./MiniMapTile";
 
 class MiniMap {
   private _scene: Phaser.Scene;
   private _mapTiles: MapTile[][];
+  private direction = 0;
 
   constructor(scene: Phaser.Scene, mapTiles: MapTile[][]) {
     this._scene = scene;
@@ -40,6 +42,24 @@ class MiniMap {
       this._scene.scale.gameSize.width - offsetX + 3 * size,
       offsetY + 4 * size,
       "minimapMark"
+    );
+
+    eventHandler.on(
+      "turnRight",
+      () => {
+        this.direction < 3 ? this.direction++ : (this.direction = 0);
+        minimapArrow.setAngle(90 * this.direction);
+      },
+      this._scene
+    );
+
+    eventHandler.on(
+      "turnLeft",
+      () => {
+        this.direction > 0 ? this.direction-- : (this.direction = 3);
+        minimapArrow.setAngle(90 * this.direction);
+      },
+      this._scene
     );
 
     // const minimapGold = this._scene.add.image(

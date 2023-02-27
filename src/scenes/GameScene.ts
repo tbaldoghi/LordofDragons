@@ -1,11 +1,13 @@
 import Phaser from "phaser";
 import creatures from "../data/creatures";
+import ViewSize from "../enums/ViewSize";
 import GameArea from "../game/GameArea";
 import MapGenerator from "../game/map/MapGenerator";
 import MessageArea from "../game/MessageArea";
 import NavigationArea from "../game/NavigationArea";
 import PortraitArea from "../game/PortraitArea";
 import MapSize from "../interfaces/MapSize";
+import ViewScene from "./ViewScene";
 
 const mapSize: MapSize = {
   height: 40,
@@ -76,7 +78,8 @@ class GameScene extends Phaser.Scene {
       startFrame: 0,
       endFrame: 1,
     });
-    this.load.image("forest", `${path}/background/forest/forest_1.png`);
+    this.load.image("forest", `${path}/background/forest/forest.png`);
+    // this.load.image("forest", `${path}/background/forest/forest_1.png`);
     this.load.image("portrait", `${path}/portraits/portrait_1.png`);
 
     this.loadCreatures(path);
@@ -94,7 +97,16 @@ class GameScene extends Phaser.Scene {
     uiBorder.setOrigin(0);
     uiRightBack.setOrigin(0);
     uiMapBorder.setOrigin(0);
-    this._gameArea.init(mapSize);
+    // this._gameArea.init(mapSize); // TODO: Use ViewScene instead.
+
+    const viewSceneZone = this.add.zone(0, 0, ViewSize.width, ViewSize.height);
+
+    viewSceneZone.setOrigin(0);
+
+    const viewScene = new ViewScene(viewSceneZone);
+
+    this.scene.add("ViewScene", viewScene);
+    viewScene.scene.start();
 
     this._messageArea.addMessage("A pack of wolves.");
     this._messageArea.addMessage("... Attack them.");
