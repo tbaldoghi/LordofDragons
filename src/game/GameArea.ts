@@ -1,6 +1,6 @@
 import MapSize from "../interfaces/MapSize";
 import Wolf from "./creature/Wolf";
-import eventHandler from "./EventHandler";
+import eventHandler from "../contants/eventHandler";
 
 class GameArea {
   private scene: Phaser.Scene;

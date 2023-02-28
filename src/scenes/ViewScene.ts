@@ -1,6 +1,6 @@
 import ViewSize from "../enums/ViewSize";
 import Wolf from "../game/creature/Wolf";
-import eventHandler from "../game/EventHandler";
+import eventHandler from "../contants/eventHandler";
 
 class ViewScene extends Phaser.Scene {
   private parent: Phaser.GameObjects.Zone;
@@ -46,8 +46,6 @@ class ViewScene extends Phaser.Scene {
           ViewSize.height / 2,
           500
         );
-        // this.direction > 0 ? this.direction-- : (this.direction = 3);
-        // forest.setFrame(this.direction);
       },
       this
     );
@@ -55,12 +53,12 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "up",
       () => {
-        this.cameras.main.zoomTo(1.2, 300, "Linear", false);
+        this.cameras.main.zoomTo(1.25, 250, "Linear", false);
         this.cameras.main.on(
           Phaser.Cameras.Scene2D.Events.ZOOM_COMPLETE,
           () => {
             this.cameras.main.setZoom(1);
-            this.cameras.main.fadeFrom(500);
+            this.cameras.main.fadeFrom(250);
             this.cameras.main.setScroll(ViewSize.width, 0);
           },
           this

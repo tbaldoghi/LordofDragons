@@ -1,18 +1,14 @@
 import Phaser from "phaser";
-import creatures from "../data/creatures";
+import creatures from "../contants/creatures";
+import mapSize from "../contants/mapSize";
+import player from "../contants/player";
 import ViewSize from "../enums/ViewSize";
 import GameArea from "../game/GameArea";
 import MapGenerator from "../game/map/MapGenerator";
 import MessageArea from "../game/MessageArea";
 import NavigationArea from "../game/NavigationArea";
 import PortraitArea from "../game/PortraitArea";
-import MapSize from "../interfaces/MapSize";
 import ViewScene from "./ViewScene";
-
-const mapSize: MapSize = {
-  height: 40,
-  width: 40,
-};
 
 class GameScene extends Phaser.Scene {
   private _gameArea: GameArea;
@@ -79,7 +75,6 @@ class GameScene extends Phaser.Scene {
       endFrame: 1,
     });
     this.load.image("forest", `${path}/background/forest/forest.png`);
-    // this.load.image("forest", `${path}/background/forest/forest_1.png`);
     this.load.image("portrait", `${path}/portraits/portrait_1.png`);
 
     this.loadCreatures(path);
@@ -97,7 +92,6 @@ class GameScene extends Phaser.Scene {
     uiBorder.setOrigin(0);
     uiRightBack.setOrigin(0);
     uiMapBorder.setOrigin(0);
-    // this._gameArea.init(mapSize); // TODO: Use ViewScene instead.
 
     const viewSceneZone = this.add.zone(0, 0, ViewSize.width, ViewSize.height);
 
@@ -118,6 +112,8 @@ class GameScene extends Phaser.Scene {
 
     this._navigationArea.init(map);
     this._portraitArea.init();
+
+    player.addToGame(this);
   }
 
   private loadCreatures(path: string): void {

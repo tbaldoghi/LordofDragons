@@ -1,7 +1,7 @@
 import Button from "../ui/common/Button";
 import SwitchButton from "../ui/common/SwitchButton";
-import eventHandler from "./EventHandler";
-import MiniMap from "./map/MiniMap";
+import eventHandler from "../contants/eventHandler";
+import MiniMapScene from "../scenes/MiniMapScene";
 import MapTile from "./MapTile";
 
 class NavigationArea {
@@ -18,12 +18,13 @@ class NavigationArea {
   }
 
   public init(map: MapTile[][]) {
-    const miniMap = new MiniMap(this.scene, map);
+    const miniMapScene = new MiniMapScene(map);
     const size = 78;
     const offsetX = 575;
     const offsetY = 175;
 
-    miniMap.renderMap();
+    this.scene.scene.add("MiniMapScene", miniMapScene);
+    miniMapScene.scene.start();
 
     const x = this.scene.scale.gameSize.width - offsetX + size * 6;
     const y = this.scene.scale.gameSize.height - offsetY;
@@ -68,7 +69,6 @@ class NavigationArea {
   };
 
   private handleTurnLeftClick = (): void => {
-    console.log("TODO: emit turn left");
     eventHandler.emit("turnLeft");
   };
 
@@ -77,7 +77,6 @@ class NavigationArea {
   };
 
   private handleUpClick = (): void => {
-    console.log("TODO: emit up");
     eventHandler.emit("up");
   };
 
@@ -92,7 +91,6 @@ class NavigationArea {
   };
 
   private handleTurnRightClick = (): void => {
-    console.log("TODO: emit turn right");
     eventHandler.emit("turnRight");
   };
 
@@ -107,7 +105,6 @@ class NavigationArea {
   };
 
   private handleLeftClick = (): void => {
-    console.log("TODO: emit left");
     eventHandler.emit("left");
   };
 
@@ -122,7 +119,6 @@ class NavigationArea {
   };
 
   private handleDownClick = (): void => {
-    console.log("TODO: emit down");
     eventHandler.emit("down");
   };
 
@@ -137,7 +133,6 @@ class NavigationArea {
   };
 
   private handleRightClick = (): void => {
-    console.log("TODO: emit right");
     eventHandler.emit("rigth");
   };
 
