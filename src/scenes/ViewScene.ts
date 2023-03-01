@@ -1,6 +1,8 @@
 import ViewSize from "../enums/ViewSize";
 import Wolf from "../game/creature/Wolf";
 import eventHandler from "../contants/eventHandler";
+import world from "../contants/world";
+import player from "../contants/player";
 
 class ViewScene extends Phaser.Scene {
   private parent: Phaser.GameObjects.Zone;
@@ -51,15 +53,24 @@ class ViewScene extends Phaser.Scene {
     );
 
     eventHandler.on(
-      "up",
+      "moveForward",
       () => {
         this.cameras.main.zoomTo(1.25, 250, "Linear", false);
         this.cameras.main.on(
           Phaser.Cameras.Scene2D.Events.ZOOM_COMPLETE,
           () => {
             this.cameras.main.setZoom(1);
-            this.cameras.main.fadeFrom(250);
-            this.cameras.main.setScroll(ViewSize.width, 0);
+
+            const worldMap = world.worldMaps.find(
+              (worldMap) => worldMap.level === player.currentLevel
+            );
+            const mapTile = worldMap?.map[player.positionX][player.positionY];
+
+            if (Math.round(Math.random()) === 1) {
+              this.cameras.main.setScroll(ViewSize.width, 0);
+            } else {
+              this.cameras.main.setScroll(0, 0);
+            }
           },
           this
         );
@@ -67,6 +78,8 @@ class ViewScene extends Phaser.Scene {
       this
     );
   }
+
+  update(): void {}
 }
 
 export default ViewScene;

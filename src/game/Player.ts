@@ -10,11 +10,13 @@ interface Position {
 class Player {
   private _position: Position = { x: 0, y: 0 };
   private _direction: number;
+  private _currentLevel: number;
 
   constructor() {
     this._position.x = mapSize.width / 2;
     this._position.y = mapSize.height / 2;
     this._direction = Directions.north;
+    this._currentLevel = 1;
   }
 
   public addToGame = (scene: Phaser.Scene): void => {
@@ -42,8 +44,20 @@ class Player {
     this._direction = direction;
   }
 
+  public get positionX(): number {
+    return this._position.x;
+  }
+
+  public get positionY(): number {
+    return this._position.y;
+  }
+
   public get direction(): number {
     return this._direction;
+  }
+
+  public get currentLevel(): number {
+    return this._currentLevel;
   }
 
   private handleTurnRight = (): void => {
@@ -64,13 +78,15 @@ class Player {
 
   private handleUp = (): void => {
     if (this._position.y < mapSize.height) {
-      this._position.y++;
+      this._position.y--;
+      eventHandler.emit("moveForward");
     }
   };
 
   private handleDown = (): void => {
     if (this._position.y > 0) {
-      this._position.y--;
+      this._position.y++;
+      eventHandler.emit("moveBack");
     }
   };
 

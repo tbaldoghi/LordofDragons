@@ -2,15 +2,14 @@ import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
 import MapTile from "../game/MapTile";
 import MiniMapTile from "../game/map/MiniMapTile";
+import world from "../contants/world";
 
 class MiniMapScene extends Phaser.Scene {
-  private _mapTiles: MapTile[][];
   private _minimapArrow!: Phaser.GameObjects.Image;
+  private _miniMapTiles: MiniMapTile[][] = [];
 
-  constructor(mapTiles: MapTile[][]) {
+  constructor() {
     super("MiniMapScene");
-
-    this._mapTiles = mapTiles;
   }
 
   public create(): void {
@@ -19,12 +18,24 @@ class MiniMapScene extends Phaser.Scene {
     const offsetX = 450;
     const offsetY = 100;
 
+    const worldMap = world.worldMaps.find(
+      (worldMap) => worldMap.level === player.currentLevel
+    );
+    const map = worldMap?.map || [];
+
     for (let i = 0; i < miniMapSize; i++) {
+      this._miniMapTiles[i] = [];
+
       for (let j = 0; j < miniMapSize; j++) {
         const x = this.scale.gameSize.width - offsetX + j * size;
         const y = offsetY + i * size;
 
-        new MiniMapTile(this, x, y, this._mapTiles[i][j].type);
+        this._miniMapTiles[i][j] = new MiniMapTile(
+          this,
+          x,
+          y,
+          map[i + player.positionX][j + player.positionY].type
+        );
       }
     }
 
@@ -51,6 +62,29 @@ class MiniMapScene extends Phaser.Scene {
   }
 
   public update(): void {
+    const miniMapSize = 5;
+    // const size = 64;
+    // const offsetX = 450;
+    // const offsetY = 100;
+
+    const worldMap = world.worldMaps.find(
+      (worldMap) => worldMap.level === player.currentLevel
+    );
+    const map = worldMap?.map || [];
+
+    for (let i = 0; i < miniMapSize; i++) {
+      // this._miniMapTiles[i] = [];
+
+      for (let j = 0; j < miniMapSize; j++) {
+        // const x = this.scale.gameSize.width - offsetX + j * size;
+        // const y = offsetY + i * size;
+
+        this._miniMapTiles[i][j].setFrame(
+          map[i + player.positionY][j + player.positionX].type
+        );
+      }
+    }
+
     this._minimapArrow.setAngle(90 * player.direction);
   }
 }

@@ -2,9 +2,9 @@ import Phaser from "phaser";
 import creatures from "../contants/creatures";
 import mapSize from "../contants/mapSize";
 import player from "../contants/player";
+import world from "../contants/world";
 import ViewSize from "../enums/ViewSize";
 import GameArea from "../game/GameArea";
-import MapGenerator from "../game/map/MapGenerator";
 import MessageArea from "../game/MessageArea";
 import NavigationArea from "../game/NavigationArea";
 import PortraitArea from "../game/PortraitArea";
@@ -82,7 +82,6 @@ class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    const mapGenerator = new MapGenerator(mapSize);
     const uiBackground = this.add.image(0, 0, "uiBackground");
     const uiBorder = this.add.image(0, 0, "uiBorder");
     const uiRightBack = this.add.image(1288, 0, "uiRightBack");
@@ -108,9 +107,7 @@ class GameScene extends Phaser.Scene {
     this._messageArea.addMessage("... Try to sneak through.");
     this._messageArea.showMessages();
 
-    const { map } = mapGenerator;
-
-    this._navigationArea.init(map);
+    this._navigationArea.init();
     this._portraitArea.init();
 
     player.addToGame(this);

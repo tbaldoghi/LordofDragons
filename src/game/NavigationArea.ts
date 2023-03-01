@@ -2,7 +2,7 @@ import Button from "../ui/common/Button";
 import SwitchButton from "../ui/common/SwitchButton";
 import eventHandler from "../contants/eventHandler";
 import MiniMapScene from "../scenes/MiniMapScene";
-import MapTile from "./MapTile";
+import world from "../contants/world";
 
 class NavigationArea {
   private scene: Phaser.Scene;
@@ -17,8 +17,8 @@ class NavigationArea {
     this.scene = scene;
   }
 
-  public init(map: MapTile[][]) {
-    const miniMapScene = new MiniMapScene(map);
+  public init() {
+    const miniMapScene = new MiniMapScene();
     const size = 78;
     const offsetX = 575;
     const offsetY = 175;
