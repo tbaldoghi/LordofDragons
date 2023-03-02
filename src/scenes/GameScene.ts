@@ -37,7 +37,8 @@ class GameScene extends Phaser.Scene {
     this.load.image("emptyPortrait", `${path}/ui/empty_portrait.png`);
     this.load.image("minimapArrow", `${path}/ui/minimap_arrow.png`);
     this.load.image("minimapMark", `${path}/ui/minimap_mark.png`);
-    this.load.image("minimapGold", `${path}/ui/minimap_gold.png`);
+    this.load.image("minimapLoot", `${path}/ui/minimap_gold.png`);
+    this.load.image("minimapLocation", `${path}/ui/minimap_location.png`);
     this.load.spritesheet("fullScreen", `${path}/ui/full_screen.png`, {
       frameWidth: 78,
       frameHeight: 78,

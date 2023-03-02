@@ -1,7 +1,8 @@
 import MapTileTypes from "../../enums/MapTileTypes";
 import WorldLevels from "../../enums/WorldLevels";
-import MapTile from "../MapTile";
+import MapTile, { Event } from "../MapTile";
 import mapSize from "../../contants/mapSize";
+import MapTileEvents from "../../enums/MapTileEvents";
 
 type MapType = "forest" | "cave" | "mine" | "catacomb";
 
@@ -48,27 +49,33 @@ class WorldGenerator {
       this._world.worldMaps[level].map[i] = [];
 
       for (let j = 0; j <= height; j++) {
-        let type = Math.floor(Math.random() * (3 - 0 + 1) + 0);
+        let event = Math.floor(Math.random() * 4) as Event;
+        let type = Math.floor(Math.random() * (3 + 1));
+
+        for (let i = 0; i < 4; i++) {
+          if (event !== MapTileEvents.empty) {
+            event = Math.floor(Math.random() * 4) as Event;
+          }
+        }
 
         if (type !== MapTileTypes.forest) {
-          type = Math.floor(Math.random() * (3 - 0 + 1) + 0);
+          type = Math.floor(Math.random() * (3 + 1));
         }
 
         if (type === MapTileTypes.mountain) {
-          type = Math.floor(Math.random() * (3 - 0 + 1) + 0);
+          type = Math.floor(Math.random() * (3 + 1));
         }
 
         if (i === 0 || j === 0 || i === width || j === height) {
           type = MapTileTypes.mountain;
         }
 
-        this._world.worldMaps[level].map[i][j] = new MapTile(type);
+        this._world.worldMaps[level].map[i][j] = new MapTile(type, event);
       }
     }
   }
 
   public get world(): World {
-    console.log(this._world);
     return this._world;
   }
 }
