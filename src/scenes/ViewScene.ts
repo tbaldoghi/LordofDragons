@@ -20,7 +20,10 @@ class ViewScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#000000");
 
     const forest = this.add.sprite(0, 0, "forest");
-    const wolf = new Wolf(this, ViewSize.width / 2, 590);
+    const wolf = new Wolf(this, ViewSize.width / 2 - 50, 590, true);
+    const wolf2 = new Wolf(this, ViewSize.width / 2 + 125, 590, true);
+    const wolf3 = new Wolf(this, ViewSize.width / 2 + 300, 590, true);
+    const wolf4 = new Wolf(this, ViewSize.width / 2 + 475, 590, true);
 
     forest.setOrigin(0);
     forest.setScale(4);
