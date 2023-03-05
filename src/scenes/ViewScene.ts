@@ -11,7 +11,6 @@ class ViewScene extends Phaser.Scene {
   private _background!: Phaser.GameObjects.TileSprite;
   private _foreground!: Phaser.GameObjects.TileSprite;
   private _isTurnRight: boolean;
-  private _elapsedTime: number;
 
   constructor(parent: Phaser.GameObjects.Zone) {
     super("ViewScene");
@@ -46,35 +45,35 @@ class ViewScene extends Phaser.Scene {
     this.cameras.main.setViewport(0, 0, ViewSize.width, ViewSize.height);
     this.cameras.main.setBackgroundColor("#000000");
 
-    // const forest = this.add.sprite(0, 0, "forest");
+    const forest = this.add.sprite(0, 0, "forest");
 
-    const sky = this.add.image(0, 0, "forest1");
-    this._distance = this.add.tileSprite(0, 0, 1280, 800, "forest2");
-    this._background = this.add.tileSprite(0, 0, 1280, 800, "forest3");
-    this._foreground = this.add.tileSprite(0, 0, 1280, 800, "forest4");
+    // const sky = this.add.image(0, 0, "forest1");
+    // this._distance = this.add.tileSprite(0, 0, 1280, 800, "forest2");
+    // this._background = this.add.tileSprite(0, 0, 1280, 800, "forest3");
+    // this._foreground = this.add.tileSprite(0, 0, 1280, 800, "forest4");
 
-    const wolf = new Wolf(this, ViewSize.width / 2 - 300, 590, true);
-    const wolf2 = new Wolf(this, ViewSize.width / 2 - 75, 590, true);
-    const wolf3 = new Wolf(this, ViewSize.width / 2 + 200, 590, true);
-    const wolf4 = new Wolf(this, ViewSize.width / 2 + 400, 590, true);
+    const wolf = new Wolf(this, ViewSize.width / 2 - 300, 570, true);
+    const wolf2 = new Wolf(this, ViewSize.width / 2 - 75, 570, true);
+    const wolf3 = new Wolf(this, ViewSize.width / 2 + 200, 570, true);
+    const wolf4 = new Wolf(this, ViewSize.width / 2 + 400, 570, true);
 
-    // forest.setOrigin(0);
-    // forest.setScale(4);
+    forest.setOrigin(0);
+    forest.setScale(4);
 
-    sky.setOrigin(0);
-    this._distance.setOrigin(0);
-    this._background.setOrigin(0);
-    this._foreground.setOrigin(0);
+    // sky.setOrigin(0);
+    // this._distance.setOrigin(0);
+    // this._background.setOrigin(0);
+    // this._foreground.setOrigin(0);
 
     eventHandler.on(
       "turnRight",
       () => {
         this.direction < 3 ? this.direction++ : (this.direction = 0);
-        // this.cameras.main.pan(
-        //   ViewSize.width / 2 + ViewSize.width * this.direction,
-        //   ViewSize.height / 2,
-        //   500
-        // );
+        this.cameras.main.pan(
+          ViewSize.width / 2 + ViewSize.width * this.direction,
+          ViewSize.height / 2,
+          500
+        );
         this._isTurnRight = true;
       },
       this
@@ -84,11 +83,11 @@ class ViewScene extends Phaser.Scene {
       "turnLeft",
       () => {
         this.direction > 0 ? this.direction-- : (this.direction = 3);
-        // this.cameras.main.pan(
-        //   ViewSize.width / 2 + ViewSize.width * this.direction,
-        //   ViewSize.height / 2,
-        //   500
-        // );
+        this.cameras.main.pan(
+          ViewSize.width / 2 + ViewSize.width * this.direction,
+          ViewSize.height / 2,
+          500
+        );
       },
       this
     );

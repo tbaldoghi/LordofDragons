@@ -32,14 +32,7 @@ class FloatMenuScene extends Phaser.Scene {
     border.setStrokeStyle(4, 0x574852);
 
     this.items.forEach((item: string, index: number) => {
-      const button = new TextButton(
-        this,
-        20,
-        0 + 34 * index,
-        item,
-        () => {},
-        28
-      );
+      const button = new TextButton(this, 20, 34 * index, item, () => {}, 28);
     });
 
     this.events.on(
