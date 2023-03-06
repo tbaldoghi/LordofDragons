@@ -11,12 +11,18 @@ class Player {
   private _position: Position = { x: 0, y: 0 };
   private _direction: number;
   private _currentLevel: number;
+  private _health: number;
+  private _mana: number;
+  private _movement: number;
 
   constructor() {
     this._position.x = mapSize.width / 2;
     this._position.y = mapSize.height / 2;
     this._direction = Directions.north;
     this._currentLevel = 1;
+    this._health = 0;
+    this._mana = 0;
+    this._movement = 0;
   }
 
   public addToGame = (scene: Phaser.Scene): void => {

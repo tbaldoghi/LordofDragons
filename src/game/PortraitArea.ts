@@ -23,18 +23,35 @@ class PortraitArea {
     portraits.forEach((portrait: string, index: number): void => {
       const x = this._scene.scale.gameSize.width - offsetX + index * size;
 
-      this._scene.add.image(x, y, portrait);
-      this._scene.add.image(x, y + 84, "uiMove");
-      const moveText = this._scene.add.text(
-        x - 56,
-        y + 68,
-        index === 0 ? "Move: 99/99" : "Move: 0/0",
-        {
-          font: "24px Oswald",
-          color: "#4b3d44",
-        }
-      );
-      moveText.setOrigin(0);
+      const healthBar = new Phaser.GameObjects.Graphics(this._scene);
+      const manaBar = new Phaser.GameObjects.Graphics(this._scene);
+      const movementBar = new Phaser.GameObjects.Graphics(this._scene);
+
+      manaBar.clear();
+      manaBar.fillStyle(0x574852);
+      manaBar.fillRect(x - 60, y - 60, 120, 12);
+
+      healthBar.clear();
+      healthBar.fillStyle(0x574852);
+      healthBar.fillRect(x - 60, y - 76, 120, 12);
+
+      movementBar.clear();
+      movementBar.fillStyle(0x574852);
+      movementBar.fillRect(x - 60, y - 44, 120, 12);
+
+      if (index === 0) {
+        manaBar.fillStyle(0x4b726e);
+        manaBar.fillRect(x - 60 + 2, y - 60 + 2, 60, 10);
+        healthBar.fillStyle(0x79444a);
+        healthBar.fillRect(x - 60 + 2, y - 76 + 2, 90, 10);
+        movementBar.fillStyle(0xb3a555);
+        movementBar.fillRect(x - 60 + 2, y - 44 + 2, 100, 10);
+      }
+
+      this._scene.add.existing(healthBar);
+      this._scene.add.existing(manaBar);
+      this._scene.add.existing(movementBar);
+      this._scene.add.image(x, y + 36, portrait);
 
       const inventoryButton = new Button(
         this._scene,

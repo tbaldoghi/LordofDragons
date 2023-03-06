@@ -87,7 +87,7 @@ class GameScene extends Phaser.Scene {
     const uiBackground = this.add.image(0, 0, "uiBackground");
     const uiBorder = this.add.image(0, 0, "uiBorder");
     const uiRightBack = this.add.image(1288, 0, "uiRightBack");
-    const uiMapBorder = this.add.image(1430, 60, "uiMapBorder");
+    const uiMapBorder = this.add.image(1380, 60, "uiMapBorder");
 
     uiBackground.setOrigin(0);
     uiBorder.setOrigin(0);

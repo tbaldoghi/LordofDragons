@@ -22,7 +22,7 @@ class NavigationArea {
     const size = 78;
     const offsetX = 575;
     const offsetY = 175;
-    const text = this.scene.add.text(1440, 20, "Month: 1 Week: 1 Day: 1", {
+    const text = this.scene.add.text(1390, 20, "Month: 1 Week: 1 Day: 1", {
       font: "24px Oswald",
       color: "#4b3d44",
     });
