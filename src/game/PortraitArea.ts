@@ -11,7 +11,7 @@ class PortraitArea {
   public init() {
     const size = 155;
     const offsetX = 550;
-    const offsetY = 400;
+    const offsetY = 380;
     const y = this._scene.scale.gameSize.height - offsetY;
     const portraits = [
       "portrait",

@@ -11,10 +11,10 @@ class MiniMapScene extends Phaser.Scene {
   }
 
   public create(): void {
-    const miniMapSize = 7;
+    const miniMapSize = 9;
     const size = 64;
-    const offsetX = 500;
-    const offsetY = 100;
+    const offsetX = 572;
+    const offsetY = 48;
     const worldMap = world.worldMaps.find(
       (worldMap) => worldMap.level === player.currentLevel
     );
@@ -39,8 +39,8 @@ class MiniMapScene extends Phaser.Scene {
     }
 
     this._minimapArrow = this.add.image(
-      this.scale.gameSize.width - offsetX + 3 * size,
-      offsetY + 3 * size,
+      this.scale.gameSize.width - offsetX + 4 * size,
+      offsetY + 4 * size,
       "minimapArrow"
     );
 
@@ -49,7 +49,7 @@ class MiniMapScene extends Phaser.Scene {
   }
 
   public update(): void {
-    const miniMapSize = 7;
+    const miniMapSize = 9;
     const worldMap = world.worldMaps.find(
       (worldMap) => worldMap.level === player.currentLevel
     );

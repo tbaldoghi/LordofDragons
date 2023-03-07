@@ -2,7 +2,6 @@ import Button from "../ui/common/Button";
 import SwitchButton from "../ui/common/SwitchButton";
 import eventHandler from "../contants/eventHandler";
 import MiniMapScene from "../scenes/MiniMapScene";
-import world from "../contants/world";
 
 class NavigationArea {
   private scene: Phaser.Scene;
@@ -21,17 +20,38 @@ class NavigationArea {
     const miniMapScene = new MiniMapScene();
     const size = 78;
     const offsetX = 575;
-    const offsetY = 175;
-    const text = this.scene.add.text(1390, 20, "Month: 1 Week: 1 Day: 1", {
+    const offsetY = 152;
+    const dateBackground = this.scene.add.image(1618, 885, "uiDateBackground");
+    const textMonthWeek = this.scene.add.text(1630, 890, "Month: 1 Week: 1", {
       font: "24px Oswald",
+      color: "#4b3d44",
+    });
+    const textDay = this.scene.add.text(1630, 916, "Day: 1", {
+      font: "32px Oswald",
       color: "#4b3d44",
     });
 
     this.scene.scene.add("MiniMapScene", miniMapScene);
     miniMapScene.scene.start();
+    dateBackground.setOrigin(0);
 
     const x = this.scene.scale.gameSize.width - offsetX + size * 6;
     const y = this.scene.scale.gameSize.height - offsetY;
+
+    const nextTurnButton = new Button(
+      this.scene,
+      x - size * 2,
+      y + size,
+      "nextTurn",
+      this.handleNextTurnClick
+    );
+    const menuButton = new Button(
+      this.scene,
+      x - size,
+      y + size,
+      "menu",
+      this.handleMenuClick
+    );
     const fullScreenButton = new SwitchButton(
       this.scene,
       x,
@@ -139,6 +159,10 @@ class NavigationArea {
   private handleRightClick = (): void => {
     eventHandler.emit("rigth");
   };
+
+  private handleNextTurnClick = (): void => {};
+
+  private handleMenuClick = (): void => {};
 
   private handleFullScreenClick = (): void => {
     this.scene.scale.toggleFullscreen();
