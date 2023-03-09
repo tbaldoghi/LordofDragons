@@ -45,10 +45,10 @@ class WorldGenerator {
 
     this._world.worldMaps.push(worldMap);
 
-    for (let i = 0; i <= width; i++) {
+    for (let i = 0; i < width; i++) {
       this._world.worldMaps[level].map[i] = [];
 
-      for (let j = 0; j <= height; j++) {
+      for (let j = 0; j < height; j++) {
         let event = Math.floor(Math.random() * 4) as Event;
         let type = Math.floor(Math.random() * (3 + 1));
 
@@ -66,7 +66,7 @@ class WorldGenerator {
           type = Math.floor(Math.random() * (3 + 1));
         }
 
-        if (i === 0 || j === 0 || i === width || j === height) {
+        if (i === 0 || j === 0 || i === width - 1 || j === height - 1) {
           type = MapTileTypes.mountain;
         }
 

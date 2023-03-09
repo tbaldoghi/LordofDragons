@@ -157,7 +157,7 @@ class NavigationArea {
   };
 
   private handleRightClick = (): void => {
-    eventHandler.emit("rigth");
+    eventHandler.emit("right");
   };
 
   private handleNextTurnClick = (): void => {};

@@ -117,6 +117,26 @@ class ViewScene extends Phaser.Scene {
       },
       this
     );
+
+    eventHandler.on(
+      "moveBack",
+      () => {
+        this.cameras.main.setZoom(1.25);
+        this.cameras.main.zoomTo(1, 250, "Linear", false);
+
+        const worldMap = world.worldMaps.find(
+          (worldMap) => worldMap.level === player.currentLevel
+        );
+        const mapTile = worldMap?.map[player.positionX][player.positionY];
+
+        if (Math.round(Math.random()) === 1) {
+          this.cameras.main.setScroll(ViewSize.width, 0);
+        } else {
+          this.cameras.main.setScroll(0, 0);
+        }
+      },
+      this
+    );
   }
 
   update(time: number, delta: number): void {

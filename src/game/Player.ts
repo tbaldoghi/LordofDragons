@@ -83,28 +83,30 @@ class Player {
   };
 
   private handleUp = (): void => {
-    if (this._position.y < mapSize.height) {
+    if (this._position.y > 0) {
       this._position.y--;
       eventHandler.emit("moveForward");
     }
   };
 
   private handleDown = (): void => {
-    if (this._position.y > 0) {
+    if (this._position.y < mapSize.height - 1) {
       this._position.y++;
       eventHandler.emit("moveBack");
     }
   };
 
   private handleRight = (): void => {
-    if (this._position.x < Directions.east) {
+    if (this._position.x < mapSize.width - 1) {
       this._position.x++;
+      eventHandler.emit("moveRight");
     }
   };
 
   private handleLeft = (): void => {
     if (this._position.x > 0) {
       this._position.x--;
+      eventHandler.emit("moveLeft");
     }
   };
 }

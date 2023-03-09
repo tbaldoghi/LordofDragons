@@ -5,13 +5,14 @@ import world from "../contants/world";
 class MiniMapScene extends Phaser.Scene {
   private _minimapArrow!: Phaser.GameObjects.Image;
   private _miniMapTiles: MiniMapTile[][] = [];
+  private readonly _miniMapSize = 9;
+  private readonly _offsetCenter = Math.floor(this._miniMapSize / 2);
 
   constructor() {
     super("MiniMapScene");
   }
 
   public create(): void {
-    const miniMapSize = 9;
     const size = 64;
     const offsetX = 572;
     const offsetY = 48;
@@ -20,13 +21,16 @@ class MiniMapScene extends Phaser.Scene {
     );
     const map = worldMap?.map || [];
 
-    for (let i = 0; i < miniMapSize; i++) {
+    for (let i = 0; i < this._miniMapSize; i++) {
       this._miniMapTiles[i] = [];
 
-      for (let j = 0; j < miniMapSize; j++) {
+      for (let j = 0; j < this._miniMapSize; j++) {
         const x = this.scale.gameSize.width - offsetX + j * size;
         const y = offsetY + i * size;
-        const mapTile = map[i + player.positionX][j + player.positionY];
+        const mapTile =
+          map[i + player.positionX - this._offsetCenter][
+            j + player.positionY - this._offsetCenter
+          ];
 
         this._miniMapTiles[i][j] = new MiniMapTile(
           this,
@@ -39,8 +43,8 @@ class MiniMapScene extends Phaser.Scene {
     }
 
     this._minimapArrow = this.add.image(
-      this.scale.gameSize.width - offsetX + 4 * size,
-      offsetY + 4 * size,
+      this.scale.gameSize.width - offsetX + this._offsetCenter * size,
+      offsetY + this._offsetCenter * size,
       "minimapArrow"
     );
 
@@ -49,17 +53,29 @@ class MiniMapScene extends Phaser.Scene {
   }
 
   public update(): void {
-    const miniMapSize = 9;
     const worldMap = world.worldMaps.find(
       (worldMap) => worldMap.level === player.currentLevel
     );
     const map = worldMap?.map || [];
 
-    for (let i = 0; i < miniMapSize; i++) {
-      for (let j = 0; j < miniMapSize; j++) {
-        const mapTile = map[i + player.positionY][j + player.positionX];
-        this._miniMapTiles[i][j].setFrame(mapTile.type);
-        this._miniMapTiles[i][j].updateMark(mapTile.event);
+    for (let i = 0; i < this._miniMapSize; i++) {
+      for (let j = 0; j < this._miniMapSize; j++) {
+        if (
+          i + player.positionY - this._offsetCenter < map.length &&
+          j + player.positionX - this._offsetCenter < map.length &&
+          i + player.positionY - this._offsetCenter >= 0 &&
+          j + player.positionX - this._offsetCenter >= 0
+        ) {
+          const mapTile =
+            map[i + player.positionY - this._offsetCenter][
+              j + player.positionX - this._offsetCenter
+            ];
+          this._miniMapTiles[i][j].setFrame(mapTile.type);
+          this._miniMapTiles[i][j].updateMark(mapTile.event);
+        } else {
+          this._miniMapTiles[i][j].setFrame(4);
+          this._miniMapTiles[i][j].updateMark(0);
+        }
       }
     }
 
