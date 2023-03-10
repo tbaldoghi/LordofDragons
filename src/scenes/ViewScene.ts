@@ -46,12 +46,6 @@ class ViewScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#000000");
 
     const forest = this.add.sprite(0, 0, "forest");
-
-    // const sky = this.add.image(0, 0, "forest1");
-    // this._distance = this.add.tileSprite(0, 0, 1280, 800, "forest2");
-    // this._background = this.add.tileSprite(0, 0, 1280, 800, "forest3");
-    // this._foreground = this.add.tileSprite(0, 0, 1280, 800, "forest4");
-
     const wolf = new Wolf(this, ViewSize.width / 2 - 300, 570, true);
     const wolf2 = new Wolf(this, ViewSize.width / 2 - 75, 570, true);
     const wolf3 = new Wolf(this, ViewSize.width / 2 + 200, 570, true);
@@ -59,11 +53,6 @@ class ViewScene extends Phaser.Scene {
 
     forest.setOrigin(0);
     forest.setScale(4);
-
-    // sky.setOrigin(0);
-    // this._distance.setOrigin(0);
-    // this._background.setOrigin(0);
-    // this._foreground.setOrigin(0);
 
     eventHandler.on(
       "turnRight",
@@ -81,6 +70,33 @@ class ViewScene extends Phaser.Scene {
 
     eventHandler.on(
       "turnLeft",
+      () => {
+        this.direction > 0 ? this.direction-- : (this.direction = 3);
+        this.cameras.main.pan(
+          ViewSize.width / 2 + ViewSize.width * this.direction,
+          ViewSize.height / 2,
+          500
+        );
+      },
+      this
+    );
+
+    eventHandler.on(
+      "moveRight",
+      () => {
+        this.direction < 3 ? this.direction++ : (this.direction = 0);
+        this.cameras.main.pan(
+          ViewSize.width / 2 + ViewSize.width * this.direction,
+          ViewSize.height / 2,
+          500
+        );
+        this._isTurnRight = true;
+      },
+      this
+    );
+
+    eventHandler.on(
+      "moveLeft",
       () => {
         this.direction > 0 ? this.direction-- : (this.direction = 3);
         this.cameras.main.pan(
@@ -121,6 +137,11 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "moveBack",
       () => {
+        if (Math.round(Math.random()) === 1) {
+          this.cameras.main.setScroll(ViewSize.width, 0);
+        } else {
+          this.cameras.main.setScroll(0, 0);
+        }
         this.cameras.main.setZoom(1.25);
         this.cameras.main.zoomTo(1, 250, "Linear", false);
 
@@ -128,12 +149,6 @@ class ViewScene extends Phaser.Scene {
           (worldMap) => worldMap.level === player.currentLevel
         );
         const mapTile = worldMap?.map[player.positionX][player.positionY];
-
-        if (Math.round(Math.random()) === 1) {
-          this.cameras.main.setScroll(ViewSize.width, 0);
-        } else {
-          this.cameras.main.setScroll(0, 0);
-        }
       },
       this
     );

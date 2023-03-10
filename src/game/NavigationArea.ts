@@ -5,9 +5,7 @@ import MiniMapScene from "../scenes/MiniMapScene";
 
 class NavigationArea {
   private scene: Phaser.Scene;
-  private turnLeftButton?: Button;
   private upButton?: Button;
-  private turnRightButton?: Button;
   private leftButton?: Button;
   private downButton?: Button;
   private rightButton?: Button;
@@ -64,13 +62,8 @@ class NavigationArea {
       for (let j = 0; j <= 2; j++) {
         const x = this.scene.scale.gameSize.width - offsetX + j * size;
         const y = this.scene.scale.gameSize.height - offsetY + i * size;
-
-        if (i === 0 && j === 0) {
-          this.addTurnLeftButton(x, y);
-        } else if (i === 0 && j === 1) {
+        if (i === 0 && j === 1) {
           this.addUpButton(x, y);
-        } else if (i === 0 && j === 2) {
-          this.addTurnRightButton(x, y);
         } else if (i === 1 && j === 0) {
           this.addLeftButton(x, y);
         } else if (i === 1 && j === 1) {
@@ -82,40 +75,12 @@ class NavigationArea {
     }
   }
 
-  private addTurnLeftButton = (x: number, y: number): void => {
-    this.turnLeftButton = new Button(
-      this.scene,
-      x,
-      y,
-      "arrowTurnLeft",
-      this.handleTurnLeftClick
-    );
-  };
-
-  private handleTurnLeftClick = (): void => {
-    eventHandler.emit("turnLeft");
-  };
-
   private addUpButton = (x: number, y: number): void => {
     this.upButton = new Button(this.scene, x, y, "arrowUp", this.handleUpClick);
   };
 
   private handleUpClick = (): void => {
     eventHandler.emit("up");
-  };
-
-  private addTurnRightButton = (x: number, y: number): void => {
-    this.turnRightButton = new Button(
-      this.scene,
-      x,
-      y,
-      "arrowTurnRight",
-      this.handleTurnRightClick
-    );
-  };
-
-  private handleTurnRightClick = (): void => {
-    eventHandler.emit("turnRight");
   };
 
   private addLeftButton = (x: number, y: number): void => {
