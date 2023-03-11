@@ -74,7 +74,19 @@ class WorldGenerator {
           event = MapTileEvents.empty;
         }
 
-        this._world.worldMaps[level].map[i][j] = new MapTile(type, event);
+        const mapTile = new MapTile(type, event);
+
+        if (event === MapTileEvents.creature) {
+          const creatures = [];
+
+          for (let i = 1; i <= Math.floor(Math.random() * 4); i++) {
+            creatures.push("wolf");
+          }
+
+          mapTile.creatures = creatures;
+        }
+
+        this._world.worldMaps[level].map[i][j] = mapTile;
       }
     }
   }

@@ -21,12 +21,12 @@ abstract class Creature extends Phaser.GameObjects.Image {
 
     if (isActive) {
       this.setInteractive();
-      this.on("pointerover", this.handleOver);
-      this.on("pointerout", this.handleOut);
+      this.on("pointerover", this.handleMouseOver);
+      this.on("pointerout", this.handleMouseOut);
     }
   }
 
-  handleOver = (): void => {
+  handleMouseOver = (): void => {
     SelectTarget.handleOver(
       this.scene,
       this.x,
@@ -36,7 +36,7 @@ abstract class Creature extends Phaser.GameObjects.Image {
     );
   };
 
-  handleOut = (): void => {
+  handleMouseOut = (): void => {
     SelectTarget.handleOut(this.scene);
   };
 }

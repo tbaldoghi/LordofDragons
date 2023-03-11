@@ -1,6 +1,7 @@
 import player from "../contants/player";
 import MiniMapTile from "../game/map/MiniMapTile";
 import world from "../contants/world";
+import eventHandler from "../contants/eventHandler";
 
 class MiniMapScene extends Phaser.Scene {
   private _minimapArrow!: Phaser.GameObjects.Image;
@@ -50,11 +51,16 @@ class MiniMapScene extends Phaser.Scene {
 
     this._minimapArrow.setScale(2);
     this._minimapArrow.setDepth(1);
+
+    eventHandler.on("moveForward", this.redrawMap);
+    eventHandler.on("moveBack", this.redrawMap);
+    eventHandler.on("moveRight", this.redrawMap);
+    eventHandler.on("moveLeft", this.redrawMap);
   }
 
-  public update(): void {
+  public redrawMap = (): void => {
     const worldMap = world.worldMaps.find(
-      (worldMap) => worldMap.level === player.currentLevel
+      (worldMap): boolean => worldMap.level === player.currentLevel
     );
     const map = worldMap?.map || [];
 
@@ -78,9 +84,7 @@ class MiniMapScene extends Phaser.Scene {
         }
       }
     }
-
-    this._minimapArrow.setAngle(90 * player.direction);
-  }
+  };
 }
 
 export default MiniMapScene;
