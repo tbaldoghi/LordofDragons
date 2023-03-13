@@ -62,7 +62,7 @@ class GameScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 32,
       startFrame: 0,
-      endFrame: 4,
+      endFrame: 10,
     });
     this.load.spritesheet("inventory", `${path}/ui/inventory_button.png`, {
       frameWidth: 64,

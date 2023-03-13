@@ -1,8 +1,9 @@
 import MapTileTypes from "../../enums/MapTileTypes";
 import WorldLevels from "../../enums/WorldLevels";
-import MapTile, { Event } from "../MapTile";
+import MapTile, { BackgroundVariant, Event, Variant } from "../MapTile";
 import mapSize from "../../contants/mapSize";
 import MapTileEvents from "../../enums/MapTileEvents";
+import MapTilePlaceTypes from "../../enums/MapTilePlaceTypes";
 
 type MapType = "forest" | "cave" | "mine" | "catacomb";
 
@@ -49,8 +50,13 @@ class WorldGenerator {
       this._world.worldMaps[level].map[i] = [];
 
       for (let j = 0; j < height; j++) {
+        const backgroundVariant = {
+          distance: Math.floor(Math.random() * 4) as Variant,
+          background: Math.floor(Math.random() * 4) as Variant,
+          foreground: Math.floor(Math.random() * 4) as Variant,
+        } as BackgroundVariant;
+        let type = Math.floor(Math.random() * 4);
         let event = Math.floor(Math.random() * 4) as Event;
-        let type = Math.floor(Math.random() * (3 + 1));
 
         for (let i = 0; i < 2; i++) {
           if (event !== MapTileEvents.empty) {
@@ -59,27 +65,35 @@ class WorldGenerator {
         }
 
         if (type !== MapTileTypes.forest) {
-          type = Math.floor(Math.random() * (3 + 1));
+          type = Math.floor(Math.random() * 4);
         }
 
         if (type === MapTileTypes.mountain) {
-          type = Math.floor(Math.random() * (3 + 1));
+          type = Math.floor(Math.random() * 4);
         }
 
         if (i === 0 || j === 0 || i === width - 1 || j === height - 1) {
           type = MapTileTypes.mountain;
         }
 
-        if (type === MapTileTypes.mountain) {
+        if (Math.random() < 0.1) {
+          type = Math.floor(Math.random() * 6 + 5);
+          console.log(type);
+        }
+
+        if (
+          type === MapTileTypes.mountain ||
+          type >= MapTilePlaceTypes.village
+        ) {
           event = MapTileEvents.empty;
         }
 
-        const mapTile = new MapTile(type, event);
+        const mapTile = new MapTile(type, backgroundVariant, event);
 
         if (event === MapTileEvents.creature) {
           const creatures = [];
 
-          for (let i = 1; i <= Math.floor(Math.random() * 4); i++) {
+          for (let i = 0; i < Math.floor(Math.random() * 4 + 1); i++) {
             creatures.push("wolf");
           }
 

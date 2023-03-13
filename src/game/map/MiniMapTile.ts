@@ -65,7 +65,7 @@ class MiniMapTile extends Phaser.GameObjects.Sprite {
     this._label.setOrigin(0);
     this._label.setStrokeStyle(1, 0x574852);
 
-    this._labelText = this.scene.add.text(this._x - 84, this._y + 18, "Wolf", {
+    this._labelText = this.scene.add.text(this._x - 84, this._y + 18, `Wolf`, {
       font: "24px Oswald",
       color: "#4b3d44",
     });

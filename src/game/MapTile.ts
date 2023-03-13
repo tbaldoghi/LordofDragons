@@ -1,17 +1,34 @@
 export type Event = 0 | 1 | 2 | 3;
+export type Variant = 0 | 1 | 2 | 3;
+
+export interface BackgroundVariant {
+  distance: Variant;
+  background: Variant;
+  foreground: Variant;
+}
 
 class MapTile {
   private _type: number;
+  private _backgroundVariant: BackgroundVariant;
   private _event: Event;
   private _creatures?: string[];
 
-  constructor(type: number, event: Event) {
+  constructor(
+    type: number,
+    backgroundVariant: BackgroundVariant,
+    event: Event
+  ) {
     this._type = type;
+    this._backgroundVariant = backgroundVariant;
     this._event = event;
   }
 
   public get type(): number {
     return this._type;
+  }
+
+  public get backgroundVariant(): BackgroundVariant {
+    return this._backgroundVariant;
   }
 
   public get event(): Event {

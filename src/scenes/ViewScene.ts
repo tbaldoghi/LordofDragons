@@ -51,11 +51,12 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "moveRight",
       () => {
-        this.cameras.main.pan(
-          ViewSize.width / 2 + ViewSize.width,
-          ViewSize.height / 2,
-          500
-        );
+        // this.cameras.main.pan(
+        //   ViewSize.width / 2 + ViewSize.width,
+        //   ViewSize.height / 2,
+        //   500
+        // );
+        this.redrawScreen();
       },
       this
     );
@@ -63,11 +64,12 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "moveLeft",
       () => {
-        this.cameras.main.pan(
-          ViewSize.width / 2 + ViewSize.width,
-          ViewSize.height / 2,
-          500
-        );
+        // this.cameras.main.pan(
+        //   ViewSize.width / 2 + ViewSize.width,
+        //   ViewSize.height / 2,
+        //   500
+        // );
+        this.redrawScreen();
       },
       this
     );
@@ -132,11 +134,11 @@ class ViewScene extends Phaser.Scene {
       (worldMap): boolean => worldMap.level === player.currentLevel
     );
     const map = worldMap?.map || [];
-    const { creatures } = map[player.positionX][player.positionY];
-    console.log(creatures);
+    const { creatures } = map[player.positionY][player.positionX];
+
     creatures.forEach((creature: string, index: number): void => {
       this._creatures.push(
-        new Wolf(this, ViewSize.width / 2 + 200 * index, 570, true)
+        new Wolf(this, ViewSize.width / 2 + 200 * index - 300, 570, true)
       );
     });
   };
