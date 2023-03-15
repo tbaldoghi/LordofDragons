@@ -3,6 +3,8 @@ import Wolf from "../game/creature/Wolf";
 import eventHandler from "../contants/eventHandler";
 import world from "../contants/world";
 import player from "../contants/player";
+import Creatures from "../enums/Creatures";
+import Skeleton from "../game/creature/Skeleton";
 
 class ViewScene extends Phaser.Scene {
   private parent: Phaser.GameObjects.Zone;
@@ -137,9 +139,23 @@ class ViewScene extends Phaser.Scene {
     const { creatures } = map[player.positionY][player.positionX];
 
     creatures.forEach((creature: string, index: number): void => {
-      this._creatures.push(
-        new Wolf(this, ViewSize.width / 2 + 200 * index - 300, 570, true)
-      );
+      switch (creature) {
+        case Creatures.wolf:
+          this._creatures.push(
+            new Wolf(this, ViewSize.width / 2 + 200 * index - 300, 570, true)
+          );
+          break;
+        default:
+          this._creatures.push(
+            new Skeleton(
+              this,
+              ViewSize.width / 2 + 300 * index - 450,
+              520,
+              true
+            )
+          );
+          break;
+      }
     });
   };
 }

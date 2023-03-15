@@ -4,6 +4,7 @@ import MapTile, { BackgroundVariant, Event, Variant } from "../MapTile";
 import mapSize from "../../contants/mapSize";
 import MapTileEvents from "../../enums/MapTileEvents";
 import MapTilePlaceTypes from "../../enums/MapTilePlaceTypes";
+import Creatures from "../../enums/Creatures";
 
 type MapType = "forest" | "cave" | "mine" | "catacomb";
 
@@ -93,8 +94,14 @@ class WorldGenerator {
         if (event === MapTileEvents.creature) {
           const creatures = [];
 
-          for (let i = 0; i < Math.floor(Math.random() * 4 + 1); i++) {
-            creatures.push("wolf");
+          if (Math.floor(Math.random() * 2) % 2 === 0) {
+            for (let i = 0; i < Math.floor(Math.random() * 4 + 1); i++) {
+              creatures.push(Creatures.wolf);
+            }
+          } else {
+            for (let i = 0; i < Math.floor(Math.random() * 4 + 1); i++) {
+              creatures.push(Creatures.skeleton);
+            }
           }
 
           mapTile.creatures = creatures;

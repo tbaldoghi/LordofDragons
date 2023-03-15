@@ -1,17 +1,13 @@
 import Phaser from "phaser";
 import creatures from "../contants/creatures";
-import mapSize from "../contants/mapSize";
 import player from "../contants/player";
-import world from "../contants/world";
 import ViewSize from "../enums/ViewSize";
-import GameArea from "../game/GameArea";
 import MessageArea from "../game/MessageArea";
 import NavigationArea from "../game/NavigationArea";
 import PortraitArea from "../game/PortraitArea";
 import ViewScene from "./ViewScene";
 
 class GameScene extends Phaser.Scene {
-  private _gameArea: GameArea;
   private _messageArea: MessageArea;
   private _navigationArea: NavigationArea;
   private _portraitArea: PortraitArea;
@@ -19,7 +15,6 @@ class GameScene extends Phaser.Scene {
   constructor() {
     super("GameScene");
 
-    this._gameArea = new GameArea(this);
     this._messageArea = new MessageArea(this);
     this._navigationArea = new NavigationArea(this);
     this._portraitArea = new PortraitArea(this);
@@ -151,14 +146,6 @@ class GameScene extends Phaser.Scene {
         endFrame: 1,
       });
     });
-  }
-
-  update(time: number, delta: number): void {
-    const { x, y } = this.input.mousePointer.position;
-
-    if (x > 0 && y > 0 && x < 1280 && y < 800) {
-      this._gameArea.setMousePosition(x, y);
-    }
   }
 }
 

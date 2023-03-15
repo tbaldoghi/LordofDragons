@@ -64,6 +64,8 @@ class MiniMapScene extends Phaser.Scene {
     );
     const map = worldMap?.map || [];
 
+    this._minimapArrow.setAngle(90 * player.direction);
+
     for (let i = 0; i < this._miniMapSize; i++) {
       for (let j = 0; j < this._miniMapSize; j++) {
         if (

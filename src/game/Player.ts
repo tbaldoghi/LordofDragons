@@ -26,8 +26,6 @@ class Player {
   }
 
   public addToGame = (scene: Phaser.Scene): void => {
-    eventHandler.on("turnRight", this.handleTurnRight, scene);
-    eventHandler.on("turnLeft", this.handleTurnLeft, scene);
     eventHandler.on("up", this.handleUp, scene);
     eventHandler.on("down", this.handleDown, scene);
     eventHandler.on("right", this.handleRight, scene);
@@ -66,25 +64,11 @@ class Player {
     return this._currentLevel;
   }
 
-  private handleTurnRight = (): void => {
-    if (this._direction < Directions.west) {
-      this._direction++;
-    } else {
-      this._direction = 0;
-    }
-  };
-
-  private handleTurnLeft = (): void => {
-    if (this._direction > Directions.north) {
-      this.direction--;
-    } else {
-      this.direction = 3;
-    }
-  };
-
   private handleUp = (): void => {
     if (this._position.y > 0) {
       this._position.y--;
+      this._direction = Directions.north;
+
       eventHandler.emit("moveForward");
     }
   };
@@ -92,6 +76,8 @@ class Player {
   private handleDown = (): void => {
     if (this._position.y < mapSize.height - 1) {
       this._position.y++;
+      this._direction = Directions.south;
+
       eventHandler.emit("moveBack");
     }
   };
@@ -99,6 +85,8 @@ class Player {
   private handleRight = (): void => {
     if (this._position.x < mapSize.width - 1) {
       this._position.x++;
+      this._direction = Directions.east;
+
       eventHandler.emit("moveRight");
     }
   };
@@ -106,6 +94,8 @@ class Player {
   private handleLeft = (): void => {
     if (this._position.x > 0) {
       this._position.x--;
+      this._direction = Directions.west;
+
       eventHandler.emit("moveLeft");
     }
   };

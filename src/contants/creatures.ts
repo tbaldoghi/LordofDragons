@@ -1,3 +1,3 @@
-const creatures = ["wolf"];
+const creatures = ["wolf", "skeleton"];
 
 export default creatures;
