@@ -48,6 +48,7 @@ class MessageArea {
   handleTextClick = (): void => {
     this._scene.cameras.main.fadeOut(500, 0, 0, 0, () => {
       this._scene.scene.start("BattleScene", BattleScene);
+      this._scene.scene.stop("MiniMapScene");
     });
   };
 }
