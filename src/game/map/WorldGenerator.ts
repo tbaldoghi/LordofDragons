@@ -73,13 +73,12 @@ class WorldGenerator {
           type = Math.floor(Math.random() * 4);
         }
 
-        if (i === 0 || j === 0 || i === width - 1 || j === height - 1) {
-          type = MapTileTypes.mountain;
+        if (Math.random() < 0.1) {
+          type = Math.floor(Math.random() * 6 + 7);
         }
 
-        if (Math.random() < 0.1) {
-          type = Math.floor(Math.random() * 6 + 5);
-          console.log(type);
+        if (i === 0 || j === 0 || i === width - 1 || j === height - 1) {
+          type = MapTileTypes.mountain;
         }
 
         if (

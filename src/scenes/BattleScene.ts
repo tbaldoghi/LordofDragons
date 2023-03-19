@@ -1,19 +1,19 @@
 import Phaser from "phaser";
 import Wolf from "../game/creature/Wolf";
 import MessageArea from "../game/MessageArea";
-import PortraitArea from "../game/PortraitArea";
+// import PortraitArea from "../game/PortraitArea";
 import Button from "../ui/common/Button";
 import SwitchButton from "../ui/common/SwitchButton";
 import FloatMenuScene from "./FloatMenuScene";
 
 class BattleScene extends Phaser.Scene {
-  private _portraitArea: PortraitArea;
+  // private _portraitArea: PortraitArea;
   private _messageArea: MessageArea;
 
   constructor() {
     super("BattleScene");
 
-    this._portraitArea = new PortraitArea(this);
+    // this._portraitArea = new PortraitArea(this);
     this._messageArea = new MessageArea(this);
   }
 

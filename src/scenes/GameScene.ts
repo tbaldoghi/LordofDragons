@@ -3,21 +3,16 @@ import creatures from "../contants/creatures";
 import player from "../contants/player";
 import ViewSize from "../enums/ViewSize";
 import MessageArea from "../game/MessageArea";
-import NavigationArea from "../game/NavigationArea";
-import PortraitArea from "../game/PortraitArea";
+import GameUIScene from "./GameUIScene";
 import ViewScene from "./ViewScene";
 
 class GameScene extends Phaser.Scene {
   private _messageArea: MessageArea;
-  private _navigationArea: NavigationArea;
-  private _portraitArea: PortraitArea;
 
   constructor() {
     super("GameScene");
 
     this._messageArea = new MessageArea(this);
-    this._navigationArea = new NavigationArea(this);
-    this._portraitArea = new PortraitArea(this);
   }
 
   preload(): void {
@@ -57,7 +52,7 @@ class GameScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 32,
       startFrame: 0,
-      endFrame: 10,
+      endFrame: 12,
     });
     this.load.spritesheet("inventory", `${path}/ui/inventory_button.png`, {
       frameWidth: 64,
@@ -91,15 +86,11 @@ class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    const uiBackground = this.add.image(0, 0, "uiBackground");
     const uiBorder = this.add.image(0, 0, "uiBorder");
     const uiRightBack = this.add.image(1288, 0, "uiRightBack");
-    const uiMapBorder = this.add.image(1308, 8, "uiMapBorder");
 
-    uiBackground.setOrigin(0);
     uiBorder.setOrigin(0);
     uiRightBack.setOrigin(0);
-    uiMapBorder.setOrigin(0);
 
     const viewSceneZone = this.add.zone(0, 0, ViewSize.width, ViewSize.height);
 
@@ -110,14 +101,16 @@ class GameScene extends Phaser.Scene {
     this.scene.add("ViewScene", viewScene);
     viewScene.scene.start();
 
+    const gameUIScene = new GameUIScene();
+
+    this.scene.add("GameUIScene", gameUIScene);
+    gameUIScene.scene.start();
+
     this._messageArea.addMessage("A pack of wolves.");
     this._messageArea.addMessage("... Attack them.");
     this._messageArea.addMessage("... Use Speak With Animals spell.");
     this._messageArea.addMessage("... Try to sneak through.");
     this._messageArea.showMessages();
-
-    this._navigationArea.init();
-    this._portraitArea.init();
 
     player.addToGame(this);
   }

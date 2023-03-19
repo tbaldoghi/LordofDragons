@@ -57,7 +57,7 @@ class MiniMapTile extends Phaser.GameObjects.Sprite {
       this._x - 90,
       this._y + 18,
       144,
-      60,
+      68,
       0xd2c9a5,
       0.9
     );
@@ -65,10 +65,15 @@ class MiniMapTile extends Phaser.GameObjects.Sprite {
     this._label.setOrigin(0);
     this._label.setStrokeStyle(1, 0x574852);
 
-    this._labelText = this.scene.add.text(this._x - 84, this._y + 18, `Wolf`, {
-      font: "24px Oswald",
-      color: "#4b3d44",
-    });
+    this._labelText = this.scene.add.text(
+      this._x - 84,
+      this._y + 18,
+      `Wolf\n(Wandering)`,
+      {
+        font: "24px Oswald",
+        color: "#4b3d44",
+      }
+    );
     this._label.setOrigin(0);
     this._label.setDepth(2);
     this._labelText.setDepth(2);

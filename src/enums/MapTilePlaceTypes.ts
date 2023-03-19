@@ -5,6 +5,8 @@ enum MapTilePlaceTypes {
   well = 8,
   mill = 9,
   hut = 10,
+  portal = 11,
+  portalExit = 12,
 }
 
 export default MapTilePlaceTypes;
