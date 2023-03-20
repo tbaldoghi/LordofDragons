@@ -1,4 +1,3 @@
-import MessageArea from "../game/MessageArea";
 import TextButton from "../ui/common/TextButton";
 
 class FloatMenuScene extends Phaser.Scene {

@@ -1,27 +1,26 @@
 import Phaser from "phaser";
 import creatures from "../contants/creatures";
+import dialogs from "../contants/dialogs";
 import player from "../contants/player";
 import ViewSize from "../enums/ViewSize";
-import MessageArea from "../game/MessageArea";
+import Dialog from "../game/Dialog";
+import BattleUIScene from "./BattleUIScene";
+import DialogScene from "./DialogScene";
 import GameUIScene from "./GameUIScene";
 import ViewScene from "./ViewScene";
 
 class GameScene extends Phaser.Scene {
-  private _messageArea: MessageArea;
-
   constructor() {
     super("GameScene");
-
-    this._messageArea = new MessageArea(this);
   }
 
   preload(): void {
     const path = "assets/images";
 
     this.load.image("uiBackground", `${path}/ui/background.png`);
-    this.load.image("uiBorder", `${path}/ui/border.png`);
     this.load.image("uiMapBorder", `${path}/ui/map_border.png`);
     this.load.image("uiRightBack", `${path}/ui/right_back.png`);
+    this.load.image("uiRightBattleBack", `${path}/ui/right_battle_back.png`);
     this.load.image("uiSelect", `${path}/ui/select.png`);
     this.load.image("messageBackground", `${path}/ui/message_background.png`);
     this.load.image("emptyPortrait", `${path}/ui/empty_portrait.png`);
@@ -78,6 +77,18 @@ class GameScene extends Phaser.Scene {
       startFrame: 0,
       endFrame: 1,
     });
+    this.load.spritesheet("attack", `${path}/ui/attack_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
+    this.load.spritesheet("potion", `${path}/ui/potion_button.png`, {
+      frameWidth: 64,
+      frameHeight: 64,
+      startFrame: 0,
+      endFrame: 1,
+    });
     this.load.image("forest", `${path}/background/forest/forest.png`);
     this.load.image("portrait", `${path}/portraits/portrait_1.png`);
 
@@ -86,12 +97,6 @@ class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    const uiBorder = this.add.image(0, 0, "uiBorder");
-    const uiRightBack = this.add.image(1288, 0, "uiRightBack");
-
-    uiBorder.setOrigin(0);
-    uiRightBack.setOrigin(0);
-
     const viewSceneZone = this.add.zone(0, 0, ViewSize.width, ViewSize.height);
 
     viewSceneZone.setOrigin(0);
@@ -106,11 +111,16 @@ class GameScene extends Phaser.Scene {
     this.scene.add("GameUIScene", gameUIScene);
     gameUIScene.scene.start();
 
-    this._messageArea.addMessage("A pack of wolves.");
-    this._messageArea.addMessage("... Attack them.");
-    this._messageArea.addMessage("... Use Speak With Animals spell.");
-    this._messageArea.addMessage("... Try to sneak through.");
-    this._messageArea.showMessages();
+    const battleUIScene = new BattleUIScene();
+
+    this.scene.add("BattleUIScene", BattleUIScene);
+    dialogs.push(new Dialog("A pack of wolves."));
+    dialogs.push(new Dialog("... Attack them.", true, this.handleClick));
+
+    const dialogScene = new DialogScene();
+
+    this.scene.add("DialogScene", dialogScene);
+    dialogScene.scene.start();
 
     player.addToGame(this);
   }
@@ -140,6 +150,17 @@ class GameScene extends Phaser.Scene {
       });
     });
   }
+
+  private handleClick = (): void => {
+    this.scene.stop("GameUIScene");
+    this.scene.stop("MiniMapScene");
+    this.scene.start("BattleUIScene", BattleUIScene);
+    // this.cameras.main.fadeOut(500, 0, 0, 0, () => {
+    //   this.scene.stop("GameUIScene");
+    //   this.scene.stop("MiniMapScene");
+    //   this.scene.start("BattleUIScene", BattleUIScene);
+    // });
+  };
 }
 
 export default GameScene;
