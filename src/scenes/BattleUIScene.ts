@@ -31,52 +31,52 @@ class BattleUIScene extends Phaser.Scene {
         const healthBar = new StatusBar(
           this,
           StatusBarTypes.health,
-          portraitX - 132,
+          portraitX - 196,
           portraitY - 160,
-          196,
-          20
+          260,
+          26
         );
 
         const healthText = this.add.text(
-          portraitX - 160,
-          portraitY - 168,
+          portraitX - 80,
+          portraitY - 162,
           "32",
           {
             font: "24px Oswald",
-            color: "#4b3d44",
+            color: "#d2c9a5",
           }
         );
 
         const manaBar = new StatusBar(
           this,
           StatusBarTypes.mana,
-          portraitX - 132,
+          portraitX - 196,
           portraitY - 130,
-          196,
-          20
+          260,
+          26
         );
 
-        const manaText = this.add.text(portraitX - 160, portraitY - 138, "26", {
+        const manaText = this.add.text(portraitX - 80, portraitY - 132, "26", {
           font: "24px Oswald",
-          color: "#4b3d44",
+          color: "#d2c9a5",
         });
 
         const staminaBar = new StatusBar(
           this,
-          StatusBarTypes.stamina,
-          portraitX - 132,
+          StatusBarTypes.timeUnits,
+          portraitX - 196,
           portraitY - 100,
-          196,
-          20
+          260,
+          26
         );
 
         const staminaText = this.add.text(
-          portraitX - 160,
-          portraitY - 108,
+          portraitX - 80,
+          portraitY - 102,
           "15",
           {
             font: "24px Oswald",
-            color: "#4b3d44",
+            color: "#d2c9a5",
           }
         );
 

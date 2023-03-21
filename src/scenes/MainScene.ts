@@ -9,7 +9,7 @@ class MainScene extends Phaser.Scene {
   create() {
     // Workaround for the font problem.
     this.add.text(0, 0, "", {
-      font: "28px Oswald",
+      font: "24px Oswald",
       color: "#4b3d44",
     });
     this.scene.start("MenuScene", MenuScene);

@@ -12,20 +12,24 @@ class FloatMenuScene extends Phaser.Scene {
 
     this.parent = parent;
     this.key = key;
-    this.items = ["Swift attack", "Normal attack", "Power attack"];
+    this.items = [
+      "Swift attack (5 TU)",
+      "Normal attack (8 TU)",
+      "Power attack (13 TU)",
+    ];
   }
 
   create(): void {
     this.cameras.main.setViewport(
       this.parent.x,
       this.parent.y,
-      210,
+      250,
       this.items.length * 36
     );
 
     this.cameras.main.setBackgroundColor("rgba(209, 177, 135, 0.9)");
 
-    const border = this.add.rectangle(0, 0, 210, this.items.length * 36);
+    const border = this.add.rectangle(0, 0, 250, this.items.length * 36);
 
     border.setOrigin(0);
     border.setStrokeStyle(4, 0x574852);

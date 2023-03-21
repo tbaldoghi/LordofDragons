@@ -1,6 +1,6 @@
 import StatusBarTypes from "../../enums/StatusBarTypes";
 
-type StatusBarType = "health" | "mana" | "stamina";
+type StatusBarType = "health" | "mana" | "stamina" | "timeUnits";
 
 class StatusBar extends Phaser.GameObjects.Graphics {
   private readonly _offset: number = 2;
@@ -28,6 +28,9 @@ class StatusBar extends Phaser.GameObjects.Graphics {
         break;
       case StatusBarTypes.stamina:
         this.fillStyle(0xb3a555);
+        break;
+      case StatusBarTypes.timeUnits:
+        this.fillStyle(0x77743b);
         break;
     }
 
