@@ -17,8 +17,8 @@ class BattleUIScene extends Phaser.Scene {
     const portraitOffsetX = 400;
     const portraitOffsetY = 200;
     const portraits = [
-      ["portrait", "emptyPortrait"],
-      ["emptyPortrait", "emptyPortrait"],
+      ["portrait1", "portrait3"],
+      ["portrait3", "emptyPortrait"],
     ];
 
     portraits.forEach((row: string[], i: number): void => {
@@ -31,52 +31,76 @@ class BattleUIScene extends Phaser.Scene {
         const healthBar = new StatusBar(
           this,
           StatusBarTypes.health,
-          portraitX - 196,
-          portraitY - 160,
-          260,
-          26
+          portraitX - 158,
+          portraitY - 166,
+          218,
+          28
         );
 
+        const healthTextBackground = this.add.image(
+          portraitX - 192,
+          portraitY - 168,
+          "uiStatisticsBackground"
+        );
+
+        healthTextBackground.setOrigin(0);
+
         const healthText = this.add.text(
-          portraitX - 80,
-          portraitY - 162,
-          "32",
+          portraitX - 188,
+          portraitY - 168,
+          "23",
           {
             font: "24px Oswald",
-            color: "#d2c9a5",
+            color: "#4b3d44",
           }
         );
 
         const manaBar = new StatusBar(
           this,
           StatusBarTypes.mana,
-          portraitX - 196,
-          portraitY - 130,
-          260,
-          26
+          portraitX - 158,
+          portraitY - 132,
+          218,
+          28
         );
 
-        const manaText = this.add.text(portraitX - 80, portraitY - 132, "26", {
+        const manaTextBackground = this.add.image(
+          portraitX - 192,
+          portraitY - 134,
+          "uiStatisticsBackground"
+        );
+
+        manaTextBackground.setOrigin(0);
+
+        const manaText = this.add.text(portraitX - 188, portraitY - 134, "36", {
           font: "24px Oswald",
-          color: "#d2c9a5",
+          color: "#4b3d44",
         });
 
-        const staminaBar = new StatusBar(
+        const timeUnitsBar = new StatusBar(
           this,
           StatusBarTypes.timeUnits,
-          portraitX - 196,
-          portraitY - 100,
-          260,
-          26
+          portraitX - 158,
+          portraitY - 98,
+          218,
+          28
         );
 
-        const staminaText = this.add.text(
-          portraitX - 80,
-          portraitY - 102,
-          "15",
+        const timeUnitsTextBackground = this.add.image(
+          portraitX - 192,
+          portraitY - 100,
+          "uiStatisticsBackground"
+        );
+
+        timeUnitsTextBackground.setOrigin(0);
+
+        const timeUnitsText = this.add.text(
+          portraitX - 188,
+          portraitY - 100,
+          "35",
           {
             font: "24px Oswald",
-            color: "#d2c9a5",
+            color: "#4b3d44",
           }
         );
 
@@ -88,7 +112,7 @@ class BattleUIScene extends Phaser.Scene {
           portraitY - 32,
           "attack",
           () => {},
-          i !== 0 || j !== 0
+          portrait === "emptyPortrait"
         );
 
         const potionButton = new Button(
@@ -97,7 +121,7 @@ class BattleUIScene extends Phaser.Scene {
           portraitY - 32,
           "potion",
           () => {},
-          i !== 0 || j !== 0
+          portrait === "emptyPortrait"
         );
 
         const castButton = new Button(
@@ -106,7 +130,7 @@ class BattleUIScene extends Phaser.Scene {
           portraitY + 32,
           "cast",
           () => {},
-          i !== 0 || j !== 0
+          portrait === "emptyPortrait"
         );
 
         const actionButton = new Button(
@@ -115,7 +139,7 @@ class BattleUIScene extends Phaser.Scene {
           portraitY + 32,
           "flag",
           () => {},
-          i !== 0 || j !== 0
+          portrait === "emptyPortrait"
         );
 
         let count = 0;

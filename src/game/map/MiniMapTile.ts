@@ -1,5 +1,4 @@
 import MapTileEvents from "../../enums/MapTileEvents";
-import FloatMessageScene from "../../scenes/FloatMessageScene";
 import { Event } from "../MapTile";
 
 class MiniMapTile extends Phaser.GameObjects.Sprite {

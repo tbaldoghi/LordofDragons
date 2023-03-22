@@ -25,12 +25,7 @@ class GameUIScene extends Phaser.Scene {
     const portraitOffsetX = 550;
     const portraitOffsetY = 380;
     const portraitY = this.scale.gameSize.height - portraitOffsetY;
-    const portraits = [
-      "portrait",
-      "emptyPortrait",
-      "emptyPortrait",
-      "emptyPortrait",
-    ];
+    const portraits = ["portrait1", "portrait3", "portrait3", "emptyPortrait"];
     const navigationSize = 78;
     const navigationOffsetX = 575;
     const navigationOffsetY = 152;
@@ -81,7 +76,7 @@ class GameUIScene extends Phaser.Scene {
         portraitY + 136,
         "inventory",
         () => {},
-        index !== 0
+        portrait === "emptyPortrait"
       );
       const bookButton = new Button(
         this,
@@ -89,18 +84,17 @@ class GameUIScene extends Phaser.Scene {
         portraitY + 136,
         "book",
         () => {},
-        index !== 0
+        portrait === "emptyPortrait"
       );
     });
 
     const floatMessageZone = this.add.zone(
       this.scale.gameSize.width - portraitOffsetX,
-      portraitY,
-      300,
-      200
+      portraitY + 40,
+      200,
+      128
     );
 
-    floatMessageZone.setInteractive();
     floatMessageZone.setOrigin(0);
 
     const floatMessageScene = new FloatMessageScene(floatMessageZone);
