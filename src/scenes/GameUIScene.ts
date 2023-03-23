@@ -88,19 +88,7 @@ class GameUIScene extends Phaser.Scene {
       );
     });
 
-    const floatMessageZone = this.add.zone(
-      this.scale.gameSize.width - portraitOffsetX,
-      portraitY + 40,
-      200,
-      128
-    );
-
-    floatMessageZone.setOrigin(0);
-
-    const floatMessageScene = new FloatMessageScene(floatMessageZone);
-
-    this.scene.add(`FloatMessageScene`, floatMessageScene);
-    floatMessageScene.scene.start();
+    eventHandler.on("showMessage", this.handleFloatMesage);
 
     const navigationX =
       this.scale.gameSize.width - navigationOffsetX + navigationSize * 6;
@@ -192,6 +180,22 @@ class GameUIScene extends Phaser.Scene {
 
   private handleFullScreenClick = (): void => {
     this.scale.toggleFullscreen();
+  };
+
+  private handleFloatMesage = (): void => {
+    const floatMessageZone = this.add.zone(
+      this.scale.gameSize.width - 550,
+      this.scale.gameSize.height - 340,
+      200,
+      128
+    );
+
+    floatMessageZone.setOrigin(0);
+
+    const floatMessageScene = new FloatMessageScene(floatMessageZone);
+
+    this.scene.add(`FloatMessageScene`, floatMessageScene);
+    floatMessageScene.scene.start();
   };
 }
 

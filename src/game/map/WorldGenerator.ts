@@ -6,9 +6,9 @@ import MapTileEvents from "../../enums/MapTileEvents";
 import MapTilePlaceTypes from "../../enums/MapTilePlaceTypes";
 import Creatures from "../../enums/Creatures";
 
-type MapType = "forest" | "cave" | "mine" | "catacomb";
+type MapType = "forest" | "cave" | "mine" | "catacomb"; // TODO: Remove this.
 
-interface WorldMap {
+export interface WorldMap {
   level: number;
   type: MapType;
   map: MapTile[][];

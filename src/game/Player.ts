@@ -1,6 +1,9 @@
 import eventHandler from "../contants/eventHandler";
 import mapSize from "../contants/mapSize";
 import Directions from "../enums/Directions";
+import world from "../contants/world";
+import { WorldMap } from "./map/WorldGenerator";
+import MapTileTypes from "../enums/MapTileTypes";
 
 interface Position {
   x: number;
@@ -11,18 +14,20 @@ class Player {
   private _position: Position = { x: 0, y: 0 };
   private _direction: number;
   private _currentLevel: number;
+  private _worldMap: WorldMap;
   private _health: number;
   private _mana: number;
   private _movement: number;
 
   constructor() {
-    this._position.x = mapSize.width / 2;
-    this._position.y = mapSize.height / 2;
+    this._position.x = 4;
+    this._position.y = 4;
     this._direction = Directions.north;
     this._currentLevel = 1;
     this._health = 0;
     this._mana = 0;
     this._movement = 0;
+    this._worldMap = this.findWorldMap();
   }
 
   public addToGame = (scene: Phaser.Scene): void => {
@@ -66,7 +71,15 @@ class Player {
 
   private handleUp = (): void => {
     if (this._position.y > 0) {
-      this._position.y--;
+      if (
+        this._worldMap.map[this._position.y - 1][this._position.x].type !==
+        MapTileTypes.mountain
+      ) {
+        this._position.y--;
+      } else {
+        eventHandler.emit("showMessage");
+      }
+
       this._direction = Directions.north;
 
       eventHandler.emit("moveForward");
@@ -98,6 +111,18 @@ class Player {
 
       eventHandler.emit("moveLeft");
     }
+  };
+
+  private findWorldMap = (): WorldMap => {
+    const worldMap = world.worldMaps.find(
+      (worldMap) => worldMap.level === this.currentLevel
+    );
+
+    if (worldMap) {
+      return worldMap;
+    }
+
+    return world.worldMaps[0];
   };
 }
 
