@@ -11,6 +11,7 @@ class MapTile {
   private _type: number;
   private _backgroundVariant: BackgroundVariant;
   private _event: Event;
+  private _createType?: string;
   private _creatures?: string[];
 
   constructor(
@@ -35,12 +36,21 @@ class MapTile {
     return this._event;
   }
 
+  public getCreatureType(): string | undefined {
+    // TODO: Use getter, instead.
+    return this._createType;
+  }
+
   public get creatures(): string[] {
     if (!this._creatures) {
       return [];
     }
 
     return this._creatures;
+  }
+
+  public set creatureType(creatureType: string) {
+    this._createType = creatureType;
   }
 
   public set creatures(creatures: string[]) {

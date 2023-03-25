@@ -1,3 +1,4 @@
+import { createWeightedChoice } from "pandemonium";
 import MapTileTypes from "../../enums/MapTileTypes";
 import WorldLevels from "../../enums/WorldLevels";
 import MapTile, { BackgroundVariant, Event, Variant } from "../MapTile";
@@ -6,11 +7,13 @@ import MapTileEvents from "../../enums/MapTileEvents";
 import MapTilePlaceTypes from "../../enums/MapTilePlaceTypes";
 import Creatures from "../../enums/Creatures";
 
-type MapType = "forest" | "cave" | "mine" | "catacomb"; // TODO: Remove this.
+interface CreatureWeight {
+  name: string;
+  weight: number;
+}
 
 export interface WorldMap {
   level: number;
-  type: MapType;
   map: MapTile[][];
 }
 
@@ -28,20 +31,17 @@ class WorldGenerator {
   }
 
   private createWorld() {
-    const size = 11;
+    const size = 21;
 
     for (let i = 0; i < size; i++) {
-      if (i <= WorldLevels.forest) {
-        this.createForestMap(i);
-      }
+      this.createtMap(i);
     }
   }
 
-  private createForestMap(level: number): void {
+  private createtMap(level: number): void {
     const { width, height } = mapSize;
     const worldMap = {
       level: level + 1,
-      type: "forest",
       map: [],
     } as WorldMap;
 
@@ -91,24 +91,42 @@ class WorldGenerator {
         const mapTile = new MapTile(type, backgroundVariant, event);
 
         if (event === MapTileEvents.creature) {
+          const creatureType = this.randomCreatureType(level);
+          const numberOfCreatures = Math.floor(Math.random() * 4);
           const creatures = [];
 
-          if (Math.floor(Math.random() * 2) % 2 === 0) {
-            for (let i = 0; i < Math.floor(Math.random() * 4 + 1); i++) {
-              creatures.push(Creatures.wolf);
-            }
-          } else {
-            for (let i = 0; i < Math.floor(Math.random() * 4 + 1); i++) {
-              creatures.push(Creatures.skeleton);
-            }
+          for (let i = 0; i <= numberOfCreatures; i++) {
+            creatures.push(creatureType);
           }
 
+          mapTile.creatureType = creatureType;
           mapTile.creatures = creatures;
         }
 
         this._world.worldMaps[level].map[i][j] = mapTile;
       }
     }
+  }
+
+  private randomCreatureType(level: number): string {
+    // TODO: Add level to weights.
+    const creatureWeights: CreatureWeight[] = [
+      { name: Creatures.wolf, weight: 5 },
+      { name: Creatures.skeleton, weight: 1 },
+    ];
+    const weightedChoice = createWeightedChoice({
+      rng: Math.random,
+      getWeight: (item: CreatureWeight) => {
+        return item.weight;
+      },
+    } as any);
+    const selectedCreature = weightedChoice(creatureWeights) as CreatureWeight;
+
+    if (selectedCreature) {
+      return selectedCreature.name;
+    }
+
+    return Creatures.wolf;
   }
 
   public get world(): World {

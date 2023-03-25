@@ -1,9 +1,7 @@
 import Phaser from "phaser";
 import creatures from "../contants/creatures";
-import dialogs from "../contants/dialogs";
 import player from "../contants/player";
 import ViewSize from "../enums/ViewSize";
-import Dialog from "../game/Dialog";
 import BattleUIScene from "./BattleUIScene";
 import DialogScene from "./DialogScene";
 import GameUIScene from "./GameUIScene";
@@ -119,8 +117,6 @@ class GameScene extends Phaser.Scene {
     const battleUIScene = new BattleUIScene();
 
     this.scene.add("BattleUIScene", BattleUIScene);
-    dialogs.push(new Dialog("A pack of wolves."));
-    dialogs.push(new Dialog("... Attack them.", true, this.handleClick));
 
     const dialogScene = new DialogScene();
 
@@ -155,17 +151,6 @@ class GameScene extends Phaser.Scene {
       });
     });
   }
-
-  private handleClick = (): void => {
-    this.scene.stop("GameUIScene");
-    this.scene.stop("MiniMapScene");
-    this.scene.start("BattleUIScene", BattleUIScene);
-    // this.cameras.main.fadeOut(500, 0, 0, 0, () => {
-    //   this.scene.stop("GameUIScene");
-    //   this.scene.stop("MiniMapScene");
-    //   this.scene.start("BattleUIScene", BattleUIScene);
-    // });
-  };
 }
 
 export default GameScene;

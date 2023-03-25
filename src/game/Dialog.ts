@@ -1,6 +1,7 @@
 class Dialog {
   private _text: string;
   private _isClickable: boolean;
+  private _textGameObject?: Phaser.GameObjects.Text;
   private _onClick?: () => void;
 
   constructor(
@@ -27,6 +28,19 @@ class Dialog {
 
   public get onClick(): (() => void) | undefined {
     return this._onClick;
+  }
+
+  public set textGameObject(textGameObject: Phaser.GameObjects.Text) {
+    this._textGameObject = textGameObject;
+  }
+
+  public setTextGameObjectInteractive(onClick: () => void): void {
+    this._textGameObject?.setInteractive();
+    this._textGameObject?.on("pointerup", onClick);
+  }
+
+  public destroyTextGameObject(): void {
+    this._textGameObject?.destroy();
   }
 }
 

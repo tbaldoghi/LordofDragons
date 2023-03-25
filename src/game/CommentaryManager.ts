@@ -1,14 +1,34 @@
-export type CommentaryEvent = "mountain";
+export type CommentaryEvent = "mountainBlock";
+
+export enum CommentaryEvents {
+  mountainBlock = "mountainBlock",
+}
+
+interface Commentary {
+  key: CommentaryEvent;
+  quotes: string[];
+}
 
 class CommentaryManager {
-  private readonly _quotes = {
-    mountain: ["Can't go that way.", "Can't climb that."],
-  };
+  private readonly _commentaries: Commentary[] = [
+    {
+      key: CommentaryEvents.mountainBlock,
+      quotes: ["Can't go that way.", "Can't climb that."],
+    },
+  ];
 
   public selectQuote(event: CommentaryEvent): string {
-    const eventQuotes = this._quotes[event];
+    const commentary = this._commentaries.find(
+      (commentary: Commentary) => commentary.key === event
+    );
 
-    return eventQuotes[Math.floor(Math.random() * eventQuotes.length)];
+    if (commentary) {
+      return commentary.quotes[
+        Math.floor(Math.random() * commentary.quotes.length)
+      ];
+    }
+
+    return "...";
   }
 }
 

@@ -1,5 +1,7 @@
+import commentaryManager from "../contants/commentaryManager";
 import eventHandler from "../contants/eventHandler";
 import StatusBarTypes from "../enums/StatusBarTypes";
+import { CommentaryEvent } from "../game/CommentaryManager";
 import Button from "../ui/common/Button";
 import StatusBar from "../ui/common/StatusBar";
 import SwitchButton from "../ui/common/SwitchButton";
@@ -88,7 +90,7 @@ class GameUIScene extends Phaser.Scene {
       );
     });
 
-    eventHandler.on("showMessage", this.handleFloatMesage);
+    eventHandler.on("showCommentary", this.handleFloatMesage);
 
     const navigationX =
       this.scale.gameSize.width - navigationOffsetX + navigationSize * 6;
@@ -182,20 +184,22 @@ class GameUIScene extends Phaser.Scene {
     this.scale.toggleFullscreen();
   };
 
-  private handleFloatMesage = (): void => {
-    const floatMessageZone = this.add.zone(
-      this.scale.gameSize.width - 550,
-      this.scale.gameSize.height - 340,
-      200,
-      128
-    );
+  private handleFloatMesage = (commentaryEvent: CommentaryEvent): void => {
+    if (!this.scene.isActive("FloatMessageScene")) {
+      const floatMessageZone = this.add.zone(
+        this.scale.gameSize.width - 550,
+        this.scale.gameSize.height - 340,
+        200,
+        128
+      );
+      const quote = commentaryManager.selectQuote(commentaryEvent);
 
-    floatMessageZone.setOrigin(0);
+      floatMessageZone.setOrigin(0);
 
-    const floatMessageScene = new FloatMessageScene(floatMessageZone);
-
-    this.scene.add(`FloatMessageScene`, floatMessageScene);
-    floatMessageScene.scene.start();
+      const floatMessageScene = new FloatMessageScene(floatMessageZone, quote);
+      this.scene.add("FloatMessageScene", floatMessageScene);
+      floatMessageScene.scene.start();
+    }
   };
 }
 

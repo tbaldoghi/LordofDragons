@@ -4,6 +4,8 @@ import Directions from "../enums/Directions";
 import world from "../contants/world";
 import { WorldMap } from "./map/WorldGenerator";
 import MapTileTypes from "../enums/MapTileTypes";
+import { CommentaryEvents } from "./CommentaryManager";
+import MapTile from "./MapTile";
 
 interface Position {
   x: number;
@@ -69,6 +71,14 @@ class Player {
     return this._currentLevel;
   }
 
+  public get currentMap(): MapTile[][] {
+    const worldMap = world.worldMaps.find(
+      (worldMap): boolean => worldMap.level === this.currentLevel
+    );
+
+    return worldMap?.map || [];
+  }
+
   private handleUp = (): void => {
     if (this._position.y > 0) {
       if (
@@ -77,7 +87,7 @@ class Player {
       ) {
         this._position.y--;
       } else {
-        eventHandler.emit("showMessage");
+        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
       }
 
       this._direction = Directions.north;
@@ -88,7 +98,15 @@ class Player {
 
   private handleDown = (): void => {
     if (this._position.y < mapSize.height - 1) {
-      this._position.y++;
+      if (
+        this._worldMap.map[this._position.y + 1][this._position.x].type !==
+        MapTileTypes.mountain
+      ) {
+        this._position.y++;
+      } else {
+        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
+      }
+
       this._direction = Directions.south;
 
       eventHandler.emit("moveBack");
@@ -97,7 +115,15 @@ class Player {
 
   private handleRight = (): void => {
     if (this._position.x < mapSize.width - 1) {
-      this._position.x++;
+      if (
+        this._worldMap.map[this._position.y][this._position.x + 1].type !==
+        MapTileTypes.mountain
+      ) {
+        this._position.x++;
+      } else {
+        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
+      }
+
       this._direction = Directions.east;
 
       eventHandler.emit("moveRight");
@@ -106,7 +132,15 @@ class Player {
 
   private handleLeft = (): void => {
     if (this._position.x > 0) {
-      this._position.x--;
+      if (
+        this._worldMap.map[this._position.y][this._position.x - 1].type !==
+        MapTileTypes.mountain
+      ) {
+        this._position.x--;
+      } else {
+        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
+      }
+
       this._direction = Directions.west;
 
       eventHandler.emit("moveLeft");

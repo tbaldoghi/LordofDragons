@@ -53,11 +53,6 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "moveRight",
       () => {
-        // this.cameras.main.pan(
-        //   ViewSize.width / 2 + ViewSize.width,
-        //   ViewSize.height / 2,
-        //   500
-        // );
         this.redrawScreen();
       },
       this
@@ -66,11 +61,6 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "moveLeft",
       () => {
-        // this.cameras.main.pan(
-        //   ViewSize.width / 2 + ViewSize.width,
-        //   ViewSize.height / 2,
-        //   500
-        // );
         this.redrawScreen();
       },
       this
@@ -79,26 +69,6 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "moveForward",
       () => {
-        // this.cameras.main.zoomTo(1.25, 250, "Linear", false);
-        // this.cameras.main.on(
-        //   Phaser.Cameras.Scene2D.Events.ZOOM_COMPLETE,
-        //   () => {
-        //     this.cameras.main.setZoom(1);
-
-        //     const worldMap = world.worldMaps.find(
-        //       (worldMap) => worldMap.level === player.currentLevel
-        //     );
-        //     const mapTile = worldMap?.map[player.positionX][player.positionY];
-
-        //     if (Math.round(Math.random()) === 1) {
-        //       this.cameras.main.setScroll(ViewSize.width, 0);
-        //     } else {
-        //       this.cameras.main.setScroll(0, 0);
-        //     }
-        //   },
-        //   this
-        // );
-
         this.redrawScreen();
       },
       this
@@ -107,19 +77,6 @@ class ViewScene extends Phaser.Scene {
     eventHandler.on(
       "moveBack",
       () => {
-        // if (Math.round(Math.random()) === 1) {
-        //   this.cameras.main.setScroll(ViewSize.width, 0);
-        // } else {
-        //   this.cameras.main.setScroll(0, 0);
-        // }
-        // this.cameras.main.setZoom(1.25);
-        // this.cameras.main.zoomTo(1, 250, "Linear", false);
-
-        // const worldMap = world.worldMaps.find(
-        //   (worldMap) => worldMap.level === player.currentLevel
-        // );
-        // const mapTile = worldMap?.map[player.positionX][player.positionY];
-
         this.redrawScreen();
       },
       this
@@ -135,8 +92,8 @@ class ViewScene extends Phaser.Scene {
     const worldMap = world.worldMaps.find(
       (worldMap): boolean => worldMap.level === player.currentLevel
     );
-    const map = worldMap?.map || [];
-    const { creatures } = map[player.positionY][player.positionX];
+    const { currentMap } = player;
+    const { creatures } = currentMap[player.positionY][player.positionX];
 
     creatures.forEach((creature: string, index: number): void => {
       switch (creature) {
@@ -145,7 +102,7 @@ class ViewScene extends Phaser.Scene {
             new Wolf(this, ViewSize.width / 2 + 200 * index - 300, 570, true)
           );
           break;
-        default:
+        case Creatures.skeleton:
           this._creatures.push(
             new Skeleton(
               this,
