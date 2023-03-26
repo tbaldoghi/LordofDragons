@@ -15,6 +15,7 @@ interface Position {
 class Player {
   private _position: Position = { x: 0, y: 0 };
   private _direction: number;
+  private _isInBattle: boolean;
   private _currentLevel: number;
   private _worldMap: WorldMap;
   private _health: number;
@@ -25,6 +26,7 @@ class Player {
     this._position.x = 4;
     this._position.y = 4;
     this._direction = Directions.north;
+    this._isInBattle = false;
     this._currentLevel = 1;
     this._health = 0;
     this._mana = 0;
@@ -65,6 +67,14 @@ class Player {
 
   public get direction(): number {
     return this._direction;
+  }
+
+  public get isInBattle(): boolean {
+    return this._isInBattle;
+  }
+
+  public set isInBattle(isInBattle: boolean) {
+    this._isInBattle = isInBattle;
   }
 
   public get currentLevel(): number {

@@ -1,7 +1,7 @@
+import dialogManager from "../contants/dialogManager";
 import dialogs from "../contants/dialogs";
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
-import Creatures from "../enums/Creatures";
 import Dialog from "../game/Dialog";
 import TextButton from "../ui/common/TextButton";
 import BattleUIScene from "./BattleUIScene";
@@ -9,7 +9,6 @@ import BattleUIScene from "./BattleUIScene";
 class DialogScene extends Phaser.Scene {
   private readonly _width = 1280;
   private readonly _heigth = 260;
-  private _messages: string[] = [];
 
   constructor() {
     super("DialogScene");
@@ -60,23 +59,12 @@ class DialogScene extends Phaser.Scene {
   }
 
   private updateDialog = (): void => {
-    const { currentMap } = player;
-    const creatureType =
-      currentMap[player.positionY][player.positionX].getCreatureType();
-
     this.resetDialogs();
+    dialogManager.addDialogs(this);
+    this.createDialog();
+  };
 
-    switch (creatureType) {
-      case Creatures.wolf:
-        dialogs.push(new Dialog("A pack of wolves."));
-        dialogs.push(new Dialog("... Attack them.", true, this.handleClick));
-        break;
-      case Creatures.skeleton:
-        dialogs.push(new Dialog("A pack of skeletons."));
-        dialogs.push(new Dialog("... Attack them.", true, this.handleClick));
-        break;
-    }
-
+  private createDialog = (): void => {
     dialogs.forEach((dialog: Dialog, index: number): void => {
       const x = 48;
       const y = this.scale.gameSize.height - this._heigth + index * 32 + 16;
@@ -93,13 +81,6 @@ class DialogScene extends Phaser.Scene {
         });
       }
     });
-  };
-
-  private handleClick = (): void => {
-    this.scene.stop("GameUIScene");
-    this.scene.stop("MiniMapScene");
-    this.scene.start("BattleUIScene", BattleUIScene);
-    this.scene.start("DialogScene", this); // TODO
   };
 
   private resetDialogs = (): void => {
