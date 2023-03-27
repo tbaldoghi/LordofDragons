@@ -1,10 +1,15 @@
 import dialogManager from "../contants/dialogManager";
-import dialogs from "../contants/dialogs";
+import dialogs, { resetDialogs } from "../contants/dialogs";
 import eventHandler from "../contants/eventHandler";
-import player from "../contants/player";
 import Dialog from "../game/Dialog";
 import TextButton from "../ui/common/TextButton";
-import BattleUIScene from "./BattleUIScene";
+
+type DialogType = "map" | "battle";
+
+enum DialogTypes {
+  map = "map",
+  battle = "battle",
+}
 
 class DialogScene extends Phaser.Scene {
   private readonly _width = 1280;
@@ -21,46 +26,43 @@ class DialogScene extends Phaser.Scene {
       height - this._heigth - 12,
       "messageBackground"
     );
+    const moveEvents = ["moveRight", "moveLeft", "moveForward", "moveBack"];
 
     messageBackground.setOrigin(0);
-    this.updateDialog();
+    this.updateDialog(DialogTypes.map);
+
+    moveEvents.forEach((moveEvent: string): void => {
+      eventHandler.on(
+        moveEvent,
+        () => {
+          this.updateDialog(DialogTypes.map);
+        },
+        this
+      );
+    });
 
     eventHandler.on(
-      "moveRight",
+      "battleBegin",
       () => {
-        this.updateDialog();
-      },
-      this
-    );
-
-    eventHandler.on(
-      "moveLeft",
-      () => {
-        this.updateDialog();
-      },
-      this
-    );
-
-    eventHandler.on(
-      "moveForward",
-      () => {
-        this.updateDialog();
-      },
-      this
-    );
-
-    eventHandler.on(
-      "moveBack",
-      () => {
-        this.updateDialog();
+        this.updateDialog(DialogTypes.battle);
       },
       this
     );
   }
 
-  private updateDialog = (): void => {
+  private updateDialog = (dialogType: DialogType): void => {
     this.resetDialogs();
-    dialogManager.addDialogs(this);
+
+    switch (dialogType) {
+      case DialogTypes.map:
+        dialogManager.addMapDialogs(this);
+        break;
+      case DialogTypes.battle:
+        dialogManager.dialogForBattle();
+        console.log(dialogs);
+        break;
+    }
+
     this.createDialog();
   };
 
@@ -88,7 +90,7 @@ class DialogScene extends Phaser.Scene {
       dialog.destroyTextGameObject();
     });
 
-    dialogs.length = 0;
+    resetDialogs();
   };
 }
 
