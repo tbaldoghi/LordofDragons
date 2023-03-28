@@ -1,6 +1,7 @@
 import dialogs from "../contants/dialogs";
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
+import BattleStates from "../enums/BattleStates";
 import Creatures from "../enums/Creatures";
 import MapTileEvents from "../enums/MapTileEvents";
 import MapTileTypes from "../enums/MapTileTypes";
@@ -33,13 +34,13 @@ class DialogManager {
 
     switch (tileType) {
       case MapTileTypes.forest:
-        dialogs.push(new Dialog("Forest."));
+        dialogs.push(new Dialog("Forests."));
         break;
       case MapTileTypes.hill:
-        dialogs.push(new Dialog("Hill."));
+        dialogs.push(new Dialog("Hills."));
         break;
       case MapTileTypes.plain:
-        dialogs.push(new Dialog("Plain."));
+        dialogs.push(new Dialog("Plains."));
         break;
     }
   }
@@ -79,21 +80,41 @@ class DialogManager {
     if (!player.isInBattle) {
       return;
     }
-    console.log(dialogs);
-    dialogs.push(new Dialog("Attack phase."));
-    dialogs.push(new Dialog("...Next phase", true, () => {}));
+
+    if (player.battleState === BattleStates.attackPhase) {
+      dialogs.push(new Dialog("Attack phase."));
+    }
+
+    if (player.battleState === BattleStates.blockPhase) {
+      dialogs.push(new Dialog("Block phase."));
+    }
+
+    dialogs.push(new Dialog("...Next phase", true, this.handleNextPhaseClick));
+    dialogs.push(new Dialog(""));
+    dialogs.push(new Dialog(""));
+    dialogs.push(new Dialog(""));
+    dialogs.push(new Dialog(""));
     dialogs.push(new Dialog("...Retrait", true, () => {}));
-    console.log(dialogs);
   }
 
   private handleAttackClick(scene: Phaser.Scene): void {
     player.isInBattle = true;
+    player.battleState = BattleStates.attackPhase;
 
     scene.scene.stop("GameUIScene");
     scene.scene.stop("MiniMapScene");
     scene.scene.launch("BattleUIScene", BattleUIScene);
-    eventHandler.emit("battleBegin");
+    eventHandler.emit("battle");
   }
+
+  private handleNextPhaseClick = () => {
+    if (player.battleState === BattleStates.attackPhase) {
+      player.battleState = BattleStates.blockPhase;
+    } else if (player.battleState === BattleStates.blockPhase) {
+      player.battleState = BattleStates.attackPhase;
+    }
+    eventHandler.emit("battle");
+  };
 }
 
 export default DialogManager;

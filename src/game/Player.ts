@@ -12,6 +12,8 @@ interface Position {
   y: number;
 }
 
+type BattleState = "attackPhase" | "blockPhase";
+
 class Player {
   private _position: Position = { x: 0, y: 0 };
   private _direction: number;
@@ -19,8 +21,14 @@ class Player {
   private _currentLevel: number;
   private _worldMap: WorldMap;
   private _health: number;
+  private _currentHealth: number;
   private _mana: number;
+  private _currentMana: number;
   private _movement: number;
+  private _currentMovement: number;
+  private _timeUnit: number;
+  private _currentTimeUnit: number;
+  private _battleState?: BattleState;
 
   constructor() {
     this._position.x = 4;
@@ -29,8 +37,13 @@ class Player {
     this._isInBattle = false;
     this._currentLevel = 1;
     this._health = 0;
+    this._currentHealth = this._health;
     this._mana = 0;
+    this._currentMana = this._mana;
     this._movement = 0;
+    this._currentMovement = this._movement;
+    this._timeUnit = 0;
+    this._currentTimeUnit = this._timeUnit;
     this._worldMap = this.findWorldMap();
   }
 
@@ -75,6 +88,14 @@ class Player {
 
   public set isInBattle(isInBattle: boolean) {
     this._isInBattle = isInBattle;
+  }
+
+  public get battleState(): BattleState | undefined {
+    return this._battleState;
+  }
+
+  public set battleState(battleState: BattleState | undefined) {
+    this._battleState = battleState;
   }
 
   public get currentLevel(): number {

@@ -57,6 +57,7 @@ class GameUIScene extends Phaser.Scene {
         x - 60,
         portraitY - 76
       );
+      healthBar.calculateCurrentValue(50, 100);
       const manaBar = new StatusBar(
         this,
         StatusBarTypes.mana,

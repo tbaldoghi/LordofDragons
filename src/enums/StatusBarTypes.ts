@@ -2,7 +2,7 @@ enum StatusBarTypes {
   health = "health",
   mana = "mana",
   stamina = "stamina",
-  timeUnits = "timeUnits",
+  timeUnit = "timeUnit",
 }
 
 export default StatusBarTypes;

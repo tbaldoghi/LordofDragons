@@ -79,7 +79,7 @@ class BattleUIScene extends Phaser.Scene {
 
         const timeUnitsBar = new StatusBar(
           this,
-          StatusBarTypes.timeUnits,
+          StatusBarTypes.timeUnit,
           portraitX - 158,
           portraitY - 98,
           218,

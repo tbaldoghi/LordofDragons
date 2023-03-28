@@ -42,7 +42,7 @@ class DialogScene extends Phaser.Scene {
     });
 
     eventHandler.on(
-      "battleBegin",
+      "battle",
       () => {
         this.updateDialog(DialogTypes.battle);
       },
@@ -59,7 +59,6 @@ class DialogScene extends Phaser.Scene {
         break;
       case DialogTypes.battle:
         dialogManager.dialogForBattle();
-        console.log(dialogs);
         break;
     }
 
