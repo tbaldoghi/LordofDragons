@@ -6,6 +6,11 @@ import { WorldMap } from "./map/WorldGenerator";
 import MapTileTypes from "../enums/MapTileTypes";
 import { CommentaryEvents } from "./CommentaryManager";
 import MapTile from "./MapTile";
+import Mercenary from "./Mercenary";
+import { random } from "pandemonium";
+import getStatistics from "../contants/statisticsDataTable";
+import StatisticsTypes from "../enums/StatisticsTypes";
+import Character from "./Character";
 
 interface Position {
   x: number;
@@ -14,36 +19,41 @@ interface Position {
 
 type BattleState = "attackPhase" | "blockPhase";
 
-class Player {
+class Player extends Character {
+  public readonly portrait: string = "portrait1";
   private _position: Position = { x: 0, y: 0 };
   private _direction: number;
   private _isInBattle: boolean;
   private _currentLevel: number;
   private _worldMap: WorldMap;
-  private _health: number;
-  private _currentHealth: number;
-  private _mana: number;
-  private _currentMana: number;
-  private _movement: number;
-  private _currentMovement: number;
-  private _timeUnit: number;
-  private _currentTimeUnit: number;
+  private _mercenaries: Mercenary[];
   private _battleState?: BattleState;
 
   constructor() {
+    super();
+
+    const statistics = getStatistics(StatisticsTypes.player);
+
+    if (statistics) {
+      this.health = random(statistics.minimumHealth, statistics.maximumHealth);
+      this.currentHealth = this.health;
+      this.mana = random(statistics.minimumMana, statistics.maximumMana);
+      this.currentMana = this.mana;
+      this.movement = statistics.movement;
+      this.currentMovement = this.movement;
+      this.timeUnit = random(
+        statistics.minimumTimeUnit,
+        statistics.maximumTimeUnit
+      );
+      this.currentTimeUnit = this.timeUnit;
+    }
+
     this._position.x = 4;
     this._position.y = 4;
     this._direction = Directions.north;
     this._isInBattle = false;
     this._currentLevel = 1;
-    this._health = 0;
-    this._currentHealth = this._health;
-    this._mana = 0;
-    this._currentMana = this._mana;
-    this._movement = 0;
-    this._currentMovement = this._movement;
-    this._timeUnit = 0;
-    this._currentTimeUnit = this._timeUnit;
+    this._mercenaries = [];
     this._worldMap = this.findWorldMap();
   }
 
@@ -100,6 +110,10 @@ class Player {
 
   public get currentLevel(): number {
     return this._currentLevel;
+  }
+
+  public get mercenaries(): Mercenary[] {
+    return this._mercenaries;
   }
 
   public get currentMap(): MapTile[][] {

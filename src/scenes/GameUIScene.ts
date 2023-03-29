@@ -1,7 +1,10 @@
 import commentaryManager from "../contants/commentaryManager";
 import eventHandler from "../contants/eventHandler";
+import player from "../contants/player";
 import StatusBarTypes from "../enums/StatusBarTypes";
 import { CommentaryEvent } from "../game/CommentaryManager";
+import Mercenary from "../game/Mercenary";
+import Player from "../game/Player";
 import Button from "../ui/common/Button";
 import StatusBar from "../ui/common/StatusBar";
 import SwitchButton from "../ui/common/SwitchButton";
@@ -28,6 +31,7 @@ class GameUIScene extends Phaser.Scene {
     const portraitOffsetY = 380;
     const portraitY = this.scale.gameSize.height - portraitOffsetY;
     const portraits = ["portrait1", "portrait3", "portrait3", "emptyPortrait"];
+    const party: (Player | Mercenary)[] = [player, ...player.mercenaries];
     const navigationSize = 78;
     const navigationOffsetX = 575;
     const navigationOffsetY = 152;
@@ -47,49 +51,68 @@ class GameUIScene extends Phaser.Scene {
     miniMapScene.scene.start();
     dateBackground.setOrigin(0);
 
-    portraits.forEach((portrait: string, index: number): void => {
-      const x =
-        this.scale.gameSize.width - portraitOffsetX + index * portraitSize;
+    for (let i = 0; i < 4; i++) {
+      const x = this.scale.gameSize.width - portraitOffsetX + i * portraitSize;
 
-      const healthBar = new StatusBar(
-        this,
-        StatusBarTypes.health,
-        x - 60,
-        portraitY - 76
-      );
-      healthBar.calculateCurrentValue(50, 100);
-      const manaBar = new StatusBar(
-        this,
-        StatusBarTypes.mana,
-        x - 60,
-        portraitY - (76 - statusBarOffset)
-      );
-      const staminaBar = new StatusBar(
-        this,
-        StatusBarTypes.stamina,
-        x - 60,
-        portraitY - (76 - statusBarOffset * 2)
-      );
+      if (i < party.length) {
+        const { portrait, currentHealth, health } = party[i];
+        const healthBar = new StatusBar(
+          this,
+          StatusBarTypes.health,
+          x - 60,
+          portraitY - 76
+        );
+        healthBar.calculateCurrentValue(currentHealth / 1.5, health); // TODO: Add to Character class.
+        const manaBar = new StatusBar(
+          this,
+          StatusBarTypes.mana,
+          x - 60,
+          portraitY - (76 - statusBarOffset)
+        );
+        const staminaBar = new StatusBar(
+          this,
+          StatusBarTypes.stamina,
+          x - 60,
+          portraitY - (76 - statusBarOffset * 2)
+        );
 
-      this.add.image(x, portraitY + 36, portrait);
+        this.add.image(x, portraitY + 36, portrait);
 
-      const inventoryButton = new Button(
-        this,
-        x - 32,
-        portraitY + 136,
-        "inventory",
-        () => {},
-        portrait === "emptyPortrait"
-      );
-      const bookButton = new Button(
-        this,
-        x + 32,
-        portraitY + 136,
-        "book",
-        () => {},
-        portrait === "emptyPortrait"
-      );
-    });
+        const inventoryButton = new Button(
+          this,
+          x - 32,
+          portraitY + 136,
+          "inventory",
+          () => {}
+        );
+        const bookButton = new Button(
+          this,
+          x + 32,
+          portraitY + 136,
+          "book",
+          () => {}
+        );
+      } else {
+        this.add.image(x, portraitY + 36, "emptyPortrait");
+
+        const inventoryButton = new Button(
+          this,
+          x - 32,
+          portraitY + 136,
+          "inventory",
+          () => {},
+          true
+        );
+        const bookButton = new Button(
+          this,
+          x + 32,
+          portraitY + 136,
+          "book",
+          () => {},
+          true
+        );
+      }
+    }
 
     eventHandler.on("showCommentary", this.handleFloatMesage);
 

@@ -38,7 +38,9 @@ class StatusBar extends Phaser.GameObjects.Graphics {
     currentValue: number,
     maximumValue: number
   ): void {
-    this._currentValue = this._maximumValue * (currentValue / maximumValue);
+    this._currentValue = Math.floor(
+      this._maximumValue * (currentValue / maximumValue)
+    );
 
     this.redrawStatsBar();
   }
