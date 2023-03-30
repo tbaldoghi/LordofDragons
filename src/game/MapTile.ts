@@ -8,53 +8,52 @@ export interface BackgroundVariant {
 }
 
 class MapTile {
-  private _type: number;
-  private _backgroundVariant: BackgroundVariant;
-  private _event: Event;
-  private _createType?: string;
-  private _creatures?: string[];
+  #type: number;
+  #backgroundVariant: BackgroundVariant;
+  #event: Event;
+  #createType?: string;
+  #creatures?: string[];
 
   constructor(
     type: number,
     backgroundVariant: BackgroundVariant,
     event: Event
   ) {
-    this._type = type;
-    this._backgroundVariant = backgroundVariant;
-    this._event = event;
+    this.#type = type;
+    this.#backgroundVariant = backgroundVariant;
+    this.#event = event;
   }
 
   public get type(): number {
-    return this._type;
+    return this.#type;
   }
 
   public get backgroundVariant(): BackgroundVariant {
-    return this._backgroundVariant;
+    return this.#backgroundVariant;
   }
 
   public get event(): Event {
-    return this._event;
+    return this.#event;
   }
 
-  public getCreatureType(): string | undefined {
-    // TODO: Use getter, instead.
-    return this._createType;
+  public get creatureType(): string | undefined {
+    return this.#createType;
   }
 
   public get creatures(): string[] {
-    if (!this._creatures) {
+    if (!this.#creatures) {
       return [];
     }
 
-    return this._creatures;
+    return this.#creatures;
   }
 
-  public set creatureType(creatureType: string) {
-    this._createType = creatureType;
+  public set creatureType(creatureType: string | undefined) {
+    this.#createType = creatureType;
   }
 
   public set creatures(creatures: string[]) {
-    this._creatures = creatures;
+    this.#creatures = creatures;
   }
 }
 

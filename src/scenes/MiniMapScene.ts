@@ -4,10 +4,10 @@ import world from "../contants/world";
 import eventHandler from "../contants/eventHandler";
 
 class MiniMapScene extends Phaser.Scene {
-  private _minimapArrow!: Phaser.GameObjects.Image;
-  private _miniMapTiles: MiniMapTile[][] = [];
-  private readonly _miniMapSize = 9;
-  private readonly _offsetCenter = Math.floor(this._miniMapSize / 2);
+  #minimapArrow!: Phaser.GameObjects.Image;
+  #miniMapTiles: MiniMapTile[][] = [];
+  readonly #miniMapSize = 9;
+  readonly #offsetCenter = Math.floor(this.#miniMapSize / 2);
 
   constructor() {
     super("MiniMapScene");
@@ -22,18 +22,18 @@ class MiniMapScene extends Phaser.Scene {
     );
     const map = worldMap?.map || [];
 
-    for (let i = 0; i < this._miniMapSize; i++) {
-      this._miniMapTiles[i] = [];
+    for (let i = 0; i < this.#miniMapSize; i++) {
+      this.#miniMapTiles[i] = [];
 
-      for (let j = 0; j < this._miniMapSize; j++) {
+      for (let j = 0; j < this.#miniMapSize; j++) {
         const x = this.scale.gameSize.width - offsetX + j * size;
         const y = offsetY + i * size;
         const mapTile =
-          map[i + player.positionX - this._offsetCenter][
-            j + player.positionY - this._offsetCenter
+          map[i + player.positionX - this.#offsetCenter][
+            j + player.positionY - this.#offsetCenter
           ];
 
-        this._miniMapTiles[i][j] = new MiniMapTile(
+        this.#miniMapTiles[i][j] = new MiniMapTile(
           this,
           x,
           y,
@@ -43,14 +43,14 @@ class MiniMapScene extends Phaser.Scene {
       }
     }
 
-    this._minimapArrow = this.add.image(
-      this.scale.gameSize.width - offsetX + this._offsetCenter * size,
-      offsetY + this._offsetCenter * size,
+    this.#minimapArrow = this.add.image(
+      this.scale.gameSize.width - offsetX + this.#offsetCenter * size,
+      offsetY + this.#offsetCenter * size,
       "minimapArrow"
     );
 
-    this._minimapArrow.setScale(2);
-    this._minimapArrow.setDepth(1);
+    this.#minimapArrow.setScale(2);
+    this.#minimapArrow.setDepth(1);
 
     eventHandler.on("moveForward", this.redrawMap);
     eventHandler.on("moveBack", this.redrawMap);
@@ -64,25 +64,25 @@ class MiniMapScene extends Phaser.Scene {
     );
     const map = worldMap?.map || [];
 
-    this._minimapArrow.setAngle(90 * player.direction);
+    this.#minimapArrow.setAngle(90 * player.direction);
 
-    for (let i = 0; i < this._miniMapSize; i++) {
-      for (let j = 0; j < this._miniMapSize; j++) {
+    for (let i = 0; i < this.#miniMapSize; i++) {
+      for (let j = 0; j < this.#miniMapSize; j++) {
         if (
-          i + player.positionY - this._offsetCenter < map.length &&
-          j + player.positionX - this._offsetCenter < map.length &&
-          i + player.positionY - this._offsetCenter >= 0 &&
-          j + player.positionX - this._offsetCenter >= 0
+          i + player.positionY - this.#offsetCenter < map.length &&
+          j + player.positionX - this.#offsetCenter < map.length &&
+          i + player.positionY - this.#offsetCenter >= 0 &&
+          j + player.positionX - this.#offsetCenter >= 0
         ) {
           const mapTile =
-            map[i + player.positionY - this._offsetCenter][
-              j + player.positionX - this._offsetCenter
+            map[i + player.positionY - this.#offsetCenter][
+              j + player.positionX - this.#offsetCenter
             ];
-          this._miniMapTiles[i][j].setFrame(mapTile.type);
-          this._miniMapTiles[i][j].updateMark(mapTile.event);
+          this.#miniMapTiles[i][j].setFrame(mapTile.type);
+          this.#miniMapTiles[i][j].updateMark(mapTile.event);
         } else {
-          this._miniMapTiles[i][j].setFrame(4);
-          this._miniMapTiles[i][j].updateMark(0);
+          this.#miniMapTiles[i][j].setFrame(4);
+          this.#miniMapTiles[i][j].updateMark(0);
         }
       }
     }

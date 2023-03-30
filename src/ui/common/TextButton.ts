@@ -1,5 +1,5 @@
 class TextButton extends Phaser.GameObjects.Text {
-  private _onClick: () => void;
+  #onClick: () => void;
 
   constructor(
     scene: Phaser.Scene,
@@ -17,7 +17,7 @@ class TextButton extends Phaser.GameObjects.Text {
 
     super(scene, x, y, text, style);
 
-    this._onClick = onClick;
+    this.#onClick = onClick;
 
     scene.add.existing(this);
     this.setInteractive();
@@ -27,7 +27,7 @@ class TextButton extends Phaser.GameObjects.Text {
   }
 
   handleUp(): void {
-    this._onClick();
+    this.#onClick();
   }
 
   handleOver(): void {

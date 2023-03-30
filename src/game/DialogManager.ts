@@ -6,16 +6,15 @@ import Creatures from "../enums/Creatures";
 import MapTileEvents from "../enums/MapTileEvents";
 import MapTileTypes from "../enums/MapTileTypes";
 import BattleUIScene from "../scenes/BattleUIScene";
-import DialogScene from "../scenes/DialogScene";
 import Dialog from "./Dialog";
 import MapTile from "./MapTile";
 
 class DialogManager {
-  private _mapTile!: MapTile;
+  #mapTile!: MapTile;
 
   public addMapDialogs(scene: Phaser.Scene): void {
     const { currentMap } = player;
-    this._mapTile = currentMap[player.positionY][player.positionX];
+    this.#mapTile = currentMap[player.positionY][player.positionX];
 
     this.dialogForEmptyTile();
     this.dialogForCreatureTile(scene);
@@ -26,11 +25,11 @@ class DialogManager {
       return;
     }
 
-    if (this._mapTile.event !== MapTileEvents.empty) {
+    if (this.#mapTile.event !== MapTileEvents.empty) {
       return;
     }
 
-    const tileType = this._mapTile.type;
+    const tileType = this.#mapTile.type;
 
     switch (tileType) {
       case MapTileTypes.forest:
@@ -50,11 +49,11 @@ class DialogManager {
       return;
     }
 
-    if (this._mapTile.event !== MapTileEvents.creature) {
+    if (this.#mapTile.event !== MapTileEvents.creature) {
       return;
     }
 
-    const creatureType = this._mapTile.getCreatureType();
+    const creatureType = this.#mapTile.creatureType;
 
     switch (creatureType) {
       case Creatures.wolf:

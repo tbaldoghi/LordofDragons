@@ -1,23 +1,23 @@
 class FloatMessageScene extends Phaser.Scene {
-  private _parent: Phaser.GameObjects.Zone;
-  private _quote: string;
-  private _timer: number;
+  #parent: Phaser.GameObjects.Zone;
+  #quote: string;
+  #timer: number;
 
   constructor(parent: Phaser.GameObjects.Zone, quote: string) {
     super("FloatMessageScene");
 
-    this._parent = parent;
-    this._quote = quote;
-    this._timer = 0;
+    this.#parent = parent;
+    this.#quote = quote;
+    this.#timer = 0;
   }
 
   create(): void {
-    const width = this._quote.length * 10;
+    const width = this.#quote.length * 10;
     const height = 40;
 
     this.cameras.main.setViewport(
-      this._parent.x - width / 2,
-      this._parent.y - 86,
+      this.#parent.x - width / 2,
+      this.#parent.y - 86,
       width,
       height
     );
@@ -28,7 +28,7 @@ class FloatMessageScene extends Phaser.Scene {
     border.setOrigin(0);
     border.setStrokeStyle(4, 0x574852);
 
-    const text = this.add.text(6, 2, this._quote, {
+    const text = this.add.text(6, 2, this.#quote, {
       font: "24px Oswald",
       color: "#4b3d44",
     });
@@ -37,16 +37,16 @@ class FloatMessageScene extends Phaser.Scene {
   }
 
   update(time: number, delta: number): void {
-    this._timer += delta;
+    this.#timer += delta;
 
-    if (this._timer > 5000) {
+    if (this.#timer > 5000) {
       this.events.emit("closeFloatMessage");
     }
   }
 
   private handleClose(): void {
     this.scene.remove("FloatMessageScene");
-    this._parent.destroy();
+    this.#parent.destroy();
   }
 }
 

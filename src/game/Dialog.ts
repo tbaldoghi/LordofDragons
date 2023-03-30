@@ -1,46 +1,46 @@
 class Dialog {
-  private _text: string;
-  private _isClickable: boolean;
-  private _textGameObject?: Phaser.GameObjects.Text;
-  private _onClick?: () => void;
+  #text: string;
+  #isClickable: boolean;
+  #textGameObject?: Phaser.GameObjects.Text;
+  #onClick?: () => void;
 
   constructor(
     text: string = "",
     isClickable: boolean = false,
     onClick?: () => void
   ) {
-    this._text = text;
-    this._isClickable = isClickable;
-    this._onClick = onClick;
+    this.#text = text;
+    this.#isClickable = isClickable;
+    this.#onClick = onClick;
   }
 
   public get text(): string {
-    return this._text;
+    return this.#text;
   }
 
   public set text(text: string) {
-    this._text = text;
+    this.#text = text;
   }
 
   public get isClickable(): boolean {
-    return this._isClickable;
+    return this.#isClickable;
   }
 
   public get onClick(): (() => void) | undefined {
-    return this._onClick;
+    return this.#onClick;
   }
 
   public set textGameObject(textGameObject: Phaser.GameObjects.Text) {
-    this._textGameObject = textGameObject;
+    this.#textGameObject = textGameObject;
   }
 
   public setTextGameObjectInteractive(onClick: () => void): void {
-    this._textGameObject?.setInteractive();
-    this._textGameObject?.on("pointerup", onClick);
+    this.#textGameObject?.setInteractive();
+    this.#textGameObject?.on("pointerup", onClick);
   }
 
   public destroyTextGameObject(): void {
-    this._textGameObject?.destroy();
+    this.#textGameObject?.destroy();
   }
 }
 

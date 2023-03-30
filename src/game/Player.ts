@@ -21,13 +21,13 @@ type BattleState = "attackPhase" | "blockPhase";
 
 class Player extends Character {
   public readonly portrait: string = "portrait1";
-  private _position: Position = { x: 0, y: 0 };
-  private _direction: number;
-  private _isInBattle: boolean;
-  private _currentLevel: number;
-  private _worldMap: WorldMap;
-  private _mercenaries: Mercenary[];
-  private _battleState?: BattleState;
+  #position: Position = { x: 0, y: 0 };
+  #direction: number;
+  #isInBattle: boolean;
+  #currentLevel: number;
+  #worldMap: WorldMap;
+  #mercenaries: Mercenary[];
+  #battleState?: BattleState;
 
   constructor() {
     super();
@@ -48,13 +48,13 @@ class Player extends Character {
       this.currentTimeUnit = this.timeUnit;
     }
 
-    this._position.x = 4;
-    this._position.y = 4;
-    this._direction = Directions.north;
-    this._isInBattle = false;
-    this._currentLevel = 1;
-    this._mercenaries = [];
-    this._worldMap = this.findWorldMap();
+    this.#position.x = 4;
+    this.#position.y = 4;
+    this.#direction = Directions.north;
+    this.#isInBattle = false;
+    this.#currentLevel = 1;
+    this.#mercenaries = [];
+    this.#worldMap = this.findWorldMap();
   }
 
   public addToGame = (scene: Phaser.Scene): void => {
@@ -65,55 +65,55 @@ class Player extends Character {
   };
 
   public set positionX(x: number) {
-    this._position.x = x;
+    this.#position.x = x;
   }
 
   public set positionY(y: number) {
-    this._position.y = y;
+    this.#position.y = y;
   }
 
   public set position(position: Position) {
-    this._position = position;
+    this.#position = position;
   }
 
   public set direction(direction: number) {
-    this._direction = direction;
+    this.#direction = direction;
   }
 
   public get positionX(): number {
-    return this._position.x;
+    return this.#position.x;
   }
 
   public get positionY(): number {
-    return this._position.y;
+    return this.#position.y;
   }
 
   public get direction(): number {
-    return this._direction;
+    return this.#direction;
   }
 
   public get isInBattle(): boolean {
-    return this._isInBattle;
+    return this.#isInBattle;
   }
 
   public set isInBattle(isInBattle: boolean) {
-    this._isInBattle = isInBattle;
+    this.#isInBattle = isInBattle;
   }
 
   public get battleState(): BattleState | undefined {
-    return this._battleState;
+    return this.#battleState;
   }
 
   public set battleState(battleState: BattleState | undefined) {
-    this._battleState = battleState;
+    this.#battleState = battleState;
   }
 
   public get currentLevel(): number {
-    return this._currentLevel;
+    return this.#currentLevel;
   }
 
   public get mercenaries(): Mercenary[] {
-    return this._mercenaries;
+    return this.#mercenaries;
   }
 
   public get currentMap(): MapTile[][] {
@@ -125,68 +125,68 @@ class Player extends Character {
   }
 
   private handleUp = (): void => {
-    if (this._position.y > 0) {
+    if (this.#position.y > 0) {
       if (
-        this._worldMap.map[this._position.y - 1][this._position.x].type !==
+        this.#worldMap.map[this.#position.y - 1][this.#position.x].type !==
         MapTileTypes.mountain
       ) {
-        this._position.y--;
+        this.#position.y--;
       } else {
         eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
       }
 
-      this._direction = Directions.north;
+      this.#direction = Directions.north;
 
       eventHandler.emit("moveForward");
     }
   };
 
   private handleDown = (): void => {
-    if (this._position.y < mapSize.height - 1) {
+    if (this.#position.y < mapSize.height - 1) {
       if (
-        this._worldMap.map[this._position.y + 1][this._position.x].type !==
+        this.#worldMap.map[this.#position.y + 1][this.#position.x].type !==
         MapTileTypes.mountain
       ) {
-        this._position.y++;
+        this.#position.y++;
       } else {
         eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
       }
 
-      this._direction = Directions.south;
+      this.#direction = Directions.south;
 
       eventHandler.emit("moveBack");
     }
   };
 
   private handleRight = (): void => {
-    if (this._position.x < mapSize.width - 1) {
+    if (this.#position.x < mapSize.width - 1) {
       if (
-        this._worldMap.map[this._position.y][this._position.x + 1].type !==
+        this.#worldMap.map[this.#position.y][this.#position.x + 1].type !==
         MapTileTypes.mountain
       ) {
-        this._position.x++;
+        this.#position.x++;
       } else {
         eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
       }
 
-      this._direction = Directions.east;
+      this.#direction = Directions.east;
 
       eventHandler.emit("moveRight");
     }
   };
 
   private handleLeft = (): void => {
-    if (this._position.x > 0) {
+    if (this.#position.x > 0) {
       if (
-        this._worldMap.map[this._position.y][this._position.x - 1].type !==
+        this.#worldMap.map[this.#position.y][this.#position.x - 1].type !==
         MapTileTypes.mountain
       ) {
-        this._position.x--;
+        this.#position.x--;
       } else {
         eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
       }
 
-      this._direction = Directions.west;
+      this.#direction = Directions.west;
 
       eventHandler.emit("moveLeft");
     }

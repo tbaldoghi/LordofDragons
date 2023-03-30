@@ -22,10 +22,10 @@ interface World {
 }
 
 class WorldGenerator {
-  private _world!: World;
+  #world!: World;
 
   constructor() {
-    this._world = { worldMaps: [] };
+    this.#world = { worldMaps: [] };
 
     this.createWorld();
   }
@@ -45,10 +45,10 @@ class WorldGenerator {
       map: [],
     } as WorldMap;
 
-    this._world.worldMaps.push(worldMap);
+    this.#world.worldMaps.push(worldMap);
 
     for (let i = 0; i < width; i++) {
-      this._world.worldMaps[level].map[i] = [];
+      this.#world.worldMaps[level].map[i] = [];
 
       for (let j = 0; j < height; j++) {
         const backgroundVariant = {
@@ -103,7 +103,7 @@ class WorldGenerator {
           mapTile.creatures = creatures;
         }
 
-        this._world.worldMaps[level].map[i][j] = mapTile;
+        this.#world.worldMaps[level].map[i][j] = mapTile;
       }
     }
   }
@@ -130,7 +130,7 @@ class WorldGenerator {
   }
 
   public get world(): World {
-    return this._world;
+    return this.#world;
   }
 }
 

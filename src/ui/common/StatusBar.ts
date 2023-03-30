@@ -3,14 +3,14 @@ import StatusBarTypes from "../../enums/StatusBarTypes";
 type StatusBarType = "health" | "mana" | "stamina" | "timeUnit";
 
 class StatusBar extends Phaser.GameObjects.Graphics {
-  private readonly _offset: number = 2;
-  private _x: number;
-  private _y: number;
-  private _width: number;
-  private _height: number;
-  private _type: StatusBarType;
-  private readonly _maximumValue: number;
-  private _currentValue: number;
+  readonly #offset: number = 2;
+  #x: number;
+  #y: number;
+  #width: number;
+  #height: number;
+  #type: StatusBarType;
+  readonly #maximumValue: number;
+  #currentValue: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -22,13 +22,13 @@ class StatusBar extends Phaser.GameObjects.Graphics {
   ) {
     super(scene);
 
-    this._x = x;
-    this._y = y;
-    this._width = width;
-    this._height = height;
-    this._type = type;
-    this._maximumValue = width - this._offset * 2;
-    this._currentValue = this._maximumValue;
+    this.#x = x;
+    this.#y = y;
+    this.#width = width;
+    this.#height = height;
+    this.#type = type;
+    this.#maximumValue = width - this.#offset * 2;
+    this.#currentValue = this.#maximumValue;
 
     this.redrawStatsBar();
     scene.add.existing(this);
@@ -38,8 +38,8 @@ class StatusBar extends Phaser.GameObjects.Graphics {
     currentValue: number,
     maximumValue: number
   ): void {
-    this._currentValue = Math.floor(
-      this._maximumValue * (currentValue / maximumValue)
+    this.#currentValue = Math.floor(
+      this.#maximumValue * (currentValue / maximumValue)
     );
 
     this.redrawStatsBar();
@@ -48,9 +48,9 @@ class StatusBar extends Phaser.GameObjects.Graphics {
   private redrawStatsBar(): void {
     this.clear();
     this.fillStyle(0x574852);
-    this.fillRect(this._x, this._y, this._width, this._height);
+    this.fillRect(this.#x, this.#y, this.#width, this.#height);
 
-    switch (this._type) {
+    switch (this.#type) {
       case StatusBarTypes.health:
         this.fillStyle(0x79444a);
         break;
@@ -66,10 +66,10 @@ class StatusBar extends Phaser.GameObjects.Graphics {
     }
 
     this.fillRect(
-      this._x + this._offset,
-      this._y + this._offset,
-      this._currentValue,
-      this._height - this._offset
+      this.#x + this.#offset,
+      this.#y + this.#offset,
+      this.#currentValue,
+      this.#height - this.#offset
     );
   }
 }

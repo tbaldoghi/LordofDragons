@@ -2,11 +2,11 @@ import MapTileEvents from "../../enums/MapTileEvents";
 import { Event } from "../MapTile";
 
 class MiniMapTile extends Phaser.GameObjects.Sprite {
-  private _mark?: Phaser.GameObjects.Image;
-  private _label?: Phaser.GameObjects.Rectangle;
-  private _labelText?: Phaser.GameObjects.Text;
-  private _x: number;
-  private _y: number;
+  #mark?: Phaser.GameObjects.Image;
+  #label?: Phaser.GameObjects.Rectangle;
+  #labelText?: Phaser.GameObjects.Text;
+  #x: number;
+  #y: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -17,8 +17,8 @@ class MiniMapTile extends Phaser.GameObjects.Sprite {
   ) {
     super(scene, x, y, "mapTiles");
 
-    this._x = x;
-    this._y = y;
+    this.#x = x;
+    this.#y = y;
 
     scene.add.existing(this);
     this.setFrame(type);
@@ -27,61 +27,61 @@ class MiniMapTile extends Phaser.GameObjects.Sprite {
   }
 
   public updateMark(event: Event): void {
-    this._mark?.destroy();
+    this.#mark?.destroy();
     this.selectEvent(event);
   }
 
   private selectEvent(event: Event): void {
     switch (event) {
       case MapTileEvents.creature:
-        this._mark = this.scene.add.image(this._x, this._y, "minimapMark");
-        this._mark?.setInteractive();
-        this._mark?.on("pointerover", this.handleMouseOver);
-        this._mark?.on("pointerout", this.handleMouseOut);
+        this.#mark = this.scene.add.image(this.#x, this.#y, "minimapMark");
+        this.#mark?.setInteractive();
+        this.#mark?.on("pointerover", this.handleMouseOver);
+        this.#mark?.on("pointerout", this.handleMouseOut);
         break;
       case MapTileEvents.loot:
-        this._mark = this.scene.add.image(this._x, this._y, "minimapLoot");
+        this.#mark = this.scene.add.image(this.#x, this.#y, "minimapLoot");
         break;
       case MapTileEvents.location:
-        this._mark = this.scene.add.image(this._x, this._y, "minimapLocation");
+        this.#mark = this.scene.add.image(this.#x, this.#y, "minimapLocation");
         break;
     }
 
-    this._mark?.setScale(2); // TODO: Resize the image.
+    this.#mark?.setScale(2); // TODO: Resize the image.
   }
 
   private handleMouseOver = (): void => {
-    this._mark?.setAlpha(0.75);
-    this._label = this.scene.add.rectangle(
-      this._x - 90,
-      this._y + 18,
+    this.#mark?.setAlpha(0.75);
+    this.#label = this.scene.add.rectangle(
+      this.#x - 90,
+      this.#y + 18,
       144,
       68,
       0xd2c9a5,
       0.9
     );
 
-    this._label.setOrigin(0);
-    this._label.setStrokeStyle(1, 0x574852);
+    this.#label.setOrigin(0);
+    this.#label.setStrokeStyle(1, 0x574852);
 
-    this._labelText = this.scene.add.text(
-      this._x - 84,
-      this._y + 18,
+    this.#labelText = this.scene.add.text(
+      this.#x - 84,
+      this.#y + 18,
       `Wolf\n(Wandering)`,
       {
         font: "24px Oswald",
         color: "#4b3d44",
       }
     );
-    this._label.setOrigin(0);
-    this._label.setDepth(2);
-    this._labelText.setDepth(2);
+    this.#label.setOrigin(0);
+    this.#label.setDepth(2);
+    this.#labelText.setDepth(2);
   };
 
   private handleMouseOut = (): void => {
-    this._mark?.setAlpha(1);
-    this._label?.destroy();
-    this._labelText?.destroy();
+    this.#mark?.setAlpha(1);
+    this.#label?.destroy();
+    this.#labelText?.destroy();
   };
 }
 

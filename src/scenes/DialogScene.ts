@@ -12,8 +12,8 @@ enum DialogTypes {
 }
 
 class DialogScene extends Phaser.Scene {
-  private readonly _width = 1280;
-  private readonly _heigth = 260;
+  readonly #width = 1280;
+  readonly #heigth = 260;
 
   constructor() {
     super("DialogScene");
@@ -23,7 +23,7 @@ class DialogScene extends Phaser.Scene {
     const height = this.scale.gameSize.height;
     const messageBackground = this.add.image(
       0,
-      height - this._heigth - 12,
+      height - this.#heigth - 12,
       "messageBackground"
     );
     const moveEvents = ["moveRight", "moveLeft", "moveForward", "moveBack"];
@@ -68,7 +68,7 @@ class DialogScene extends Phaser.Scene {
   private createDialog = (): void => {
     dialogs.forEach((dialog: Dialog, index: number): void => {
       const x = 48;
-      const y = this.scale.gameSize.height - this._heigth + index * 32 + 16;
+      const y = this.scale.gameSize.height - this.#heigth + index * 32 + 16;
       const { text, isClickable, onClick } = dialog;
 
       if (isClickable && onClick) {

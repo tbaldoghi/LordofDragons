@@ -10,7 +10,7 @@ interface Commentary {
 }
 
 class CommentaryManager {
-  private readonly _commentaries: Commentary[] = [
+  readonly #commentaries: Commentary[] = [
     {
       key: CommentaryEvents.mountainBlock,
       quotes: ["Can't go that way.", "Can't climb that."],
@@ -18,7 +18,7 @@ class CommentaryManager {
   ];
 
   public selectQuote(event: CommentaryEvent): string {
-    const commentary = this._commentaries.find(
+    const commentary = this.#commentaries.find(
       (commentary: Commentary) => commentary.key === event
     );
 
