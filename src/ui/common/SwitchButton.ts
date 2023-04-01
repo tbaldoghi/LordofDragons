@@ -2,8 +2,8 @@ import BaseButton from "./BaseButton";
 import ButtonStates from "../../enums/ButtonStates";
 
 class SwitchButton extends BaseButton {
-  private isPressed: boolean;
-  private readonly frameOffset = 2;
+  #isPressed: boolean;
+  readonly #frameOffset = 2;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,7 +14,7 @@ class SwitchButton extends BaseButton {
   ) {
     super(scene, x, y, texture, onClick);
 
-    this.isPressed = false;
+    this.#isPressed = false;
 
     this.on("pointerdown", this.handleDown, this);
     this.on("pointerout", this.handleOut, this);
@@ -25,8 +25,8 @@ class SwitchButton extends BaseButton {
   handleDown(): void {
     let frame = ButtonStates.up;
 
-    if (this.isPressed) {
-      frame += this.frameOffset;
+    if (this.#isPressed) {
+      frame += this.#frameOffset;
     }
 
     this.setFrame(frame);
@@ -35,8 +35,8 @@ class SwitchButton extends BaseButton {
   handleOut(): void {
     let frame = ButtonStates.down;
 
-    if (this.isPressed) {
-      frame += this.frameOffset;
+    if (this.#isPressed) {
+      frame += this.#frameOffset;
     }
 
     this.setFrame(frame);
@@ -47,8 +47,8 @@ class SwitchButton extends BaseButton {
 
     this.updateIsPressed();
 
-    if (this.isPressed) {
-      frame += this.frameOffset;
+    if (this.#isPressed) {
+      frame += this.#frameOffset;
     }
 
     this.setFrame(frame);
@@ -56,7 +56,7 @@ class SwitchButton extends BaseButton {
   }
 
   updateIsPressed(): void {
-    this.isPressed = !this.isPressed;
+    this.#isPressed = !this.#isPressed;
   }
 }
 

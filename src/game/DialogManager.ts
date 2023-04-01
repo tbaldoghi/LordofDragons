@@ -3,6 +3,7 @@ import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
 import BattleStates from "../enums/BattleStates";
 import Creatures from "../enums/Creatures";
+import Events from "../enums/Events";
 import MapTileEvents from "../enums/MapTileEvents";
 import MapTileTypes from "../enums/MapTileTypes";
 import BattleUIScene from "../scenes/BattleUIScene";
@@ -103,7 +104,7 @@ class DialogManager {
     scene.scene.stop("GameUIScene");
     scene.scene.stop("MiniMapScene");
     scene.scene.launch("BattleUIScene", BattleUIScene);
-    eventHandler.emit("battle");
+    eventHandler.emit(Events.battle);
   }
 
   private handleNextPhaseClick = () => {
@@ -112,7 +113,7 @@ class DialogManager {
     } else if (player.battleState === BattleStates.blockPhase) {
       player.battleState = BattleStates.attackPhase;
     }
-    eventHandler.emit("battle");
+    eventHandler.emit(Events.battle);
   };
 }
 

@@ -1,7 +1,8 @@
-export type CommentaryEvent = "mountainBlock";
+export type CommentaryEvent = "mountainBlock" | "movementRunsOut";
 
 export enum CommentaryEvents {
   mountainBlock = "mountainBlock",
+  movementRunsOut = "movementRunsOut",
 }
 
 interface Commentary {
@@ -14,6 +15,10 @@ class CommentaryManager {
     {
       key: CommentaryEvents.mountainBlock,
       quotes: ["Can't go that way.", "Can't climb that."],
+    },
+    {
+      key: CommentaryEvents.movementRunsOut,
+      quotes: ["Need to rest."],
     },
   ];
 

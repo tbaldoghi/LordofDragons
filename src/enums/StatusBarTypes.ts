@@ -1,7 +1,7 @@
 enum StatusBarTypes {
   health = "health",
   mana = "mana",
-  stamina = "stamina",
+  movement = "movement",
   timeUnit = "timeUnit",
 }
 

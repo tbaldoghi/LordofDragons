@@ -2,6 +2,7 @@ import player from "../contants/player";
 import MiniMapTile from "../game/map/MiniMapTile";
 import world from "../contants/world";
 import eventHandler from "../contants/eventHandler";
+import Events from "../enums/Events";
 
 class MiniMapScene extends Phaser.Scene {
   #minimapArrow!: Phaser.GameObjects.Image;
@@ -52,10 +53,16 @@ class MiniMapScene extends Phaser.Scene {
     this.#minimapArrow.setScale(2);
     this.#minimapArrow.setDepth(1);
 
-    eventHandler.on("moveForward", this.redrawMap);
-    eventHandler.on("moveBack", this.redrawMap);
-    eventHandler.on("moveRight", this.redrawMap);
-    eventHandler.on("moveLeft", this.redrawMap);
+    const events = [
+      Events.moveForward,
+      Events.moveBack,
+      Events.moveRight,
+      Events.moveLeft,
+    ];
+
+    events.forEach((event: string): void => {
+      eventHandler.on(event, this.redrawMap);
+    });
   }
 
   public redrawMap = (): void => {

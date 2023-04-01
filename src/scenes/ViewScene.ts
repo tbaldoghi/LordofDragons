@@ -5,6 +5,7 @@ import world from "../contants/world";
 import player from "../contants/player";
 import Creatures from "../enums/Creatures";
 import Skeleton from "../game/creature/Skeleton";
+import Events from "../enums/Events";
 
 class ViewScene extends Phaser.Scene {
   #parent: Phaser.GameObjects.Zone;
@@ -51,33 +52,37 @@ class ViewScene extends Phaser.Scene {
     this.redrawScreen();
 
     eventHandler.on(
-      "moveRight",
+      Events.moveRight,
       () => {
         this.redrawScreen();
+        eventHandler.emit(Events.redrawGameStatusBar);
       },
       this
     );
 
     eventHandler.on(
-      "moveLeft",
+      Events.moveLeft,
       () => {
         this.redrawScreen();
+        eventHandler.emit(Events.redrawGameStatusBar);
       },
       this
     );
 
     eventHandler.on(
-      "moveForward",
+      Events.moveForward,
       () => {
         this.redrawScreen();
+        eventHandler.emit(Events.redrawGameStatusBar);
       },
       this
     );
 
     eventHandler.on(
-      "moveBack",
+      Events.moveBack,
       () => {
         this.redrawScreen();
+        eventHandler.emit(Events.redrawGameStatusBar);
       },
       this
     );

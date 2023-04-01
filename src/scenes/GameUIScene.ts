@@ -1,6 +1,8 @@
 import commentaryManager from "../contants/commentaryManager";
+import dateManager from "../contants/dateManager";
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
+import Events from "../enums/Events";
 import StatusBarTypes from "../enums/StatusBarTypes";
 import { CommentaryEvent } from "../game/CommentaryManager";
 import Mercenary from "../game/Mercenary";
@@ -12,69 +14,94 @@ import FloatMessageScene from "./FloatMessageScene";
 import MiniMapScene from "./MiniMapScene";
 
 class GameUIScene extends Phaser.Scene {
-  private upButton?: Button;
-  private leftButton?: Button;
-  private downButton?: Button;
-  private rightButton?: Button;
+  #upButton?: Button;
+  #leftButton?: Button;
+  #downButton?: Button;
+  #rightButton?: Button;
+  #dayText!: Phaser.GameObjects.Text;
+  #weekMonthText!: Phaser.GameObjects.Text;
+  #characters: (Player | Mercenary)[] = [];
+  #healthBars: StatusBar[] = [];
+  #manaBars: StatusBar[] = [];
+  #movementBars: StatusBar[] = [];
 
   constructor() {
     super("GameUIScene");
+
+    this.#characters = [player, ...player.mercenaries];
   }
 
   create(): void {
     const uiRightBack = this.add.image(1288, 0, "uiRightBack");
     const uiMapBorder = this.add.image(1308, 8, "uiMapBorder");
+    const dateBackground = this.add.image(1618, 885, "uiDateBackground");
     const miniMapScene = new MiniMapScene();
     const portraitSize = 155;
     const statusBarOffset = 16;
     const portraitOffsetX = 550;
     const portraitOffsetY = 380;
     const portraitY = this.scale.gameSize.height - portraitOffsetY;
-    const portraits = ["portrait1", "portrait3", "portrait3", "emptyPortrait"];
-    const party: (Player | Mercenary)[] = [player, ...player.mercenaries];
     const navigationSize = 78;
     const navigationOffsetX = 575;
     const navigationOffsetY = 152;
-    const dateBackground = this.add.image(1618, 885, "uiDateBackground");
-    const textMonthWeek = this.add.text(1630, 890, "Month: 1 Week: 1", {
-      font: "24px Oswald",
-      color: "#4b3d44",
-    });
-    const textDay = this.add.text(1630, 916, "Day: 1", {
+    const { day, week, month } = dateManager;
+
+    this.#dayText = this.add.text(1630, 916, `Day: ${day}`, {
       font: "32px Oswald",
       color: "#4b3d44",
     });
+    this.#weekMonthText = this.add.text(
+      1630,
+      890,
+      `Month: ${month} Week: ${week}`,
+      {
+        font: "24px Oswald",
+        color: "#4b3d44",
+      }
+    );
 
     uiRightBack.setOrigin(0);
     uiMapBorder.setOrigin(0);
+    dateBackground.setOrigin(0);
     this.scene.add("MiniMapScene", miniMapScene);
     miniMapScene.scene.start();
-    dateBackground.setOrigin(0);
 
     for (let i = 0; i < 4; i++) {
       const x = this.scale.gameSize.width - portraitOffsetX + i * portraitSize;
 
-      if (i < party.length) {
-        const { portrait, currentHealth, health } = party[i];
-        const healthBar = new StatusBar(
-          this,
-          StatusBarTypes.health,
-          x - 60,
-          portraitY - 76
+      if (i < this.#characters.length) {
+        const {
+          portrait,
+          currentHealth,
+          health,
+          currentMana,
+          mana,
+          currentMovement,
+          movement,
+        } = this.#characters[i];
+
+        this.#healthBars.push(
+          new StatusBar(this, StatusBarTypes.health, x - 60, portraitY - 76)
         );
-        healthBar.calculateCurrentValue(currentHealth / 1.5, health); // TODO: Add to Character class.
-        const manaBar = new StatusBar(
-          this,
-          StatusBarTypes.mana,
-          x - 60,
-          portraitY - (76 - statusBarOffset)
+        this.#healthBars[i].calculateCurrentValue(currentHealth, health);
+        this.#manaBars.push(
+          new StatusBar(
+            this,
+            StatusBarTypes.mana,
+            x - 60,
+            portraitY - (76 - statusBarOffset)
+          )
         );
-        const staminaBar = new StatusBar(
-          this,
-          StatusBarTypes.stamina,
-          x - 60,
-          portraitY - (76 - statusBarOffset * 2)
+        this.#manaBars[i].calculateCurrentValue(currentMana, mana);
+        this.#movementBars.push(
+          new StatusBar(
+            this,
+            StatusBarTypes.movement,
+            x - 60,
+            portraitY - (76 - statusBarOffset * 2)
+          )
         );
+        this.#movementBars[i].calculateCurrentValue(currentMovement, movement);
 
         this.add.image(x, portraitY + 36, portrait);
 
@@ -114,7 +141,8 @@ class GameUIScene extends Phaser.Scene {
       }
     }
 
-    eventHandler.on("showCommentary", this.handleFloatMesage);
+    eventHandler.on(Events.showCommentary, this.handleFloatMesage);
+    eventHandler.on(Events.redrawGameStatusBar, this.redrawStatusBars);
 
     const navigationX =
       this.scale.gameSize.width - navigationOffsetX + navigationSize * 6;
@@ -163,31 +191,43 @@ class GameUIScene extends Phaser.Scene {
   }
 
   private addUpButton = (x: number, y: number): void => {
-    this.upButton = new Button(this, x, y, "arrowUp", this.handleUpClick);
+    this.#upButton = new Button(this, x, y, "arrowUp", this.handleUpClick);
   };
 
   private handleUpClick = (): void => {
-    eventHandler.emit("up");
+    eventHandler.emit(Events.up);
   };
 
   private addLeftButton = (x: number, y: number): void => {
-    this.leftButton = new Button(this, x, y, "arrowLeft", this.handleLeftClick);
+    this.#leftButton = new Button(
+      this,
+      x,
+      y,
+      "arrowLeft",
+      this.handleLeftClick
+    );
   };
 
   private handleLeftClick = (): void => {
-    eventHandler.emit("left");
+    eventHandler.emit(Events.left);
   };
 
   private addDownButton = (x: number, y: number): void => {
-    this.downButton = new Button(this, x, y, "arrowDown", this.handleDownClick);
+    this.#downButton = new Button(
+      this,
+      x,
+      y,
+      "arrowDown",
+      this.handleDownClick
+    );
   };
 
   private handleDownClick = (): void => {
-    eventHandler.emit("down");
+    eventHandler.emit(Events.down);
   };
 
   private addRigthButton = (x: number, y: number): void => {
-    this.rightButton = new Button(
+    this.#rightButton = new Button(
       this,
       x,
       y,
@@ -197,10 +237,15 @@ class GameUIScene extends Phaser.Scene {
   };
 
   private handleRightClick = (): void => {
-    eventHandler.emit("right");
+    eventHandler.emit(Events.right);
   };
 
-  private handleNextTurnClick = (): void => {};
+  private handleNextTurnClick = (): void => {
+    dateManager.nextDay();
+    player.rest();
+    eventHandler.emit(Events.redrawGameStatusBar);
+    this.redrawDate();
+  };
 
   private handleMenuClick = (): void => {};
 
@@ -224,6 +269,35 @@ class GameUIScene extends Phaser.Scene {
       this.scene.add("FloatMessageScene", floatMessageScene);
       floatMessageScene.scene.start();
     }
+  };
+
+  private redrawStatusBars = (): void => {
+    this.#characters.forEach(
+      (character: Player | Mercenary, index: number): void => {
+        const {
+          currentHealth,
+          health,
+          currentMana,
+          mana,
+          currentMovement,
+          movement,
+        } = character;
+
+        this.#healthBars[index].calculateCurrentValue(currentHealth, health);
+        this.#manaBars[index].calculateCurrentValue(currentMana, mana);
+        this.#movementBars[index].calculateCurrentValue(
+          currentMovement,
+          movement
+        );
+      }
+    );
+  };
+
+  private redrawDate = (): void => {
+    const { day, week, month } = dateManager;
+
+    this.#dayText.text = `Day: ${day}`;
+    this.#weekMonthText.text = `Month: ${month} Week: ${week}`;
   };
 }
 

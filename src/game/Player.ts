@@ -11,6 +11,8 @@ import { random } from "pandemonium";
 import getStatistics from "../contants/statisticsDataTable";
 import StatisticsTypes from "../enums/StatisticsTypes";
 import Character from "./Character";
+import Events from "../enums/Events";
+import MovementManager from "./MovementManager";
 
 interface Position {
   x: number;
@@ -20,6 +22,7 @@ interface Position {
 type BattleState = "attackPhase" | "blockPhase";
 
 class Player extends Character {
+  #movementManager: MovementManager;
   public readonly portrait: string = "portrait1";
   #position: Position = { x: 0, y: 0 };
   #direction: number;
@@ -31,6 +34,8 @@ class Player extends Character {
 
   constructor() {
     super();
+
+    this.#movementManager = new MovementManager();
 
     const statistics = getStatistics(StatisticsTypes.player);
 
@@ -58,10 +63,10 @@ class Player extends Character {
   }
 
   public addToGame = (scene: Phaser.Scene): void => {
-    eventHandler.on("up", this.handleUp, scene);
-    eventHandler.on("down", this.handleDown, scene);
-    eventHandler.on("right", this.handleRight, scene);
-    eventHandler.on("left", this.handleLeft, scene);
+    eventHandler.on(Events.up, this.handleUp, scene);
+    eventHandler.on(Events.down, this.handleDown, scene);
+    eventHandler.on(Events.right, this.handleRight, scene);
+    eventHandler.on(Events.left, this.handleLeft, scene);
   };
 
   public set positionX(x: number) {
@@ -124,71 +129,131 @@ class Player extends Character {
     return worldMap?.map || [];
   }
 
+  public rest(): void {
+    this.currentMovement = this.movement;
+
+    this.mercenaries.forEach((mercenary: Mercenary): void => {
+      mercenary.currentMovement = mercenary.movement;
+    });
+  }
+
   private handleUp = (): void => {
     if (this.#position.y > 0) {
-      if (
-        this.#worldMap.map[this.#position.y - 1][this.#position.x].type !==
-        MapTileTypes.mountain
-      ) {
-        this.#position.y--;
+      const { type } =
+        this.#worldMap.map[this.#position.y - 1][this.#position.x];
+
+      if (type !== MapTileTypes.mountain) {
+        const movementCost = this.#movementManager.movementCost(type);
+
+        if (this.currentMovement - movementCost >= 0) {
+          this.#position.y--;
+          this.currentMovement -= movementCost;
+        } else {
+          eventHandler.emit(
+            Events.showCommentary,
+            CommentaryEvents.movementRunsOut
+          );
+        }
       } else {
-        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
+        eventHandler.emit(
+          Events.showCommentary,
+          CommentaryEvents.mountainBlock
+        );
       }
 
       this.#direction = Directions.north;
 
-      eventHandler.emit("moveForward");
+      eventHandler.emit(Events.moveForward);
     }
   };
 
   private handleDown = (): void => {
     if (this.#position.y < mapSize.height - 1) {
-      if (
-        this.#worldMap.map[this.#position.y + 1][this.#position.x].type !==
-        MapTileTypes.mountain
-      ) {
-        this.#position.y++;
+      const { type } =
+        this.#worldMap.map[this.#position.y + 1][this.#position.x];
+
+      if (type !== MapTileTypes.mountain) {
+        const movementCost = this.#movementManager.movementCost(type);
+
+        if (this.currentMovement - movementCost >= 0) {
+          this.#position.y++;
+          this.currentMovement -= movementCost;
+        } else {
+          eventHandler.emit(
+            Events.showCommentary,
+            CommentaryEvents.movementRunsOut
+          );
+        }
       } else {
-        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
+        eventHandler.emit(
+          Events.showCommentary,
+          CommentaryEvents.mountainBlock
+        );
       }
 
       this.#direction = Directions.south;
 
-      eventHandler.emit("moveBack");
+      eventHandler.emit(Events.moveBack);
     }
   };
 
   private handleRight = (): void => {
     if (this.#position.x < mapSize.width - 1) {
-      if (
-        this.#worldMap.map[this.#position.y][this.#position.x + 1].type !==
-        MapTileTypes.mountain
-      ) {
-        this.#position.x++;
+      const { type } =
+        this.#worldMap.map[this.#position.y][this.#position.x + 1];
+
+      if (type !== MapTileTypes.mountain) {
+        const movementCost = this.#movementManager.movementCost(type);
+
+        if (this.currentMovement - movementCost >= 0) {
+          this.#position.x++;
+          this.currentMovement -= movementCost;
+        } else {
+          eventHandler.emit(
+            Events.showCommentary,
+            CommentaryEvents.movementRunsOut
+          );
+        }
       } else {
-        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
+        eventHandler.emit(
+          Events.showCommentary,
+          CommentaryEvents.mountainBlock
+        );
       }
 
       this.#direction = Directions.east;
 
-      eventHandler.emit("moveRight");
+      eventHandler.emit(Events.moveRight);
     }
   };
 
   private handleLeft = (): void => {
     if (this.#position.x > 0) {
-      if (
-        this.#worldMap.map[this.#position.y][this.#position.x - 1].type !==
-        MapTileTypes.mountain
-      ) {
-        this.#position.x--;
+      const { type } =
+        this.#worldMap.map[this.#position.y][this.#position.x - 1];
+
+      if (type !== MapTileTypes.mountain) {
+        const movementCost = this.#movementManager.movementCost(type);
+
+        if (this.currentMovement - movementCost >= 0) {
+          this.#position.x--;
+          this.currentMovement -= movementCost;
+        } else {
+          eventHandler.emit(
+            Events.showCommentary,
+            CommentaryEvents.movementRunsOut
+          );
+        }
       } else {
-        eventHandler.emit("showCommentary", CommentaryEvents.mountainBlock);
+        eventHandler.emit(
+          Events.showCommentary,
+          CommentaryEvents.mountainBlock
+        );
       }
 
       this.#direction = Directions.west;
 
-      eventHandler.emit("moveLeft");
+      eventHandler.emit(Events.moveLeft);
     }
   };
 

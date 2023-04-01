@@ -1,6 +1,7 @@
 import dialogManager from "../contants/dialogManager";
 import dialogs, { resetDialogs } from "../contants/dialogs";
 import eventHandler from "../contants/eventHandler";
+import Events from "../enums/Events";
 import Dialog from "../game/Dialog";
 import TextButton from "../ui/common/TextButton";
 
@@ -26,7 +27,12 @@ class DialogScene extends Phaser.Scene {
       height - this.#heigth - 12,
       "messageBackground"
     );
-    const moveEvents = ["moveRight", "moveLeft", "moveForward", "moveBack"];
+    const moveEvents = [
+      Events.moveRight,
+      Events.moveLeft,
+      Events.moveForward,
+      Events.moveBack,
+    ];
 
     messageBackground.setOrigin(0);
     this.updateDialog(DialogTypes.map);
@@ -42,7 +48,7 @@ class DialogScene extends Phaser.Scene {
     });
 
     eventHandler.on(
-      "battle",
+      Events.battle,
       () => {
         this.updateDialog(DialogTypes.battle);
       },

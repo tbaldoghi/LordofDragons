@@ -12,12 +12,12 @@ class FloatMessageScene extends Phaser.Scene {
   }
 
   create(): void {
-    const width = this.#quote.length * 10;
+    const width = 200;
     const height = 40;
 
     this.cameras.main.setViewport(
-      this.#parent.x - width / 2,
-      this.#parent.y - 86,
+      this.#parent.x - 268,
+      this.#parent.y - 64,
       width,
       height
     );
@@ -39,7 +39,7 @@ class FloatMessageScene extends Phaser.Scene {
   update(time: number, delta: number): void {
     this.#timer += delta;
 
-    if (this.#timer > 5000) {
+    if (this.#timer > this.#quote.length * 200) {
       this.events.emit("closeFloatMessage");
     }
   }
