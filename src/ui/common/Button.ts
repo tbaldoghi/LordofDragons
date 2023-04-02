@@ -21,16 +21,22 @@ class Button extends BaseButton {
   }
 
   handleDown(): void {
-    this.setFrame(ButtonStates.up);
+    if (!this._isDisabled) {
+      this.setFrame(ButtonStates.up);
+    }
   }
 
   handleOut(): void {
-    this.setFrame(ButtonStates.down);
+    if (!this._isDisabled) {
+      this.setFrame(ButtonStates.down);
+    }
   }
 
   handleUp(): void {
-    this.setFrame(ButtonStates.down);
-    this.onClick();
+    if (!this._isDisabled) {
+      this.setFrame(ButtonStates.down);
+      this.onClick();
+    }
   }
 }
 

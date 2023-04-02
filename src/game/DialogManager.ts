@@ -90,11 +90,28 @@ class DialogManager {
     }
 
     dialogs.push(new Dialog("...Next phase", true, this.handleNextPhaseClick));
-    dialogs.push(new Dialog(""));
-    dialogs.push(new Dialog(""));
-    dialogs.push(new Dialog(""));
-    dialogs.push(new Dialog(""));
+
+    for (let i = 0; i < 4; i++) {
+      dialogs.push(new Dialog(""));
+    }
+
     dialogs.push(new Dialog("...Retrait", true, () => {}));
+  }
+
+  public dialogForBattleAttack(): void {
+    if (!player.isInBattle) {
+      return;
+    }
+
+    dialogs.push(new Dialog("Select target!"));
+
+    for (let i = 0; i < 5; i++) {
+      dialogs.push(new Dialog(""));
+    }
+
+    dialogs.push(
+      new Dialog("... Another action.", true, this.handleAnotherActionClick)
+    );
   }
 
   private handleAttackClick(scene: Phaser.Scene): void {
@@ -107,13 +124,19 @@ class DialogManager {
     eventHandler.emit(Events.battle);
   }
 
-  private handleNextPhaseClick = () => {
+  private handleNextPhaseClick = (): void => {
     if (player.battleState === BattleStates.attackPhase) {
       player.battleState = BattleStates.blockPhase;
     } else if (player.battleState === BattleStates.blockPhase) {
       player.battleState = BattleStates.attackPhase;
     }
+
     eventHandler.emit(Events.battle);
+  };
+
+  private handleAnotherActionClick = (): void => {
+    eventHandler.emit(Events.battle);
+    eventHandler.emit(Events.closeAfterClick);
   };
 }
 

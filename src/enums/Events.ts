@@ -9,8 +9,10 @@ enum Events {
   moveLeft = "moveLeft",
   showCommentary = "showCommentary",
   battle = "battle",
+  battleAttack = "battleAttack",
   redrawGameStatusBar = "redrawGameStatusBar",
   redrawBattleStatusBar = "redrawBattleStatusBar",
+  closeAfterClick = "closeAfterClick",
 }
 
 export default Events;

@@ -5,11 +5,12 @@ import Events from "../enums/Events";
 import Dialog from "../game/Dialog";
 import TextButton from "../ui/common/TextButton";
 
-type DialogType = "map" | "battle";
+type DialogType = "map" | "battle" | "battleAttack";
 
 enum DialogTypes {
   map = "map",
   battle = "battle",
+  battleAttack = "battleAttack",
 }
 
 class DialogScene extends Phaser.Scene {
@@ -54,6 +55,14 @@ class DialogScene extends Phaser.Scene {
       },
       this
     );
+
+    eventHandler.on(
+      Events.battleAttack,
+      () => {
+        this.updateDialog(DialogTypes.battleAttack);
+      },
+      this
+    );
   }
 
   private updateDialog = (dialogType: DialogType): void => {
@@ -65,6 +74,9 @@ class DialogScene extends Phaser.Scene {
         break;
       case DialogTypes.battle:
         dialogManager.dialogForBattle();
+        break;
+      case DialogTypes.battleAttack:
+        dialogManager.dialogForBattleAttack();
         break;
     }
 

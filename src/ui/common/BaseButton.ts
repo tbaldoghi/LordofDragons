@@ -1,6 +1,7 @@
 import ButtonStates from "../../enums/ButtonStates";
 
 abstract class BaseButton extends Phaser.GameObjects.Sprite {
+  protected _isDisabled?: boolean;
   public onClick: () => void;
 
   constructor(
@@ -13,6 +14,7 @@ abstract class BaseButton extends Phaser.GameObjects.Sprite {
   ) {
     super(scene, x, y, texture);
 
+    this._isDisabled = isDisabled;
     this.onClick = onClick;
 
     scene.add.existing(this);
@@ -29,6 +31,20 @@ abstract class BaseButton extends Phaser.GameObjects.Sprite {
   abstract handleOut(): void;
 
   abstract handleUp(): void;
+
+  public disable(): void {
+    this._isDisabled = true;
+
+    this.disableInteractive();
+    this.setFrame(ButtonStates.up);
+  }
+
+  public enable(): void {
+    this._isDisabled = false;
+
+    this.setInteractive();
+    this.setFrame(ButtonStates.down);
+  }
 }
 
 export default BaseButton;

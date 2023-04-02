@@ -1,3 +1,5 @@
+import Inventory from "./Inventory";
+
 abstract class Character {
   protected _health!: number;
   protected _currentHealth!: number;
@@ -7,6 +9,11 @@ abstract class Character {
   protected _currentMovement!: number;
   protected _timeUnit!: number;
   protected _currentTimeUnit!: number;
+  protected _inventory: Inventory;
+
+  constructor() {
+    this._inventory = new Inventory();
+  }
 
   public get health(): number {
     return this._health;
@@ -70,6 +77,10 @@ abstract class Character {
 
   public set currentTimeUnit(currentTimeUnit: number) {
     this._currentTimeUnit = currentTimeUnit;
+  }
+
+  public get inventory(): Inventory {
+    return this._inventory;
   }
 }
 
