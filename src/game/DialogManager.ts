@@ -1,3 +1,4 @@
+import ViewCreautres from "../contants/ViewCreatures";
 import dialogs from "../contants/dialogs";
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
@@ -137,6 +138,10 @@ class DialogManager {
   private handleAnotherActionClick = (): void => {
     eventHandler.emit(Events.battle);
     eventHandler.emit(Events.closeAfterClick);
+
+    ViewCreautres.creatures.forEach((creature): void => {
+      creature.disable();
+    });
   };
 }
 

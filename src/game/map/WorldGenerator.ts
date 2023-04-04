@@ -1,4 +1,4 @@
-import { createWeightedChoice } from "pandemonium";
+import { createWeightedChoice, random } from "pandemonium";
 import MapTileTypes from "../../enums/MapTileTypes";
 import WorldLevels from "../../enums/WorldLevels";
 import MapTile, { BackgroundVariant, Event, Variant } from "../MapTile";
@@ -51,34 +51,35 @@ class WorldGenerator {
       this.#world.worldMaps[level].map[i] = [];
 
       for (let j = 0; j < height; j++) {
-        const backgroundVariant = {
-          distance: Math.floor(Math.random() * 4) as Variant,
-          background: Math.floor(Math.random() * 4) as Variant,
-          foreground: Math.floor(Math.random() * 4) as Variant,
-        } as BackgroundVariant;
-        let type = Math.floor(Math.random() * 4);
-        let event = Math.floor(Math.random() * 4) as Event;
+        let type = random(0, 3);
+        let event = random(0, 3) as Event;
 
         for (let i = 0; i < 2; i++) {
           if (event !== MapTileEvents.empty) {
-            event = Math.floor(Math.random() * 4) as Event;
+            event = random(0, 3) as Event;
           }
         }
 
         if (type !== MapTileTypes.forest) {
-          type = Math.floor(Math.random() * 4);
+          type = random(0, 3);
         }
 
         if (type === MapTileTypes.mountain) {
-          type = Math.floor(Math.random() * 4);
+          type = random(0, 3);
         }
 
         if (Math.random() < 0.1) {
-          type = Math.floor(Math.random() * 6 + 7);
+          type = random(6, 10);
         }
 
         if (i === 0 || j === 0 || i === width - 1 || j === height - 1) {
           type = MapTileTypes.mountain;
+        }
+
+        if (level === 0) {
+          if (i === 2 && j === 2) {
+            type = MapTilePlaceTypes.village;
+          }
         }
 
         if (
@@ -88,7 +89,7 @@ class WorldGenerator {
           event = MapTileEvents.empty;
         }
 
-        const mapTile = new MapTile(type, backgroundVariant, event);
+        const mapTile = new MapTile(type, this.backgroundVariant(), event);
 
         if (event === MapTileEvents.creature) {
           const creatureType = this.randomCreatureType(level);
@@ -106,7 +107,69 @@ class WorldGenerator {
         this.#world.worldMaps[level].map[i][j] = mapTile;
       }
     }
+
+    this.addPortals(level);
   }
+
+  private addPortals = (level: number): void => {
+    const { width, height } = mapSize;
+
+    if (level === 0) {
+      let mapTile = new MapTile(
+        MapTilePlaceTypes.portal,
+        this.backgroundVariant(),
+        MapTileEvents.empty
+      );
+
+      this.#world.worldMaps[level].map[1][1] = mapTile;
+
+      mapTile = new MapTile(
+        MapTilePlaceTypes.portalExit,
+        this.backgroundVariant(),
+        MapTileEvents.empty
+      );
+      const i = random(5, width - 1);
+      const j = random(5, height - 1);
+
+      this.#world.worldMaps[level].map[i][j] = mapTile;
+    } else {
+      const indices = [];
+
+      while (indices.length < 4) {
+        const index = random(1, width - 1);
+
+        if (indices.indexOf(index) === -1) {
+          indices.push(index);
+        }
+      }
+
+      let mapTile = new MapTile(
+        MapTilePlaceTypes.portal,
+        this.backgroundVariant(),
+        MapTileEvents.empty
+      );
+
+      this.#world.worldMaps[level].map[indices[0]][indices[1]] = mapTile;
+
+      mapTile = new MapTile(
+        MapTilePlaceTypes.portalExit,
+        this.backgroundVariant(),
+        MapTileEvents.empty
+      );
+      const i = random(5, width - 1);
+      const j = random(5, height - 1);
+
+      this.#world.worldMaps[level].map[indices[2]][indices[3]] = mapTile;
+    }
+  };
+
+  private backgroundVariant = (): BackgroundVariant => {
+    return {
+      distance: random(0, 3) as Variant,
+      background: random(0, 3) as Variant,
+      foreground: random(0, 3) as Variant,
+    } as BackgroundVariant;
+  };
 
   private randomCreatureType(level: number): string {
     // TODO: Add level to weights.

@@ -1,5 +1,7 @@
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
+import ViewCreautres from "../contants/ViewCreatures";
+import viewCreatures from "../contants/ViewCreatures";
 import { WeaponData } from "../contants/weaponDataTable";
 import Events from "../enums/Events";
 import StatusBarTypes from "../enums/StatusBarTypes";
@@ -7,7 +9,6 @@ import Mercenary from "../game/Mercenary";
 import Player from "../game/Player";
 import Button from "../ui/common/Button";
 import StatusBar from "../ui/common/StatusBar";
-import TextButton from "../ui/common/TextButton";
 import FloatMenuScene, { FloatMenuItem } from "./FloatMenuScene";
 
 class BattleUIScene extends Phaser.Scene {
@@ -198,7 +199,7 @@ class BattleUIScene extends Phaser.Scene {
               portraitX + i * 155 - 128,
               portraitY + 32
             );
-            console.log("clicked");
+
             count++;
           });
         } else {
@@ -245,7 +246,16 @@ class BattleUIScene extends Phaser.Scene {
       }
     }
 
-    eventHandler.on(Events.closeAfterClick, this.handleCloseFloatMenu);
+    eventHandler.on(Events.closeAfterClick, this.handleCloseFloatMenu); // TODO: Rename this event.
+    eventHandler.on(
+      Events.battleAttack,
+      () => {
+        for (let i = 0; i < ViewCreautres.creatures.length; i++) {
+          ViewCreautres.creatures[i].enable();
+        }
+      },
+      this
+    );
   }
 
   private handleCreateFloatMenu = (key: number, x: number, y: number): void => {
