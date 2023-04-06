@@ -10,6 +10,7 @@ enum Events {
   showCommentary = "showCommentary",
   battle = "battle",
   battleAttack = "battleAttack",
+  battleSelectTarget = "battleSelectTarget",
   redrawGameStatusBar = "redrawGameStatusBar",
   redrawBattleStatusBar = "redrawBattleStatusBar",
   closeAfterClick = "closeAfterClick",

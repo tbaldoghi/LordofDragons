@@ -82,6 +82,10 @@ abstract class Character {
   public get inventory(): Inventory {
     return this._inventory;
   }
+
+  protected handleAttack = (timeUnitCost: number): void => {
+    this.currentTimeUnit -= timeUnitCost;
+  };
 }
 
 export default Character;

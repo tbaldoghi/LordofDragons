@@ -1,9 +1,18 @@
+import eventHandler from "../../contants/eventHandler";
+import Events from "../../enums/Events";
 import SelectTarget from "../SelectTarget";
+import Loot from "../loot/Loot";
 
 // TODO: Update to sprite game object, instead of image. (For animations.)
 abstract class Creature extends Phaser.GameObjects.Image {
   public x: number;
   public y: number;
+  protected _health!: number;
+  protected _currentHealth!: number;
+  protected _mana!: number;
+  protected _currentMana!: number;
+  protected _timeUnit!: number;
+  protected _currentTimeUnit!: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -28,13 +37,14 @@ abstract class Creature extends Phaser.GameObjects.Image {
     this.setInteractive();
     this.on("pointerover", this.handleMouseOver);
     this.on("pointerout", this.handleMouseOut);
-    this.on("pointerdown", this.hit);
+    this.on("pointerdown", this.handleMouseDown);
   };
 
   public disable = (): void => {
     this.disableInteractive();
     this.off("pointerover");
     this.off("pointerout");
+    this.off("pointerdown");
   };
 
   public hit = (): void => {
@@ -48,7 +58,7 @@ abstract class Creature extends Phaser.GameObjects.Image {
     });
   };
 
-  handleMouseOver = (): void => {
+  private handleMouseOver = (): void => {
     SelectTarget.handleOver(
       this.scene,
       this.x,
@@ -58,8 +68,12 @@ abstract class Creature extends Phaser.GameObjects.Image {
     );
   };
 
-  handleMouseOut = (): void => {
+  private handleMouseOut = (): void => {
     SelectTarget.handleOut(this.scene);
+  };
+
+  private handleMouseDown = (): void => {
+    eventHandler.emit(Events.battleSelectTarget, this);
   };
 }
 

@@ -1,9 +1,9 @@
 import Skeleton from "../game/creature/Skeleton";
 import Wolf from "../game/creature/Wolf";
 
-type CreatureType = Wolf & Skeleton;
+export type CreatureType = Wolf & Skeleton;
 
-class ViewCreautres {
+class ViewCreatures {
   public static creatures: CreatureType[] = [];
 
   public static resetCreatures = (): void => {
@@ -11,4 +11,4 @@ class ViewCreautres {
   };
 }
 
-export default ViewCreautres;
+export default ViewCreatures;

@@ -80,6 +80,11 @@ class WorldGenerator {
           if (i === 2 && j === 2) {
             type = MapTilePlaceTypes.village;
           }
+
+          if (i === 4 && j === 4) {
+            type = MapTileTypes.plain;
+            event = MapTileEvents.empty;
+          }
         }
 
         if (

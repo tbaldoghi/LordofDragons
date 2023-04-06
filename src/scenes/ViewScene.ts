@@ -2,12 +2,11 @@ import ViewSize from "../enums/ViewSize";
 import Wolf from "../game/creature/Wolf";
 import eventHandler from "../contants/eventHandler";
 import world from "../contants/world";
-import viewCreatures from "../contants/ViewCreatures";
 import player from "../contants/player";
 import Creatures from "../enums/Creatures";
 import Skeleton from "../game/creature/Skeleton";
 import Events from "../enums/Events";
-import ViewCreautres from "../contants/ViewCreatures";
+import ViewCreatures from "../contants/ViewCreatures";
 
 class ViewScene extends Phaser.Scene {
   #parent: Phaser.GameObjects.Zone;
@@ -91,11 +90,11 @@ class ViewScene extends Phaser.Scene {
 
   private redrawScreen = (): void => {
     // TODO: Add background.
-    ViewCreautres.creatures.forEach((creature: Wolf | Skeleton): void => {
+    ViewCreatures.creatures.forEach((creature: Wolf | Skeleton): void => {
       creature.destroy();
     });
 
-    ViewCreautres.resetCreatures();
+    ViewCreatures.resetCreatures();
 
     const worldMap = world.worldMaps.find(
       (worldMap): boolean => worldMap.level === player.currentLevel
@@ -106,12 +105,12 @@ class ViewScene extends Phaser.Scene {
     creatures.forEach((creature: string, index: number): void => {
       switch (creature) {
         case Creatures.wolf:
-          ViewCreautres.creatures.push(
+          ViewCreatures.creatures.push(
             new Wolf(this, ViewSize.width / 2 + 200 * index - 300, 570, false)
           );
           break;
         case Creatures.skeleton:
-          ViewCreautres.creatures.push(
+          ViewCreatures.creatures.push(
             new Skeleton(
               this,
               ViewSize.width / 2 + 300 * index - 450,

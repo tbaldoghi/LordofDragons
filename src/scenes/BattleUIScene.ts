@@ -1,10 +1,10 @@
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
-import ViewCreautres from "../contants/ViewCreatures";
-import viewCreatures from "../contants/ViewCreatures";
+import ViewCreatures, { CreatureType } from "../contants/ViewCreatures";
 import { WeaponData } from "../contants/weaponDataTable";
 import Events from "../enums/Events";
 import StatusBarTypes from "../enums/StatusBarTypes";
+import Inventory from "../game/Inventory";
 import Mercenary from "../game/Mercenary";
 import Player from "../game/Player";
 import Button from "../ui/common/Button";
@@ -53,6 +53,7 @@ class BattleUIScene extends Phaser.Scene {
             mana,
             currentTimeUnit,
             timeUnit,
+            inventory,
           } = this.#characters[index];
 
           this.#healthBars.push(
@@ -197,7 +198,9 @@ class BattleUIScene extends Phaser.Scene {
             this.handleCreateFloatMenu(
               count,
               portraitX + i * 155 - 128,
-              portraitY + 32
+              portraitY + 32,
+              timeUnit,
+              inventory
             );
 
             count++;
@@ -250,15 +253,28 @@ class BattleUIScene extends Phaser.Scene {
     eventHandler.on(
       Events.battleAttack,
       () => {
-        for (let i = 0; i < ViewCreautres.creatures.length; i++) {
-          ViewCreautres.creatures[i].enable();
-        }
+        ViewCreatures.creatures.forEach((creature: CreatureType): void => {
+          creature.enable();
+        });
+      },
+      this
+    );
+    eventHandler.on(
+      Events.battleSelectTarget,
+      (creature: CreatureType) => {
+        creature.hit();
       },
       this
     );
   }
 
-  private handleCreateFloatMenu = (key: number, x: number, y: number): void => {
+  private handleCreateFloatMenu = (
+    key: number,
+    x: number,
+    y: number,
+    timeUnit: number,
+    inventory: Inventory
+  ): void => {
     const floatMenu = this.add.zone(x - 150, y - 100, 250, 200);
 
     floatMenu.setInteractive();
@@ -268,16 +284,16 @@ class BattleUIScene extends Phaser.Scene {
     const floatMenuScene = new FloatMenuScene(
       key,
       floatMenu,
-      player.inventory.weaponAttacks().map(
-        (weaponAttack: WeaponData): FloatMenuItem => ({
-          text: `${weaponAttack.name} (${Math.floor(
-            player.timeUnit * weaponAttack.timeUnit
-          )} TU)`,
-          onClick: () => {
-            eventHandler.emit(Events.battleAttack);
-          },
+      inventory
+        .weaponAttacks()
+        .map((weaponAttack: WeaponData): FloatMenuItem => {
+          const timeUnitCost = Math.floor(timeUnit * weaponAttack.timeUnit);
+
+          return {
+            text: `${weaponAttack.name} (${timeUnitCost} TU)`,
+            onClick: this.handleFloatMenuClick,
+          };
         })
-      )
     );
 
     this.#buttons.forEach((button: Button): void => {
@@ -288,10 +304,14 @@ class BattleUIScene extends Phaser.Scene {
     floatMenuScene.scene.start();
   };
 
-  public handleCloseFloatMenu = (): void => {
+  private handleCloseFloatMenu = (): void => {
     this.#buttons.forEach((button: Button): void => {
       button.enable();
     });
+  };
+
+  private handleFloatMenuClick = (): void => {
+    eventHandler.emit(Events.battleAttack);
   };
 
   private redrawStatusBars = (): void => {
