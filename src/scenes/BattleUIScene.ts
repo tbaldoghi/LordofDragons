@@ -1,17 +1,24 @@
+import { randomFloat } from "pandemonium";
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
 import ViewCreatures, { CreatureType } from "../contants/ViewCreatures";
 import { WeaponData } from "../contants/weaponDataTable";
 import Events from "../enums/Events";
 import StatusBarTypes from "../enums/StatusBarTypes";
-import Inventory from "../game/Inventory";
 import Mercenary from "../game/Mercenary";
 import Player from "../game/Player";
 import Button from "../ui/common/Button";
 import StatusBar from "../ui/common/StatusBar";
-import FloatMenuScene, { FloatMenuItem } from "./FloatMenuScene";
+import BattleTurn from "../contants/BattleTurn";
+
+export interface ListItem {
+  text: string;
+  onClick: () => void;
+}
 
 class BattleUIScene extends Phaser.Scene {
+  #selectedCharacter: Player | Mercenary | null;
+  #timeUnitCost: number;
   #healthBars: StatusBar[] = [];
   #manaBars: StatusBar[] = [];
   #timeUnitBars: StatusBar[] = [];
@@ -24,6 +31,8 @@ class BattleUIScene extends Phaser.Scene {
   constructor() {
     super("BattleUIScene");
 
+    this.#selectedCharacter = null;
+    this.#timeUnitCost = 0;
     this.#characters = [player, ...player.mercenaries];
   }
 
@@ -45,6 +54,7 @@ class BattleUIScene extends Phaser.Scene {
           this.scale.gameSize.width - portraitOffsetX + j * portraitSpace;
 
         if (index < this.#characters.length) {
+          const character = this.#characters[index];
           const {
             portrait,
             currentHealth,
@@ -54,7 +64,7 @@ class BattleUIScene extends Phaser.Scene {
             currentTimeUnit,
             timeUnit,
             inventory,
-          } = this.#characters[index];
+          } = character;
 
           this.#healthBars.push(
             new StatusBar(
@@ -192,19 +202,9 @@ class BattleUIScene extends Phaser.Scene {
 
           this.#buttons.push(actionButton);
 
-          let count = 0;
-
-          attackButton.on("pointerup", () => {
-            this.handleCreateFloatMenu(
-              count,
-              portraitX + i * 155 - 128,
-              portraitY + 32,
-              timeUnit,
-              inventory
-            );
-
-            count++;
-          });
+          attackButton.on("pointerup", () =>
+            this.handleAttackButtonClick(character)
+          );
         } else {
           this.add.image(portraitX, portraitY, "emptyPortrait");
 
@@ -249,7 +249,18 @@ class BattleUIScene extends Phaser.Scene {
       }
     }
 
-    eventHandler.on(Events.closeAfterClick, this.handleCloseFloatMenu); // TODO: Rename this event.
+    const nextTurnButton = new Button(
+      this,
+      1363,
+      1000,
+      "nextTurn",
+      this.handleNextTurnClick
+    );
+
+    eventHandler.on(
+      Events.closeAfterClick,
+      this.handleAnotherActionDialogClick
+    ); // TODO: Rename this event.
     eventHandler.on(
       Events.battleAttack,
       () => {
@@ -261,57 +272,83 @@ class BattleUIScene extends Phaser.Scene {
     );
     eventHandler.on(
       Events.battleSelectTarget,
-      (creature: CreatureType) => {
-        creature.hit();
+      (creature: CreatureType): void => {
+        if (this.#selectedCharacter) {
+          const remainingTimeUnit =
+            this.#selectedCharacter.currentTimeUnit - this.#timeUnitCost;
+
+          if (remainingTimeUnit >= 0) {
+            // TODO: Calculate hit chance.
+            if (randomFloat(0, 1) > 0.6) {
+              creature.hit();
+            } else {
+              this.missTarget(creature.x, creature.y);
+            }
+
+            this.#selectedCharacter.currentTimeUnit -= this.#timeUnitCost;
+            this.redrawStatusBars();
+          }
+        }
+      },
+      this
+    );
+    eventHandler.on(
+      Events.battleNextTurn,
+      (): void => {
+        this.#characters.forEach((character: Player | Mercenary): void => {
+          character.battleRest();
+        });
+
+        ViewCreatures.creatures.forEach((creature: CreatureType): void => {
+          creature.disable();
+        });
+
+        this.handleAnotherActionDialogClick();
+        BattleTurn.nextTurn();
+        this.redrawStatusBars();
       },
       this
     );
   }
 
-  private handleCreateFloatMenu = (
-    key: number,
-    x: number,
-    y: number,
-    timeUnit: number,
-    inventory: Inventory
-  ): void => {
-    const floatMenu = this.add.zone(x - 150, y - 100, 250, 200);
-
-    floatMenu.setInteractive();
-    floatMenu.setOrigin(0);
-
-    // TODO: Remove map.
-    const floatMenuScene = new FloatMenuScene(
-      key,
-      floatMenu,
-      inventory
-        .weaponAttacks()
-        .map((weaponAttack: WeaponData): FloatMenuItem => {
-          const timeUnitCost = Math.floor(timeUnit * weaponAttack.timeUnit);
-
-          return {
-            text: `${weaponAttack.name} (${timeUnitCost} TU)`,
-            onClick: this.handleFloatMenuClick,
-          };
-        })
-    );
-
-    this.#buttons.forEach((button: Button): void => {
-      button.disable();
-    });
-
-    this.scene.add(`FloatMenuScene${key}`, floatMenuScene);
-    floatMenuScene.scene.start();
-  };
-
-  private handleCloseFloatMenu = (): void => {
+  private handleAnotherActionDialogClick = (): void => {
     this.#buttons.forEach((button: Button): void => {
       button.enable();
     });
   };
 
-  private handleFloatMenuClick = (): void => {
+  public handleAttackClick = (timeUnitCost: number): void => {
+    this.#timeUnitCost = timeUnitCost;
+
     eventHandler.emit(Events.battleAttack);
+  };
+
+  private handleAttackButtonClick = (character: Player | Mercenary): void => {
+    this.#buttons.forEach((button: Button): void => {
+      button.disable();
+    });
+
+    this.#selectedCharacter = character;
+
+    const attacks = character.inventory
+      .weaponAttacks()
+      .map((weaponAttack: WeaponData): ListItem => {
+        const timeUnitCost = Math.floor(
+          character.timeUnit * weaponAttack.timeUnit
+        );
+
+        return {
+          text: `${weaponAttack.name} (${timeUnitCost} TU)`,
+          onClick: () => this.handleAttackClick(timeUnitCost),
+        };
+      });
+
+    eventHandler.emit(Events.battleSelectAttack, attacks);
+  };
+
+  private handleNextTurnClick = (): void => {
+    eventHandler.emit(Events.battleNextTurn);
+    eventHandler.emit(Events.battle);
   };
 
   private redrawStatusBars = (): void => {
@@ -337,6 +374,25 @@ class BattleUIScene extends Phaser.Scene {
         this.#timeUnitTexts[index].text = `${currentTimeUnit}`;
       }
     );
+  };
+
+  private missTarget = (x: number, y: number): void => {
+    const missText = this.add.text(x, y, "Miss", {
+      font: "24px Oswald",
+      color: "#79444a",
+      stroke: "#d2c9a5",
+      strokeThickness: 4,
+    });
+    const tween = this.tweens.add({
+      targets: missText,
+      y: 400,
+      paused: false,
+      yoyo: false,
+      repeat: 0,
+      onComplete: (): void => {
+        missText.destroy();
+      },
+    });
   };
 }
 

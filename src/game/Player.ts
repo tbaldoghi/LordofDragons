@@ -58,7 +58,7 @@ class Player extends Character {
     this.#direction = Directions.north;
     this.#isInBattle = false;
     this.#currentLevel = 1;
-    this.#mercenaries = [new Mercenary()]; // For testing. Remove Mercenary later.
+    this.#mercenaries = [new Mercenary(), new Mercenary()]; // For testing. Remove Mercenary later.
     this.#worldMap = this.findWorldMap();
   }
 

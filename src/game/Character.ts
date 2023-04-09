@@ -83,6 +83,10 @@ abstract class Character {
     return this._inventory;
   }
 
+  public battleRest = (): void => {
+    this._currentTimeUnit = this.timeUnit;
+  };
+
   protected handleAttack = (timeUnitCost: number): void => {
     this.currentTimeUnit -= timeUnitCost;
   };

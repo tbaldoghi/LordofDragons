@@ -21,7 +21,7 @@ class Inventory {
       name: "Hand-to-hand",
       minimumDamage: 1,
       maximumDamage: 2,
-      timeUnit: 0.2,
+      timeUnit: 0.33,
     };
 
     return [handToHand];

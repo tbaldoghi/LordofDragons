@@ -147,7 +147,6 @@ class GameUIScene extends Phaser.Scene {
     const navigationX =
       this.scale.gameSize.width - navigationOffsetX + navigationSize * 6;
     const navigationY = this.scale.gameSize.height - navigationOffsetY;
-
     const nextTurnButton = new Button(
       this,
       navigationX - navigationSize * 2,

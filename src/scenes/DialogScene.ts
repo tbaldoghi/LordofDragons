@@ -4,13 +4,15 @@ import eventHandler from "../contants/eventHandler";
 import Events from "../enums/Events";
 import Dialog from "../game/Dialog";
 import TextButton from "../ui/common/TextButton";
+import { ListItem } from "./BattleUIScene";
 
-type DialogType = "map" | "battle" | "battleAttack";
+type DialogType = "map" | "battle" | "battleAttack" | "battleSelectAttack";
 
 enum DialogTypes {
   map = "map",
   battle = "battle",
   battleAttack = "battleAttack",
+  battleSelectAttack = "battleSelectAttack",
 }
 
 class DialogScene extends Phaser.Scene {
@@ -57,15 +59,22 @@ class DialogScene extends Phaser.Scene {
     );
 
     eventHandler.on(
-      Events.battleAttack,
-      () => {
-        this.updateDialog(DialogTypes.battleAttack);
+      Events.battleSelectAttack,
+      (listItems: ListItem[]) => {
+        this.updateDialog(DialogTypes.battleSelectAttack, listItems);
       },
       this
     );
+
+    eventHandler.on(Events.battleAttack, () => {
+      this.updateDialog(DialogTypes.battleAttack), this;
+    });
   }
 
-  private updateDialog = (dialogType: DialogType): void => {
+  private updateDialog = (
+    dialogType: DialogType,
+    listItems?: ListItem[]
+  ): void => {
     this.resetDialogs();
 
     switch (dialogType) {
@@ -74,6 +83,9 @@ class DialogScene extends Phaser.Scene {
         break;
       case DialogTypes.battle:
         dialogManager.dialogForBattle();
+        break;
+      case DialogTypes.battleSelectAttack:
+        dialogManager.dialogForBattleSelectAttack(listItems || []);
         break;
       case DialogTypes.battleAttack:
         dialogManager.dialogForBattleAttack();

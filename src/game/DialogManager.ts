@@ -1,13 +1,14 @@
+import BattleTurn from "../contants/BattleTurn";
 import ViewCreatures, { CreatureType } from "../contants/ViewCreatures";
 import dialogs from "../contants/dialogs";
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
-import BattleStates from "../enums/BattleStates";
+// import BattleStates from "../enums/BattleStates";
 import Creatures from "../enums/Creatures";
 import Events from "../enums/Events";
 import MapTileEvents from "../enums/MapTileEvents";
 import MapTileTypes from "../enums/MapTileTypes";
-import BattleUIScene from "../scenes/BattleUIScene";
+import BattleUIScene, { ListItem } from "../scenes/BattleUIScene";
 import Dialog from "./Dialog";
 import MapTile from "./MapTile";
 
@@ -82,21 +83,29 @@ class DialogManager {
       return;
     }
 
-    if (player.battleState === BattleStates.attackPhase) {
-      dialogs.push(new Dialog("Attack phase."));
-    }
+    dialogs.push(new Dialog(`Turn ${BattleTurn.turn}`));
 
-    if (player.battleState === BattleStates.blockPhase) {
-      dialogs.push(new Dialog("Block phase."));
-    }
-
-    dialogs.push(new Dialog("...Next phase", true, this.handleNextPhaseClick));
-
-    for (let i = 0; i < 4; i++) {
-      dialogs.push(new Dialog(""));
-    }
+    this.addEmptyDialogLines(5);
 
     dialogs.push(new Dialog("...Retrait", true, () => {}));
+  }
+
+  public dialogForBattleSelectAttack(listItems: ListItem[]): void {
+    if (!player.isInBattle) {
+      return;
+    }
+
+    dialogs.push(new Dialog("Select action!"));
+
+    listItems.forEach((listItem: ListItem) => {
+      dialogs.push(new Dialog(`... ${listItem.text}`, true, listItem.onClick));
+    });
+
+    this.addEmptyDialogLines(5 - listItems.length);
+
+    dialogs.push(
+      new Dialog("... Another action.", true, this.handleAnotherActionClick)
+    );
   }
 
   public dialogForBattleAttack(): void {
@@ -106,9 +115,7 @@ class DialogManager {
 
     dialogs.push(new Dialog("Select target!"));
 
-    for (let i = 0; i < 5; i++) {
-      dialogs.push(new Dialog(""));
-    }
+    this.addEmptyDialogLines(5);
 
     dialogs.push(
       new Dialog("... Another action.", true, this.handleAnotherActionClick)
@@ -117,23 +124,12 @@ class DialogManager {
 
   private handleAttackClick(scene: Phaser.Scene): void {
     player.isInBattle = true;
-    player.battleState = BattleStates.attackPhase;
 
     scene.scene.stop("GameUIScene");
     scene.scene.stop("MiniMapScene");
     scene.scene.launch("BattleUIScene", BattleUIScene);
     eventHandler.emit(Events.battle);
   }
-
-  private handleNextPhaseClick = (): void => {
-    if (player.battleState === BattleStates.attackPhase) {
-      player.battleState = BattleStates.blockPhase;
-    } else if (player.battleState === BattleStates.blockPhase) {
-      player.battleState = BattleStates.attackPhase;
-    }
-
-    eventHandler.emit(Events.battle);
-  };
 
   private handleAnotherActionClick = (): void => {
     eventHandler.emit(Events.battle);
@@ -142,6 +138,12 @@ class DialogManager {
     ViewCreatures.creatures.forEach((creature: CreatureType): void => {
       creature.disable();
     });
+  };
+
+  private addEmptyDialogLines = (number: number): void => {
+    for (let i = 0; i < number; i++) {
+      dialogs.push(new Dialog(""));
+    }
   };
 }
 
