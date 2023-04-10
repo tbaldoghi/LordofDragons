@@ -1,7 +1,11 @@
 import eventHandler from "../../contants/eventHandler";
 import Events from "../../enums/Events";
 import SelectTarget from "../SelectTarget";
-import Loot from "../loot/Loot";
+
+export interface Attack {
+  damage?: number;
+  isMiss?: boolean;
+}
 
 // TODO: Update to sprite game object, instead of image. (For animations.)
 abstract class Creature extends Phaser.GameObjects.Image {
@@ -9,8 +13,6 @@ abstract class Creature extends Phaser.GameObjects.Image {
   public y: number;
   protected _health!: number;
   protected _currentHealth!: number;
-  protected _mana!: number;
-  protected _currentMana!: number;
   protected _timeUnit!: number;
   protected _currentTimeUnit!: number;
 
@@ -32,6 +34,8 @@ abstract class Creature extends Phaser.GameObjects.Image {
       this.enable();
     }
   }
+
+  abstract attack(characterAgility: number): Attack;
 
   public enable = (): void => {
     this.setInteractive();

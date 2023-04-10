@@ -17,7 +17,6 @@ interface Statistics {
   maximumTimeUnit: number;
 }
 
-// TODO
 const statisticsDataTable: Statistics[] = [
   {
     name: StatisticsTypes.player,
@@ -31,26 +30,6 @@ const statisticsDataTable: Statistics[] = [
   },
   {
     name: StatisticsTypes.mercenary,
-    minimumHealth: 50,
-    maximumHealth: 60,
-    minimumMana: 40,
-    maximumMana: 40,
-    movement: 32,
-    minimumTimeUnit: 50,
-    maximumTimeUnit: 60,
-  },
-  {
-    name: StatisticsTypes.wolf,
-    minimumHealth: 50,
-    maximumHealth: 60,
-    minimumMana: 40,
-    maximumMana: 40,
-    movement: 32,
-    minimumTimeUnit: 50,
-    maximumTimeUnit: 60,
-  },
-  {
-    name: StatisticsTypes.skeleton,
     minimumHealth: 50,
     maximumHealth: 60,
     minimumMana: 40,

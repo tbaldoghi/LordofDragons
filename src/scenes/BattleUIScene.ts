@@ -1,4 +1,4 @@
-import { randomFloat } from "pandemonium";
+import { random, randomFloat } from "pandemonium";
 import eventHandler from "../contants/eventHandler";
 import player from "../contants/player";
 import ViewCreatures, { CreatureType } from "../contants/ViewCreatures";
@@ -26,6 +26,7 @@ class BattleUIScene extends Phaser.Scene {
   #manaTexts: Phaser.GameObjects.Text[] = [];
   #timeUnitTexts: Phaser.GameObjects.Text[] = [];
   #characters: (Player | Mercenary)[] = [];
+  #characterPortraits: Phaser.GameObjects.Image[] = [];
   #buttons: Button[] = [];
 
   constructor() {
@@ -160,7 +161,13 @@ class BattleUIScene extends Phaser.Scene {
             )
           );
 
-          this.add.image(portraitX, portraitY, portrait);
+          const characterPortrait = this.add.image(
+            portraitX,
+            portraitY,
+            portrait
+          );
+
+          this.#characterPortraits.push(characterPortrait);
 
           const attackButton = new Button(
             this,
@@ -295,12 +302,16 @@ class BattleUIScene extends Phaser.Scene {
     eventHandler.on(
       Events.battleNextTurn,
       (): void => {
-        this.#characters.forEach((character: Player | Mercenary): void => {
-          character.battleRest();
-        });
-
         ViewCreatures.creatures.forEach((creature: CreatureType): void => {
           creature.disable();
+        });
+
+        let index: number = 0;
+
+        this.creatureAttack(index);
+
+        this.#characters.forEach((character: Player | Mercenary): void => {
+          character.battleRest();
         });
 
         this.handleAnotherActionDialogClick();
@@ -310,6 +321,33 @@ class BattleUIScene extends Phaser.Scene {
       this
     );
   }
+
+  private creatureAttack = (index: number): void => {
+    this.tweens.add({
+      targets: ViewCreatures.creatures[index],
+      duration: 150,
+      yoyo: true,
+      repeat: 0,
+      y: ViewCreatures.creatures[index].y + 25,
+      onYoyo: (): void => {
+        const { x, y } = ViewCreatures.creatures[index];
+        const attack = ViewCreatures.creatures[index].attack(0); // TODO: Add character agility.
+
+        if (attack.isMiss) {
+          this.missTarget(x, y);
+        } else {
+          this.hitCharacter(attack.damage || 0);
+        }
+      },
+      onComplete: (): void => {
+        if (index < ViewCreatures.creatures.length - 1) {
+          index++;
+
+          this.creatureAttack(index);
+        }
+      },
+    });
+  };
 
   private handleAnotherActionDialogClick = (): void => {
     this.#buttons.forEach((button: Button): void => {
@@ -393,6 +431,23 @@ class BattleUIScene extends Phaser.Scene {
         missText.destroy();
       },
     });
+  };
+
+  private hitCharacter = (damage: number): void => {
+    const targetIndex = random(0, 2);
+    const characterPortrait = this.#characterPortraits[targetIndex];
+
+    this.#characters[targetIndex].currentHealth -= damage;
+
+    characterPortrait.setTint(0x79444a);
+    this.time.addEvent({
+      loop: false,
+      delay: 500,
+      callback: () => {
+        characterPortrait.clearTint();
+      },
+    });
+    this.redrawStatusBars();
   };
 }
 
