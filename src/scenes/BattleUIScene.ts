@@ -414,6 +414,12 @@ class BattleUIScene extends Phaser.Scene {
     );
   };
 
+  private redrawPortraits = (): void => {
+    this.#characters
+      .filter((character, index: number): boolean => index !== 0)
+      .forEach((character: Player | Mercenary, index: number): void => {});
+  };
+
   private missTarget = (x: number, y: number): void => {
     const missText = this.add.text(x, y, "Miss", {
       font: "24px Oswald",

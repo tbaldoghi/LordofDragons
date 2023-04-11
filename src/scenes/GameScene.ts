@@ -94,6 +94,7 @@ class GameScene extends Phaser.Scene {
     this.load.image("forest", `${path}/background/forest/forest.png`);
     this.load.image("portrait1", `${path}/portraits/portrait_1.png`);
     this.load.image("portrait3", `${path}/portraits/portrait_3.png`);
+    this.load.image("portrait3dead", `${path}/portraits/portrait_3_dead.png`);
 
     this.loadCreatures(path);
     this.loadArrowButtons(path);

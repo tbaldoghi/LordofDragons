@@ -5,9 +5,13 @@ import Character from "./Character";
 
 class Mercenary extends Character {
   public readonly portrait: string = "portrait3"; // TODO: Rename the files.
+  public readonly portraitDead: string = "portrait3dead"; // TODO: Rename the files.
+  #isDead: boolean;
 
   constructor() {
     super();
+
+    this.#isDead = false;
 
     const statistics = getStatistics(StatisticsTypes.mercenary);
 
@@ -25,6 +29,10 @@ class Mercenary extends Character {
       this.currentTimeUnit = this.timeUnit;
     }
   }
+
+  public die = (): void => {
+    this.#isDead = true;
+  };
 }
 
 export default Mercenary;
